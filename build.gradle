@@ -23,7 +23,7 @@ plugins {
 apply plugin: "org.grails.grails-web"
 apply plugin: "org.grails.grails-gsp"
 
-group = "myApp"
+group = "groovybones"
 
 repositories {
     mavenCentral()

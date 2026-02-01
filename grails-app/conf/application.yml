@@ -10,7 +10,7 @@ info:
     grailsVersion: '@info.app.grailsVersion@'
 grails:
   codegen:
-    defaultPackage: myApp
+    defaultPackage: groovybones
   profile: web
   mime:
     disable:
