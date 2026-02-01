@@ -1,4 +1,4 @@
-package myApp
+package groovybones
 
 class BootStrap {
 

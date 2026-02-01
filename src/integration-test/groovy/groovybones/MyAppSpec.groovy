@@ -1,4 +1,4 @@
-package myApp
+package groovybones
 import grails.gorm.transactions.Rollback
 import grails.testing.mixin.integration.Integration
 

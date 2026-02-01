@@ -84,7 +84,7 @@ dependencies {
 }
 
 application {
-    mainClass = "myApp.Application"
+    mainClass = "groovybones.Application"
 }
 
 java {
