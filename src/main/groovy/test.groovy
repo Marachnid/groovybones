@@ -28,20 +28,25 @@
  */
 
 
-//score == 29
-final def player1Board = [
-        [3,3,1],        //column 1
-        [],             //column 3
-        [4,4,3]         //column 2
-]
+//def player1Board = [
+//        [null],         //column 1
+//        [null],         //column 3
+//        [null]          //column 2
+//]
+//
+//
+//def player2Board = [
+//        [null],         //column 1
+//        [null],         //column 3
+//        [null]          //column 2
+//]
 
-//score == 13
-final def player2Board = [
-        [3,3],          //column 1
-        [2,2],          //column 2
-        []              //column 3
-]
+//Arrays.asList() locks array sizes - one array with 3 inner arrays
+def inner = Arrays.asList(null, null, null)
+def player1Board = Arrays.asList(inner, inner, inner)
+def player2Board = Arrays.asList(inner, inner, inner)
 
+println player1Board
 
 /**
  * reads game board for values present and # of duplications if present
@@ -52,13 +57,12 @@ def findRepeatedValues = { def gameBoard ->
     Set columnValues = []
 
     //iterate over outer gameBoard array
-    gameBoard.eachWithIndex { column, i ->
-
-        //for temp tracking, detects if a column is empty and just notes it
-        if (column.size() == 0) {println "Column - ${i + 1} - is empty"}
+    gameBoard.each { column ->
 
         //iterate through inner gameBoard arrays (columns), add values and # of duplications to Set
-        column.each { number -> columnValues << ["$number" : column.count(number)]}
+        column.each { number ->
+            if (number != null) {columnValues << ["$number" : column.count(number)]}
+        }
     }
     return columnValues
 }
@@ -67,24 +71,64 @@ def findRepeatedValues = { def gameBoard ->
 /**
  * iterates over Set of unique board values and exponentially multiplies them
  */
-def calculateValues = { def gameBoard ->
-    final def columnValues = findRepeatedValues(gameBoard)
+def calculateValues = { def boardValues ->
+    final def columnValues = findRepeatedValues(boardValues)
     def total = 0
 
     columnValues.each {mapItem ->
         mapItem.each{k,v -> total+= k.toInteger() ** v}
     }
 
-    println total
     return total
 }
 
-final def player1Score = calculateValues(player1Board)
-final def player2Score = calculateValues(player2Board)
 
-if (player1Score == 29){println "Player1 Score ($player1Score) matches expected value: 29"}
-else {println "Player1 Score ($player1Score) DOES NOT match expected value: 29"}
+/**
+ * handles adding numbers when initialized values might == null
+ */
+def addNumber = {def board, def i, def v ->
+    board[i][0] == null ? board[i] = [v] : board[i] << v
+}
 
-if (player2Score == 13){println "Player2 Score ($player2Score) matches expected value: 13"}
-else {println "Player2 Score ($player1Score) DOES NOT match expected value: 13"}
 
+
+/*
+    DON'T mix/match findRepeatedValues() and calculateValues()
+ */
+def test = {
+
+    def randomNumber = 2
+
+
+    addNumber(player1Board, 0, 2)
+    addNumber(player1Board, 0, 1)
+    addNumber(player1Board, 2, 4)
+    addNumber(player1Board, 1, 3)
+
+    println player1Board
+
+
+
+    player1Board.eachWithIndex {column, i ->
+        if (column.count(randomNumber) > 0) {
+            println column
+            println i
+
+            if (player2Board[i] == null) {
+                player2Board[i] = [randomNumber]
+            } else {
+//                player2Board[i] << randomNumber
+                addNumber(player2Board, i, randomNumber)
+            }
+            player1Board[i].removeAll {it == randomNumber}
+        }
+    }
+
+    println 'player 1'
+    println player1Board
+    println 'player 2'
+    println player2Board
+
+
+
+}.call()
