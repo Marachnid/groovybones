@@ -3,10 +3,13 @@
     Starts with a 2d array initialized with 3 empty inner arrays
 
     gameBoard = [
-        [],                 column1
-        [],                 column2
-        []                  column3
+        [null,null,null],                 column1
+        [null,null,null],                 column2
+        [null,null,null]                  column3
     ]
+
+    The null,null,null seems to be a Groovy quirk with Java resources
+    [null,..] is a placeholder and get's reassigned to [v] where we can << v
 
     New values are always shuffled to the lowest available position of a column
         *we don't have to worry about [2, , 3] --- game assumes [2,3]
@@ -27,19 +30,6 @@
         items with no duplication are unchanged -- multiplied by ^1
  */
 
-
-//def player1Board = [
-//        [null],         //column 1
-//        [null],         //column 3
-//        [null]          //column 2
-//]
-//
-//
-//def player2Board = [
-//        [null],         //column 1
-//        [null],         //column 3
-//        [null]          //column 2
-//]
 
 //Arrays.asList() locks array sizes - one array with 3 inner arrays
 def inner = Arrays.asList(null, null, null)
@@ -91,7 +81,6 @@ def addNumber = {def board, def i, def v ->
 }
 
 
-
 /*
     DON'T mix/match findRepeatedValues() and calculateValues()
  */
@@ -111,8 +100,8 @@ def test = {
 
     player1Board.eachWithIndex {column, i ->
         if (column.count(randomNumber) > 0) {
-            println column
-            println i
+//            println column
+//            println i
 
             if (player2Board[i] == null) {
                 player2Board[i] = [randomNumber]
