@@ -62,6 +62,7 @@ Tasks Completed:
 - task
 
 Notes:
+- Logging is built-in via SLF4J
 - Groovy scripts and Groovy classes have slightly different variable scope
 - Board operations aren't as bad as I thought they were going to be, Sets, .contains() and .removeAll() handle most operations
 - Opponent logic is going to have to consider a lot of factors that need to be modularized to make it easier to implement
