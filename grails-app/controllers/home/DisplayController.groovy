@@ -1,6 +1,4 @@
 package home
-
-import groovybones.UserService
 import user.User
 
 /**
@@ -10,15 +8,9 @@ import user.User
  */
 class DisplayController {
 
-    UserService userService
-
     /**
      * single-line method to define model of User objects as a list and render display
      * @return List<User> results, render display.gsp
      */
-    def display() {
-        userService.createUser('test', 'testUser')
-
-        [users: User.list()]
-    }
+    def display() {[users: User.list()]}
 }
