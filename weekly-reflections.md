@@ -71,4 +71,26 @@ Notes:
     - Player board values/positions
     - Self board values/positions
     - IF genNum matches ANY board value --- IF SELF-column.contains(genNum) IS NOT full
-- 
+
+
+
+## Week 4
+2/9/26 - ==================
+
+Tasks Completed:
+- task
+- task
+- task
+
+Notes:
+- GRAILS/GORM do not use DAOs
+  - GORM/Grails merges domain objects and persistence into a single class where Hibernate separates them
+  - Hibernate uses Data Mapper patterns (static typing)
+  - GORM uses Active Record patterns (dynamic typing)
+  - in GORM, the entity IS the persistence class
+    - where a Java ORM entity is just a mapping to a DB table, GORM is a mapping with persistence behavior by default
+  - Grails controllers automatically initiate and open/close Hibernate sessions
+  - It looks like:
+    - Hibernate: Controller -> Service -> DAO -> Hibernate -> DB
+    - GORM: Controller -> Service (optional) -> Domain Class (GORM class/DB entity)
+- note
