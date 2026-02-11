@@ -75,11 +75,11 @@ Notes:
 
 
 ## Week 4
-2/9/26 - 10h
+2/9/26 - 13h
 
 Tasks Completed:
 - Converted game operation scripts into GameBoard class to control add/delete dice actions, map board values, and calculate score
-- task
+- Added logic for auto-running a board until all of its columns are full
 - task
 
 Notes:
