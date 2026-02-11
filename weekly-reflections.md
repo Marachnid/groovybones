@@ -75,15 +75,15 @@ Notes:
 
 
 ## Week 4
-2/9/26 - ==================
+2/9/26 - 10h
 
 Tasks Completed:
-- task
+- Converted game operation scripts into GameBoard class to control add/delete dice actions, map board values, and calculate score
 - task
 - task
 
 Notes:
-- GRAILS/GORM do not use DAOs
+- GRAILS/GORM does not use DAOs
   - GORM/Grails merges domain objects and persistence into a single class where Hibernate separates them
   - Hibernate uses Data Mapper patterns (static typing)
   - GORM uses Active Record patterns (dynamic typing)
@@ -91,6 +91,6 @@ Notes:
     - where a Java ORM entity is just a mapping to a DB table, GORM is a mapping with persistence behavior by default
   - Grails controllers automatically initiate and open/close Hibernate sessions
   - It looks like:
-    - Hibernate: Controller -> Service -> DAO -> Hibernate -> DB
-    - GORM: Controller -> Service (optional) -> Domain Class (GORM class/DB entity)
-- note
+    - Hibernate: Controller > Service > DAO > Hibernate > DB
+    - GORM: Controller > Service (optional) > Domain Class (GORM class/DB entity)
+- 
