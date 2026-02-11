@@ -6,13 +6,36 @@ import groovybones.GameBoard
  */
 
 GameBoard player1 = new GameBoard()
+GameBoard player2 = new GameBoard()
 
-println player1.score
-
-player1.addNumber(0, 2)
-player1.addNumber(1, 3)
-player1.addNumber(2, 2)
-player1.addNumber(2, 2)
+Random r = new Random()
+int dice
+int column
 
 println player1.board
-println player1.score
+
+
+def test = {
+    dice = r.nextInt(6) + 1
+    column = r.nextInt(3)
+    println 'Random number: ' + dice
+
+    if (!player1.addNumber(column, dice)) {
+        println 'column full'
+        println 'finding first alternative column'
+
+        player1.board.withIndex().any {col, index ->
+            if (col.size()+1 <= 3) {
+                println 'Found an open column - ' + index
+                return player1.addNumber(index, dice)
+            } else {
+                println 'No columns are available'
+                return false
+            }
+        }
+    } else return true
+}
+
+while (test()) {
+}
+println player1.board
