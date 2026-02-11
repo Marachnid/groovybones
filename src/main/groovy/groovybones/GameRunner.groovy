@@ -21,7 +21,7 @@ class GameRunner {
             println 'column full'
 
             board.board.withIndex().any {col, index ->
-                if (col.size()+1 <= 3) {
+                if (col.size()+1 <= board.board.size()) {           //reference the size of the failed addNumber() column
                     println '-->placing dice: ' + board.board
                     return board.addNumber(index, dice)             //return true to continue next condition
                 } else {
