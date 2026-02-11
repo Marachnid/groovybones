@@ -17,9 +17,9 @@ class GameBoard {
      * @param number number to add to board column - playerBoard[i]
      * @return boolean true if append, false if not
      */
-    boolean addNumber(int i, int number) {
-        if (board[i].size() + 1 <= columnMaxSize) board[i] <<number
-        else false
+    boolean addNumber(int index, int number) {
+        if (board[index].size() + 1 <= columnMaxSize) board[index] <<number
+        else return false
 
         calculateScore()
     }
@@ -31,9 +31,9 @@ class GameBoard {
      * @param number number to delete
      * @return boolean true if deleted, false if not
      */
-    boolean deleteNumber(int i, int number) {
-        if (board[i].contains(number)) board[i].removeAll {it == number}
-        else false
+    boolean deleteNumber(int index, int number) {
+        if (board[index].contains(number)) board[index].removeAll {it == number}
+        else return false
 
         calculateScore()
     }
