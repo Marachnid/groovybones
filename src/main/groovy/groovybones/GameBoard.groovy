@@ -61,6 +61,7 @@ class GameBoard {
      * Calculates a board's score
      * numbers are exponentially multiplied by their value and # of repetitions
      * repeated values in the same column are more valuable (col 1[3:1] == 3, col 2[3:2] == 9, etc...)
+     * RESET score to 0 each call - will append to old scores otherwise
      * @return updated score
      */
     def calculateScore() {
