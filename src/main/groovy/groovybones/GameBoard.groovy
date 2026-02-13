@@ -9,6 +9,7 @@ class GameBoard {
 
     //board score is updated every time a number is added or deleted
     int score
+    String boardName
 
 
     /**
@@ -20,7 +21,6 @@ class GameBoard {
     boolean addNumber(int index, int number) {
         if (board[index].size() + 1 <= columnMaxSize) board[index] <<number
         else return false
-
         calculateScore()
     }
 
@@ -34,7 +34,6 @@ class GameBoard {
     boolean deleteNumber(int index, int number) {
         if (board[index].contains(number)) board[index].removeAll {it == number}
         else return false
-
         calculateScore()
     }
 
@@ -79,28 +78,23 @@ class GameBoard {
      * @param board GameBoard object representing a player board
      * @return true if looping, false if not
      */
-    static boolean runBoard(GameBoard board) {
+    boolean runBoard(GameBoard board) {
         final Random r = new Random()
         int dice = r.nextInt(6) + 1
         int column = r.nextInt(3)
-        println "Random dice: $dice --- Random column: $column"
+        boolean placed
+        println "Player: $boardName ---Random dice: $dice --- Random column: $column"
 
-
-        if (!board.addNumber(column, dice)) {
-            println 'column full'
-
-            board.board.withIndex().any {col, index ->
-                if (col.size()+1 <= board.board.size()) {           //reference the size of the failed addNumber() column
-                    println '-->placing dice: ' + board.board
-                    return board.addNumber(index, dice)             //return true to continue next condition
-                } else {
-                    println '!!!No columns available!!!'
-                    return false                                    //return false to keep searching until ends on false
-                }
-            }
-        } else {
-            println '-->placing dice in ' + board.board
+        //try to place randomly first
+        if (board.addNumber(column, dice)) {
             return true
+
+        //else try to place in next sequential column
+        } else {
+            placed = board.board.withIndex().any {col, index ->
+                return board.addNumber(index, dice)
+            }
         }
+        return placed
     }
 }
