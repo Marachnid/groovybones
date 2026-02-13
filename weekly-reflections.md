@@ -75,13 +75,14 @@ Notes:
 
 
 ## Week 4
-2/9/26 - 15h
+2/9/26 - 18h
 
 Tasks Completed:
 - Converted game operation scripts into GameBoard class to control add/delete dice actions, map board values, and calculate score
 - Added logic for auto-running a board until all of its columns are full
 - Built out a dev design for DB tables - User + associated tables, Opponent (difficulty) table
 - Created an initial project design
+- Created screen designs
 
 Notes:
 - GRAILS/GORM does not use DAOs
