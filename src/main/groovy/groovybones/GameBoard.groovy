@@ -83,7 +83,7 @@ class GameBoard {
         int dice = r.nextInt(6) + 1
         int column = r.nextInt(3)
         boolean placed
-        println "Player: $boardName ---Random dice: $dice --- Random column: $column"
+//        println "Player: $boardName ---Random dice: $dice --- Random column: $column"
 
         //try to place randomly first
         if (board.addNumber(column, dice)) {
