@@ -8,75 +8,113 @@ import groovybones.GameBoard
 final Random r = new Random()
 int dice
 
+def preBoard1 = [[1,1,1], [2],[4]]
+def preBoard2 = [[3], [5],[6]]
 
-GameBoard test1 = new GameBoard(boardName: 'player1')
-GameBoard test2 = new GameBoard(boardName: 'player2')
+GameBoard player1 = new GameBoard(boardName: 'player1', board: preBoard1)
+GameBoard player2 = new GameBoard(boardName: 'player2', board: preBoard2)
 
-boolean runGame = true
+println player1.board
+println player2.board
+
+dice = 5
+
+def boardOp(def randomNumber, GameBoard staticBoard, GameBoard activeBoard) {
+
+    println "Player: ${staticBoard.boardName}"
+    def mapValues = staticBoard.mapBoardValues()
+    println mapValues
+
+//    if (mapValues['number'].contains(randomNumber)) {
+//        println randomNumber + ' NUMBER FOUND'
+//        println mapValues[0]
+//
+//    }
+
+    mapValues.eachWithIndex{ def entry, int i ->
+        if (entry['number'] == randomNumber) {
+            println 'TEST SUCCESS'
+            println entry['number']
+            println i
+        }
+    }
 
 
-test1.board[0] << 1
-test1.board[0] << 1
-test1.board[0] << 1
-test1.board[1] << 2
-test1.board[2] << 3
-test1.board[2] << 1
+//    mapValues.any {
+//        if (it.number == randomNumber) {
+//            println 'TEST2'
+//
+//            if (activeBoard.addNumber(it.index, it.number)) {
+//                staticBoard.deleteNumber(it.index, it.number)
+//                return true
+//            }
+//        } else {
+//            println it.number
+//            activeBoard.runBoard(randomNumber)
+//            println 'ELSE RUN BOARD'
+//            return true
+//        }
+//    }
+}
+
+println 'BOARD OP START'
+boardOp(dice, player2, player1)
+
+
+//println player1.board
+//println player2.board
 
 
 
-println test1.board
 
 
-def test = test1.mapBoardValues()
 
-println test['index']
-println test['number']
-println test['repetitions']
 
-println test[0]
 
-//if (test.any {it.number == 1}) {
-//    println '1 DETECTED'
+
+
+
+
+
+
+
+
+
+
+
+//test.any {
+//
+//    if (it.number == meh) {
+//
+//        if (test2.addNumber(it.index, it.number)) {
+//            test1.deleteNumber(it.index, it.number)
+//        } else {
+//            test2.runBoard(meh)
+//        }
+//    } else {
+//        test2.runBoard(meh)
+//    }
+//}
+//
+//
+//def mehTest = test2.mapBoardValues()
+//meh = 4
+//
+//
+//mehTest.any {
+//
+//    if (it.number == meh) {
+//
+//        if (test1.addNumber(it.index, it.number)) {
+//            test2.deleteNumber(it.index, it.number)
+//        } else {
+//            test1.runBoard(meh)
+//        }
+//    } else {
+//        test1.runBoard(meh)
+//    }
 //}
 
-def meh = 4
-
-test.any {
-
-    if (it.number == meh) {
-
-        if (test2.addNumber(it.index, it.number)) {
-            test1.deleteNumber(it.index, it.number)
-        } else {
-            test2.runBoard(meh)
-        }
-    } else {
-        test2.runBoard(meh)
-    }
-}
-
-
-def mehTest = test2.mapBoardValues()
-meh = 4
-
-
-mehTest.any {
-
-    if (it.number == meh) {
-
-        if (test1.addNumber(it.index, it.number)) {
-            test2.deleteNumber(it.index, it.number)
-        } else {
-            test1.runBoard(meh)
-        }
-    } else {
-        test1.runBoard(meh)
-    }
-}
-
-
-println test1.board
-println test2.board
 
 //while (runGame) {
 //    dice = r.nextInt(6) + 1
