@@ -3,12 +3,9 @@ package groovybones
 
 class GameBoard {
 
-    //TODO will eventually have to make this dynamic to allow custom board sizes
-    ArrayList board = [[], [], []]
     final int columnMaxSize = 3
-
-    //board score is updated every time a number is added or deleted
-    int score
+    ArrayList board = [[], [], []]
+    int score = 0
     String boardName
 
 
@@ -19,11 +16,9 @@ class GameBoard {
      * @return boolean true if append, false if not
      */
     boolean addNumber(int index, int number) {
-        if (board[index].size() + 1 <= columnMaxSize) board[index] <<number
+        if (board[index].size() + 1 <= columnMaxSize) board[index] << number
         else return false
-        calculateScore()
     }
-
 
     /**
      * Deletes all values of a column matching the targeted number to delete
@@ -34,9 +29,7 @@ class GameBoard {
     boolean deleteNumber(int index, int number) {
         if (board[index].contains(number)) board[index].removeAll {it == number}
         else return false
-        calculateScore()
     }
-
 
     /**
      * Maps board values to determine all numbers present
@@ -55,7 +48,6 @@ class GameBoard {
         return values
     }
 
-
     /**
      * Calculates a board's score
      * numbers are exponentially multiplied by their value and # of repetitions
@@ -64,7 +56,6 @@ class GameBoard {
      * @return updated score
      */
     def calculateScore() {
-        score = 0
         mapBoardValues().each {entry ->
             score += entry['number'] ** entry['repetitions']
         }
@@ -78,23 +69,30 @@ class GameBoard {
      * @param board GameBoard object representing a player board
      * @return true if looping, false if not
      */
-    boolean runBoard(GameBoard board) {
+    boolean runBoard(int dice) {
         final Random r = new Random()
-        int dice = r.nextInt(6) + 1
         int column = r.nextInt(3)
         boolean placed
-//        println "Player: $boardName ---Random dice: $dice --- Random column: $column"
+
+        println "Player: $boardName ---Random dice: $dice --- Random column: $column"
 
         //try to place randomly first
-        if (board.addNumber(column, dice)) {
-            return true
+        if (addNumber(column, dice)) {
+            placed = true
 
-        //else try to place in next sequential column
+            //else try to place in next sequential column
         } else {
-            placed = board.board.withIndex().any {col, index ->
-                return board.addNumber(index, dice)
+            placed = board.withIndex().any {col, index ->
+                return addNumber(index, dice)
             }
         }
         return placed
     }
+
+    /**
+     * detects if every inner array == max column size
+     * used to prevent a game loop from overrunning
+     * @return true if a board is full for game end
+     */
+    boolean detectFullBoard() {board.every {it.size() == columnMaxSize}}
 }
