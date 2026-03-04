@@ -1,6 +1,5 @@
 package groovybones
 
-
 class GameBoard {
 
     final int columnMaxSize = 3

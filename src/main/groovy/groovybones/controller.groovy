@@ -1,4 +1,4 @@
-import groovybones.GameBoard
+package groovybones
 
 /*
     This script acts like a main method controlling/orchestrating game logic for testing
