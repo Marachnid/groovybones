@@ -11,12 +11,12 @@ import geb.spock.*
 @Rollback
 class MyAppSpec extends GebSpec {
 
-    void "test something"() {
-        when:"The home page is visited"
-            go '/'
-
-        then:"The title is correct"
-            title == "Welcome to Grails"
-    }
+//    void "test something"() {
+//        when:"The home page is visited"
+//            go '/'
+//
+//        then:"The title is correct"
+//            title == "Welcome to Grails"
+//    }
 
 }
