@@ -12,5 +12,8 @@ class ProfileController {
      */
     def profile() {
         println 'ProfileController Profile()'
+
+        if (session['mockID']) {println session['mockID']}
+        else {println 'No User'}
     }
 }

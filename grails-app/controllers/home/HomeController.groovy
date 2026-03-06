@@ -10,5 +10,10 @@ class HomeController {
      * single-line method to print a test message and render index
      * @return render index.gsp
      */
-    def index() {println 'HomeController index()'}
+    def index() {
+        println 'HomeController index()'
+
+        session['mockID'] = 1
+        render(view: 'index')
+    }
 }
