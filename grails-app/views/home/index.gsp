@@ -1,20 +1,14 @@
-
-<%@ page contentType="text/html;charset=UTF-8" %>
+<!doctype html>
 <html>
 <head>
-    <title>Home Page</title>
+    <meta name="layout" content="main"/>
+    <title>Welcome to Grails</title>
 </head>
-
 <body>
-  <h1>Home Page</h1>
 
-  <ul>
-    <li>
-      <g:link controller="message" action="message">MessageController</g:link>
-    </li>
-    <li>
-      <g:link controller="display" action="display">DisplayController</g:link>
-    </li>
-  </ul>
+
+<g:link controller="play" action="play">
+    <button type="button">Play</button>
+</g:link>
+
 </body>
-</html>
