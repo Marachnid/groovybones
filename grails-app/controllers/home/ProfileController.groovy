@@ -1,5 +1,7 @@
 package home
 
+import user.User
+
 /**
  * Default homepage controller that renders index view
  * views/home/index.gsp is implicitly rendered
@@ -13,7 +15,12 @@ class ProfileController {
     def profile() {
         println 'ProfileController Profile()'
 
-        if (session['mockID']) {println session['mockID']}
-        else {println 'No User'}
+        if (session['mockID']) {
+            println session['mockID']
+            [user: User.get(session['mockID'])]
+        }
+        else {
+            redirect(controller: 'home', action: 'index')
+        }
     }
 }
