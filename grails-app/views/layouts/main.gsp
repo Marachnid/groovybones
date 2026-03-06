@@ -18,10 +18,10 @@
     <ul>
         <li><g:link controller="home" action="index">Home</g:link></li>
         <li><g:link controller="profile" action="profile">Profile</g:link></li>
-        <li><g:link controller="Tutorial" action="Tutorial">Tutorial</g:link></li>
-        <li><g:link controller="About" action="About">About</g:link></li>
-        <li><g:link controller="signin" action="signin">Sign In</g:link></li>
-        <li><g:link controller="register" action="register">Register</g:link></li>
+        <li><g:link controller="Tutorial" action="tutorial">Tutorial</g:link></li>
+        <li><g:link controller="About" action="about">About</g:link></li>
+        <li><g:link controller="SignIn" action="signin">Sign In</g:link></li>
+        <li><g:link controller="Register" action="register">Register</g:link></li>
     </ul>
 </nav>
 <g:layoutBody/>

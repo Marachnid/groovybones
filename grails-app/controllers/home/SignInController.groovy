@@ -8,9 +8,7 @@ class SignInController {
 
     /**
      * single-line method to print a test message and render index
-     * @return render index.gsp
+     * @return render signin.gsp
      */
-    def signin() {
-        println 'ProfileController Profile()'
-    }
+    def signin() { println 'SignInController signin()' }
 }

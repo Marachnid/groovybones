@@ -8,7 +8,7 @@ class ProfileController {
 
     /**
      * single-line method to print a test message and render index
-     * @return render index.gsp
+     * @return render profile.gsp
      */
     def profile() {
         println 'ProfileController Profile()'

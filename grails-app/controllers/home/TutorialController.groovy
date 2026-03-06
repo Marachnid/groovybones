@@ -8,9 +8,7 @@ class TutorialController {
 
     /**
      * single-line method to print a test message and render index
-     * @return render index.gsp
+     * @return render tutorial.gsp
      */
-    def tutorial() {
-        println 'ProfileController Profile()'
-    }
+    def tutorial() { println 'TutorialController tutorial()' }
 }
