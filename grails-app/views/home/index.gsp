@@ -7,7 +7,7 @@
 <body>
 
 
-<g:link controller="play" action="play">
+<g:link controller="game" action="game">
     <button type="button">Play</button>
 </g:link>
 
