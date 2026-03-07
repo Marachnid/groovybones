@@ -1,27 +1,25 @@
 package home
 
-import groovybones.UserService
+import groovybones.GameBoard
 import user.User
 
 /**
- * Default homepage controller that renders index view
- * views/home/index.gsp is implicitly rendered
+ * Default homepage controller that renders game page view
  */
 class GameController {
 
     /**
-     * single-line method to print a test message and render game
+     * game page
      * @return render game.gsp
      */
     def game() {
         println 'GameController game()'
 
-        User user = null
         if (session['mockID']) {
-            user = User.get(session['mockID'] as int)
+            session['user'] = User.get(session['mockID'] as int)
+            session['userBoard'] = new GameBoard(boardName: session['user'].userName)
         }
 
-
-        [user: user]
+        render(view: 'game')
     }
 }

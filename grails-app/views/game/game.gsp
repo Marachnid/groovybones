@@ -8,20 +8,26 @@
 <body>
 
   <h2>GAME</h2>
-  <h3>Player: ${user.userName}</h3>
-  <h3>Board: ${board.board}</h3>
+  <h3>Player: ${session['user'].userName}</h3>
+  <h3>Board: ${session['userBoard'].board}</h3>
 
 
 <h3>TEST TABLE</h3>
 <table>
-  <g:each in="${board.board}" var="column">
+  <g:each in="${session['userBoard'].board}" var="column">
     <tr class="boardColumn">
-      <g:each in="${0..(board.columnMaxSize-1)}" var="i">
+      <g:each in="${0..(session['userBoard'].columnMaxSize-1)}" var="i">
         <td>${column[i] == null ? '-' : column[i]}</td>
       </g:each>
     </tr>
   </g:each>
 </table>
+
+
+%{--<g:link controller="gameaction" action="gameaction">--}%
+%{--  <button type="button">Add a number to the board</button>--}%
+%{--</g:link>--}%
+
 
 <g:link controller="home" action="index">
   <button type="button">RETURN HOME</button>
