@@ -3,8 +3,9 @@ package groovybones
 class GameBoard {
 
     final int columnMaxSize = 3
-    ArrayList board = [[], [], []]
+    final int range = 6
     int score = 0
+    ArrayList board = [[], [], []]
     String boardName
 
 
@@ -93,5 +94,12 @@ class GameBoard {
      * used to prevent a game loop from overrunning
      * @return true if a board is full for game end
      */
-    boolean detectFullBoard() {board.every {it.size() == columnMaxSize}}
+    boolean detectFullBoard() { board.every {it.size() == columnMaxSize} }
+
+
+    /**
+     * generates a random number per a set range
+     * @return random number/int
+     */
+    int generateNumber() { new Random().nextInt(range) + 1 }
 }
