@@ -59,3 +59,28 @@ body {
     align-items: center;
     box-sizing: border-box;
 }
+
+
+.menu-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+
+}
+
+.menu-list li {
+    text-decoration: none;
+    /*font-size: 5.2rem;*/
+    color: #333;
+    font-weight: bold;
+
+    /*letter-spacing: 0.1em;*/
+    transform: scaleX(1.5);
+    transform-origin: left;
+}
+
+.menu-list li a {color: black;}
+.menu-list li a:hover {color: #007bff;}
