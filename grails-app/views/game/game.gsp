@@ -7,6 +7,7 @@
 </head>
 <body>
   <h2>GAME</h2>
+  <h3>Dice: ${session['dice']}</h3>
 
   <g:link controller="gameAction" action="runOpponentBoard" params="[opponentBoard: session['opponentBoard']]">
     <button type="button">Add number to Opponent Board</button>
@@ -37,7 +38,7 @@
           <tr class="boardColumn"
               onclick="window.location='${createLink(
               controller:'gameAction', action:'runPlayerBoard',
-              params:[col: colIndex], playerBoard: session['playerBoard'])}'"
+              params:[col: colIndex])}'"
               style="cursor:pointer;"
           >
             <g:each in="${0..(session['playerBoard'].columnMaxSize-1)}" var="i">

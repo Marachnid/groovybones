@@ -13,9 +13,12 @@ class GameActionController {
 
     def runPlayerBoard() {
         println 'GameActionController addNumber()'
-        GameBoard board = session['playerBoard'] as GameBoard
 
-        if (board.addNumber(params['col'] as int, board.generateNumber())) {
+        GameBoard board = session['playerBoard'] as GameBoard
+        int columnIndex = params['col'] as int
+        int dice = session['dice'] as int
+
+        if (board.addNumber(columnIndex, dice)) {
 
             if (board.detectFullBoard()) redirect(controller: 'gameOver', action: 'gameOver')
             else redirect(controller: 'game', action: 'game')
@@ -30,8 +33,9 @@ class GameActionController {
     def runOpponentBoard() {
         println 'GameActionController runBoard()'
         GameBoard board = session['opponentBoard'] as GameBoard
+        int dice = session['dice'] as int
 
-        if (board.runBoard(board.generateNumber())) {session['opponentBoard'] = board
+        if (board.runBoard(dice)) {session['opponentBoard'] = board
 
             if (board.detectFullBoard()) redirect(controller: 'gameOver', action: 'gameOver')
             else redirect(controller: 'game', action: 'game')
