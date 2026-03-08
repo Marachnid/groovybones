@@ -1,0 +1,20 @@
+.menu-list li {font-size: 1rem;}
+
+.profile-lists {
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    gap: 3rem;
+}
+
+.profile-list {
+    width: 20rem; /* keeps lists from expanding too wide */
+    padding: 0;
+    margin: 0;
+    text-align: left;
+}
+
+.menu-list li:first-child {
+    font-size: 1.5rem;
+    text-decoration: underline;
+}

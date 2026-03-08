@@ -3,25 +3,30 @@
 <html>
 <head>
   <meta name="layout" content="main"/>
+  <asset:stylesheet src="profile.css"/>
   <title>Profile</title>
 </head>
 <body>
 
   <h2>PROFILE</h2>
 
-%{--eventually two side-by-side boxes--}%
-<div>
-  <h3>${user.userName}</h3>
-  <p>Manage Account (eventual link)</p>
-  <p>Manage Mods (eventual link)</p>
-  <p>Delete Account (eventual link)</p>
-</div>
+  <div class="content-container">
+    <div class="profile-lists">
+      <ul class="menu-list profile-list">
+        <li>${session['player'].userName}</li>
+        <li>Manage Account (eventual link)</li>
+        <li>Manage Mods (eventual link)</li>
+        <li>Delete Account (eventual link)</li>
+      </ul>
 
-<div>
-  <h3>Stats</h3>
-  <p>Total Score: ${user.totalScore}</p>
-  <p>Wins: ${user.wins}</p>
-  <p>Losses: ${user.losses}</p>
-  <p>Win Percentage: (Eventual method calculation)</p>
-</div>
+      <ul class="menu-list profile-list">
+        <li>Stats</li>
+        <li>Total Score: ${session['player'].totalScore}</li>
+        <li>Wins: ${session['player'].wins}</li>
+        <li>Losses: ${session['player'].losses}</li>
+        <li>Win Ratio: TBD</li>
+      </ul>
+    </div>
+  </div>
+
 </body>
