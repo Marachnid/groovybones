@@ -3,6 +3,8 @@
 <html>
 <head>
   <meta name="layout" content="main"/>
+  %{-- can ignore this error --}%
+  <asset:stylesheet src="game.css"/>
   <title>GAME</title>
 </head>
 <body>
