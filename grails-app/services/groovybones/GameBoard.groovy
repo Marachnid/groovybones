@@ -55,10 +55,16 @@ class GameBoard {
      * RESET score to 0 each call - will append to old scores otherwise
      * @return updated score
      */
-    def calculateScore() {
+    int calculateScore() {
+
+        //TODO - temporary, have to relook at methods/game needs later
+        score = 0
+
         mapBoardValues().each {entry ->
             score += entry['number'] ** entry['repetitions']
         }
+
+        return score
     }
 
 
