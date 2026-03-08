@@ -24,9 +24,9 @@
 </table>
 
 
-%{--<g:link controller="gameaction" action="gameaction">--}%
-%{--  <button type="button">Add a number to the board</button>--}%
-%{--</g:link>--}%
+<g:link controller="gameAction" action="runBoard" params="[userBoard: session['userBoard']]">
+  <button type="button">Add a number to the board</button>
+</g:link>
 
 
 <g:link controller="home" action="index">
