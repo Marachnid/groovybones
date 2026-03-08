@@ -1,5 +1,8 @@
 package home
 
+import groovybones.GameBoard
+import user.User
+
 /**
  * Default homepage controller that renders index view
  * views/home/index.gsp is implicitly rendered
@@ -14,6 +17,11 @@ class HomeController {
         println 'HomeController index()'
 
         session['mockID'] = 1
+
+        if (session['mockID']) {
+            session['user'] = User.get(session['mockID'] as int)
+            session['userBoard'] = new GameBoard(boardName: session['user'].userName)
+        }
         render(view: 'index')
     }
 }
