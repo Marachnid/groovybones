@@ -24,6 +24,26 @@
 </table>
 
 
+
+<table>
+  <g:each in="${session['userBoard'].board}" var="column" status="colIndex">
+
+    <tr class="boardColumn"
+        onclick="window.location='${createLink(controller:'gameAction', action:'addNumber', params:[col: colIndex])}'"
+        style="cursor:pointer;">
+
+      <g:each in="${0..(session['userBoard'].columnMaxSize-1)}" var="i">
+
+        <td>${column[i] == null ? '-' : column[i]}</td>
+
+      </g:each>
+
+    </tr>
+
+  </g:each>
+</table>
+
+
 <g:link controller="gameAction" action="runBoard" params="[userBoard: session['userBoard']]">
   <button type="button">Add a number to the board</button>
 </g:link>

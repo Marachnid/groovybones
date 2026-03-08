@@ -14,6 +14,12 @@ class GameActionController {
         println 'gameAction()'
     }
 
+    def addNumber() {
+        println 'ADD NUMBER CALLED'
+        println params['col']
+        redirect(controller: 'game', action: 'game')
+    }
+
 
     //TODO this will likely be a sub-method within a player action/method
     def runBoard() {
