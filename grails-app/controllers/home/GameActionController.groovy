@@ -15,17 +15,16 @@ class GameActionController {
     }
 
 
+    //TODO this will likely be a sub-method within a player action/method
     def runBoard() {
-
         gameAction()
         GameBoard board = session['userBoard'] as GameBoard
 
-        if (board.runBoard(board.generateNumber())) {
-            session['userBoard'] = board
-            redirect(controller: 'game', action: 'game')
+        if (board.runBoard(board.generateNumber())) {session['userBoard'] = board
 
-        } else {
-            redirect(controller: 'gameOver', action: 'gameOver')
-        }
+            if (board.detectFullBoard()) redirect(controller: 'gameOver', action: 'gameOver')
+            else redirect(controller: 'game', action: 'game')
+
+        } else {redirect(controller: 'gameOver', action: 'gameOver')}
     }
 }

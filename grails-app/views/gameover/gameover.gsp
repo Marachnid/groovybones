@@ -13,10 +13,6 @@
 
   <ul>
     <li>${session['userBoard'].calculateScore()}</li>
-%{--    <li></li>--}%
-%{--    <li></li>--}%
-%{--    <li></li>--}%
-%{--    <li></li>--}%
   </ul>
 
 
