@@ -14,8 +14,7 @@
   <g:link controller="gameAction" action="runOpponentBoard" params="[opponentBoard: session['opponentBoard']]">
     <button type="button">Add number to Opponent Board</button>
   </g:link>
-
-<div id="game-box">
+<div class="content-container">
   <div id="game-area">
     <div class="game-container">
       <table id="opponent-board" class="game-board">
@@ -57,9 +56,7 @@
     </div>
   </div>
 </div>
-
-<g:link controller="home" action="index">
-  <button type="button">RETURN HOME</button>
-</g:link>
-
+  <g:link controller="home" action="index">
+    <button type="button">RETURN HOME</button>
+  </g:link>
 </body>

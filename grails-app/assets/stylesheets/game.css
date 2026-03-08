@@ -1,24 +1,15 @@
-/*centers the overall game container*/
-#game-box {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    margin-top: 2rem;
-}
-
-/*aligns player container contents*/
+/*centers the overall game area*/
 #game-area {
     display: flex;
     flex-direction: column;
-    align-items: flex-start; /*push content left*/
     gap: 2rem;
 }
+
 
 /*aligns player table and info*/
 .game-container {
     display: flex;
     flex-direction: row;
-    align-items: flex-start; /*push content left*/
     gap: 1.5rem;
 }
 
