@@ -16,12 +16,17 @@ class HomeController {
     def index() {
         println 'HomeController index()'
 
-        session['mockID'] = 1
+        //TODO Temp initializations
 
-        if (session['mockID']) {
-            session['user'] = User.get(session['mockID'] as int)
-            session['userBoard'] = new GameBoard(boardName: session['user'].userName)
-        }
+        User player = User.get(1)
+        session['player'] = player
+        session['playerBoard'] = new GameBoard(boardName: player.userName)
+
+        User opponent = new User(userName: 'Game Opponent')
+        session['opponent'] = opponent
+        session['opponentBoard'] = new GameBoard(boardName: opponent.userName)
+
+
         render(view: 'index')
     }
 }
