@@ -2,13 +2,23 @@
 <html>
 <head>
     <meta name="layout" content="main"/>
+    %{-- can ignore this error --}%
+    <asset:stylesheet src="index.css"/>
     <title>Home</title>
 </head>
 <body>
-
-
-<g:link controller="game" action="game">
-    <button type="button">Play</button>
-</g:link>
-
+    <div class="content-container">
+        <g:if test="${session['player']}">
+            <ul class="home-list">
+                <li><g:link controller="game" action="game">Play</g:link></li>
+                <li><g:link controller="profile" action="profile">Profile</g:link></li>
+            </ul>
+        </g:if>
+        <g:else>
+            <ul class="home-list">
+                <li><g:link controller="SignIn" action="signIn">Sign In</g:link></li>
+                <li><g:link controller="Register" action="register">Register</g:link></li>
+            </ul>
+        </g:else>
+    </div>
 </body>

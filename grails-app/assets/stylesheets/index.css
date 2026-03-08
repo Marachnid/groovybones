@@ -1,0 +1,24 @@
+.home-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+
+}
+
+.home-list li a {
+    text-decoration: none;
+    font-size: 5.2rem;
+    color: #333;
+    font-weight: bold;
+
+    letter-spacing: 0.1em;
+    transform: scaleX(1.5);
+    transform-origin: left;
+}
+
+.home-list li a:hover {
+    color: #007bff;
+}
