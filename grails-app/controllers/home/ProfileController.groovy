@@ -1,10 +1,8 @@
 package home
 
-import user.User
 
 /**
- * Default homepage controller that renders index view
- * views/home/index.gsp is implicitly rendered
+ * profile router
  */
 class ProfileController {
 
@@ -15,13 +13,7 @@ class ProfileController {
     def profile() {
         println 'ProfileController Profile()'
 
-        if (session['mockID']) {
-            println session['mockID']
-            [user: User.get(session['mockID'])]
-            render(view: 'profile')
-        }
-        else {
-            redirect(controller: 'home', action: 'index')
-        }
+        if (session['player']) render(view: 'profile')
+        else redirect(controller: 'home', action: 'index')
     }
 }
