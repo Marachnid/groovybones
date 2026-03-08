@@ -1,7 +1,5 @@
 package home
 
-import groovybones.GameBoard
-import user.User
 
 /**
  * Default homepage controller that renders index view
@@ -15,18 +13,6 @@ class HomeController {
      */
     def index() {
         println 'HomeController index()'
-
-        //TODO Temp initializations
-
-        User player = User.get(1)
-        session['player'] = player
-        session['playerBoard'] = new GameBoard(boardName: player.userName)
-
-        User opponent = new User(userName: 'Game Opponent')
-        session['opponent'] = opponent
-        session['opponentBoard'] = new GameBoard(boardName: opponent.userName)
-
-
         render(view: 'index')
     }
 }

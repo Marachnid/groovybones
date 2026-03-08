@@ -18,6 +18,7 @@ class ProfileController {
         if (session['mockID']) {
             println session['mockID']
             [user: User.get(session['mockID'])]
+            render(view: 'profile')
         }
         else {
             redirect(controller: 'home', action: 'index')
