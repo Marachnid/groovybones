@@ -10,7 +10,7 @@
 <div class="content-container">
     <g:if test="${session['player']}">
         <ul class="menu-list">
-            <li><g:link controller="game" action="game">Play</g:link></li>
+            <li><g:link controller="game" action="gameInitialization">Play</g:link></li>
             <li><g:link controller="profile" action="profile">Profile</g:link></li>
         </ul>
     </g:if>
