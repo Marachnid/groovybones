@@ -15,7 +15,6 @@
 
 /*fix table/gameboard size*/
 .game-board {flex: 0 0 auto;}
-
 .board-info {flex: 1 1 auto;}
 
 .game-board td {
@@ -36,28 +35,25 @@
     transition: background-color 0.2s ease;
 }
 
-
 .game-board tr:hover td {background-color: #f0f0f0;}
 
-/*player and opponent boards - rotates and flips boards to mirror each other*/
+
+/*
+    Transform player and opponent boards to mirror each other
+*/
+#opponent-board, #player-board, #opponent-board td, #player-board td {transform-origin: center}
+
+#player-board {transform: rotate(90deg) scaleY(-1)}
+#opponent-board {transform: rotate(-90deg)}
+
 #opponent-board td {
     background-color: #fafafa;
-    transform: rotate(180deg);
-    transform-origin: center;
+    transform: rotate(90deg);
 }
 
 #player-board td {
     background-color: #fff;
-    transform: rotate(-90deg);
-    transform-origin: center;
+    transform: rotate(90deg) scaleY(-1);
 }
 
-#player-board {
-    transform: rotate(90deg);
-    transform-origin: center;
-}
 
-#opponent-board {
-    transform: scale(-1, -1);
-    transform-origin: center;
-}
