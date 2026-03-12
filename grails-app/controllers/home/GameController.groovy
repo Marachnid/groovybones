@@ -10,19 +10,16 @@ import user.User
 class GameController {
 
     /**
-     * default method to render game.gsp and generate a random dice value for subsequent turns
+     * default method to render game.gsp
      * @return render game.gsp
      */
-    def game() {
-        println 'GameController game()'
-        session['dice'] = new GameBoard().generateNumber()
-        render(view: 'game')
-    }
+    def game() { println 'GameController game()' }
 
 
     /**
      * initializes session variables to setup player and opponent game boards
-     * @return render game.gsp
+     * activates gameOrchestrator for player vs. opponent turn sequencing
+     * @return initiate gameOrchestrator()
      */
     def gameInitialization() {
         println 'GameController gameInitialization()'
@@ -31,13 +28,29 @@ class GameController {
         session['playerBoard'] = new GameBoard(boardName: session['player'].userName)
 
         //initialize opponent and opponent GameBoard object
+        //TODO this will eventually include opponent behavior profiles (easy/medium/hard)
         User opponent = new User(userName: 'Game Opponent')
         session['opponent'] = opponent
         session['opponentBoard'] = new GameBoard(boardName: opponent.userName)
 
-        //generate a random dice value
-        session['dice'] = new GameBoard().generateNumber()
+        //initiate to player turn first - eventually might make a 50/50 chance between opponent or player starting
         session['playerTurn'] = true
+
+        //if !playerTurn, game.gsp scriptlet will auto execute GameActionController runOpponenBoard() after timeout
+        session['timeout'] = 3000
+        gameOrchestrator()
+    }
+
+
+    /**
+     * separates number generation from default game rendering to prevent new numbers each browser refresh
+     * would control player vs. opponent sequencing/actions here
+     * @return render game.gsp
+     */
+    def gameOrchestrator() {
+        println 'gameAction gameOrchestrator()'
+        session['dice'] = new GameBoard().generateNumber()
+
         render(view: 'game')
     }
 }

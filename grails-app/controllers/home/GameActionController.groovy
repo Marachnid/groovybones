@@ -4,17 +4,9 @@ import groovybones.GameBoard
 
 
 /**
- * Responsible for controlling player and opponent turns and board actions
+ * Responsible for controlling player and opponent board actions
  */
 class GameActionController {
-
-
-    /**
-     * default method, does not render anything at the moment
-     * @return log statement
-     */
-    def gameAction() { println 'gameAction()' }
-
 
     /**
      * handles logic behind running a player turn
@@ -26,6 +18,9 @@ class GameActionController {
     def runPlayerBoard() {
         println 'GameActionController runPlayerBoard()'
 
+        //allows opponent to run autonomously after player turn is finished
+        session['playerTurn'] = false
+
         GameBoard board = session['playerBoard'] as GameBoard
         int columnIndex = params['col'] as int
         int dice = session['dice'] as int
@@ -36,11 +31,16 @@ class GameActionController {
         if (board.addNumber(columnIndex, dice)) {
 
             //if the player's board is full after adding the dice, redirect to gameover page
-            if (board.detectFullBoard()) redirect(controller: 'gameOver', action: 'gameOver')
+            if (board.detectFullBoard()) {
 
-            //if the player's board is not full, redirect back to game for opponent turn
-            else redirect(controller: 'game', action: 'game')
+                println 'full board detected'
+                redirect(controller: 'gameOver', action: 'gameOver')
 
+            //if the player's board is not full, redirect back to gameOrchestrator to run opponent turn
+            } else {
+                println 'Trying to call game gameOrchestrator()'
+                redirect(controller: 'game', action: 'gameOrchestrator')
+            }
 
         //if the number can't be added to the column, send the player back to game with a session hint
         } else {
@@ -54,11 +54,15 @@ class GameActionController {
      * handles logic for game logic opponent turn
      * redirects back to game for player turn if add was successful
      * redirects to gameover if the board is filled
-     * redirects to gameover if add is unsuccessful
+     * redirects to gameover if add is unsuccessful for any reason ("shouldn't happen")
      * @return redirect to game or gameover
      */
     def runOpponentBoard() {
-        println 'GameActionController runBoard()'
+        println 'GameActionController runOpponentBoard()'
+
+        //allows player to execute their turn after opponent's
+        session['playerTurn'] = true
+
         GameBoard board = session['opponentBoard'] as GameBoard
         int dice = session['dice'] as int
 
@@ -69,9 +73,9 @@ class GameActionController {
             if (board.detectFullBoard()) redirect(controller: 'gameOver', action: 'gameOver')
 
             //if the opponent's board is not full, redirect back to game for player's turn
-            else redirect(controller: 'game', action: 'game')
+            else redirect(controller: 'game', action: 'gameOrchestrator')
 
-        //if no dice can be added, redirect to gameover page (this condition "shouldn't" happen, but is a failsafe)
+            //if no dice can be added, redirect to gameover page (this condition "shouldn't" happen, but is a failsafe)
         } else {redirect(controller: 'gameOver', action: 'gameOver')}
     }
 }
