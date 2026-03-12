@@ -28,7 +28,7 @@ class GameController {
         println 'GameController gameInitialization()'
 
         //create player GameBoard object
-        session['playerBoard'] = new GameBoard(boardName: session['userName'])
+        session['playerBoard'] = new GameBoard(boardName: session['player'].userName)
 
         //initialize opponent and opponent GameBoard object
         User opponent = new User(userName: 'Game Opponent')
@@ -37,6 +37,7 @@ class GameController {
 
         //generate a random dice value
         session['dice'] = new GameBoard().generateNumber()
+        session['playerTurn'] = true
         render(view: 'game')
     }
 }
