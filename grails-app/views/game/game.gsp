@@ -36,12 +36,21 @@
     <div class="game-container">
       <table id="player-board" class="game-board">
         <g:each in="${session['playerBoard'].board}" var="column" status="colIndex">
-          <tr class="boardColumn"
-              onclick="window.location='${createLink(
-              controller:'gameAction', action:'runPlayerBoard',
-              params:[col: colIndex])}'"
-              style="cursor:pointer;"
-          >
+
+%{--Enables on-click action for player turn, else --}%
+          <g:if test="${session['playerTurn'] == true}">
+            <tr class="boardColumn"
+                onclick="window.location='${createLink(
+                controller:'gameAction', action:'runPlayerBoard',
+                params:[col: colIndex])}'"
+                style="cursor:pointer;"
+            >
+          </g:if>
+          <g:else>
+            <tr class="boardColumn" style="cursor:pointer">
+          </g:else>
+
+
             <g:each in="${0..(session['playerBoard'].columnMaxSize-1)}" var="i">
               <td>${column[i] == null ? '-' : column[i]}</td>
             </g:each>
