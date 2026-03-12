@@ -33,6 +33,7 @@ class GameController {
         session['opponent'] = opponent
         session['opponentBoard'] = new GameBoard(boardName: opponent.userName)
 
+
         //initiate to player turn first - eventually might make a 50/50 chance between opponent or player starting
         session['playerTurn'] = true
 
@@ -51,6 +52,7 @@ class GameController {
         println 'gameAction gameOrchestrator()'
         session['dice'] = new GameBoard().generateNumber()
 
-        render(view: 'game')
+        //redirect prevents gameOrchestrator from being reinstantiated and dice regenerating on browser refresh
+        redirect(controller: 'game', action: 'game')
     }
 }
