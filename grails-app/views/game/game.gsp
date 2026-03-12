@@ -53,7 +53,7 @@
         <table id="player-board" class="game-board">
           <g:each in="${session['playerBoard'].board}" var="column" status="colIndex">
 
-  %{--Enables on-click action for player turn, else --}%
+  %{--Enables on-click action for player turn, else non-clickable <tr> --}%
             <g:if test="${session['playerTurn'] == true}">
               <tr class="boardColumn"
                   onclick="window.location='${createLink(
