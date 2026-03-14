@@ -1,0 +1,111 @@
+package groovybones
+
+class GameBoard {
+
+    final int columnMaxSize = 3
+    final int range = 6
+    int score = 0
+    ArrayList board = [[], [], []]
+    String boardName
+
+
+    /**
+     * Appends a new value to a board's column if expected column.size <= max
+     * @param i index position of column adding to
+     * @param number number to add to board column - playerBoard[i]
+     * @return boolean true if append, false if not
+     */
+    boolean addNumber(int index, int number) {
+        if (board[index].size() + 1 <= columnMaxSize) board[index] << number
+        else return false
+    }
+
+    /**
+     * Deletes all values of a column matching the targeted number to delete
+     * @param i index position of column deleting from
+     * @param number number to delete
+     * @return boolean true if deleted, false if not
+     */
+    boolean deleteNumber(int index, int number) {
+        if (board[index].contains(number)) board[index].removeAll {it == number}
+        else return false
+    }
+
+    /**
+     * Maps board values to determine all numbers present
+     * determines a number's column index position and how many times it's repeated per column (index)
+     * repeated numbers are counted twice, let Set filter out duplications
+     * @return Set of numbers present, their index, and number of repetitions
+     */
+    Set mapBoardValues() {
+        Set values = []
+
+        board.eachWithIndex {column, i ->
+            column.each {v ->
+                values << [index: i, number: v, repetitions: column.count(v)]
+            }
+        }
+        return values
+    }
+
+    /**
+     * Calculates a board's score
+     * numbers are exponentially multiplied by their value and # of repetitions
+     * repeated values in the same column are more valuable (col 1[3:1] == 3, col 2[3:2] == 9, etc...)
+     * RESET score to 0 each call - will append to old scores otherwise
+     * @return updated score
+     */
+    int calculateScore() {
+
+        //TODO - temporary, have to relook at methods/game needs later
+        score = 0
+
+        mapBoardValues().each {entry ->
+            score += entry['number'] ** entry['repetitions']
+        }
+
+        return score
+    }
+
+
+    /**
+     * Simulates a player placing dice on their board until no more can be placed
+     * if the current column if full, it seeks to fill the next available column
+     * the loop ends once all columns are full
+     * @param board GameBoard object representing a player board
+     * @return true if looping, false if not
+     */
+    boolean runBoard(int dice) {
+        final Random r = new Random()
+        int column = r.nextInt(3)
+        boolean placed
+
+        println "Player: $boardName ---Random dice: $dice --- Random column: $column"
+
+        //try to place randomly first
+        if (addNumber(column, dice)) {
+            placed = true
+
+            //else try to place in next sequential column
+        } else {
+            placed = board.withIndex().any {col, index ->
+                return addNumber(index, dice)
+            }
+        }
+        return placed
+    }
+
+    /**
+     * detects if every inner array == max column size
+     * used to prevent a game loop from overrunning
+     * @return true if a board is full for game end
+     */
+    boolean detectFullBoard() { board.every {it.size() == columnMaxSize} }
+
+
+    /**
+     * generates a random number per a set range
+     * @return random number/int
+     */
+    int generateNumber() { new Random().nextInt(range) + 1 }
+}

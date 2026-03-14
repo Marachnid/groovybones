@@ -13,6 +13,9 @@ class User {
      */
     String firstName
     String userName
+    Integer wins
+    Integer losses
+    Integer totalScore
 
     /**
      * closure for matching input field constraints to DB column constraints (not null, varchar(20))
@@ -20,6 +23,9 @@ class User {
     static constraints = {
         firstName blank: false, maxSize: 20
         userName blank: false, maxSize: 20
+        wins min: 0, max: 255
+        losses min: 0, max: 255
+        totalScore min: 0
     }
 
     /**
@@ -33,5 +39,10 @@ class User {
         //table 'my_table'
         //id column: 'column_name'
         //firstName column: 'column_name'
+        //...
+
+        wins sqlType: 'TINYINT UNSIGNED'
+        losses sqlType: 'TINYINT UNSIGNED'
+        totalScore sqlType: 'INT'
     }
 }

@@ -1,18 +1,14 @@
 package home
 
-
 /**
  * Default homepage controller that renders index view
  * views/home/index.gsp is implicitly rendered
  */
-class HomeController {
+class TutorialController {
 
     /**
      * single-line method to print a test message and render index
-     * @return render index.gsp
+     * @return render tutorial.gsp
      */
-    def index() {
-        println 'HomeController index()'
-        render(view: 'index')
-    }
+    def tutorial() { println 'TutorialController tutorial()' }
 }

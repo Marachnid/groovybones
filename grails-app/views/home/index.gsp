@@ -1,20 +1,24 @@
-
-<%@ page contentType="text/html;charset=UTF-8" %>
+<!doctype html>
 <html>
 <head>
-    <title>Home Page</title>
+    <meta name="layout" content="main"/>
+    %{-- can ignore this error --}%
+    <asset:stylesheet src="index.css"/>
+    <title>Home</title>
 </head>
-
 <body>
-  <h1>Home Page</h1>
-
-  <ul>
-    <li>
-      <g:link controller="message" action="message">MessageController</g:link>
-    </li>
-    <li>
-      <g:link controller="display" action="display">DisplayController</g:link>
-    </li>
-  </ul>
+<div class="content-container">
+    <g:if test="${session['player']}">
+        <ul class="menu-list">
+            <li><g:link controller="game" action="gameInitialization">Play</g:link></li>
+            <li><g:link controller="profile" action="profile">Profile</g:link></li>
+        </ul>
+    </g:if>
+    <g:else>
+        <ul class="menu-list">
+            <li><g:link controller="SignIn" action="signIn">Sign In</g:link></li>
+            <li><g:link controller="Register" action="register">Register</g:link></li>
+        </ul>
+    </g:else>
+</div>
 </body>
-</html>
