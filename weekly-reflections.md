@@ -95,4 +95,55 @@ Notes:
   - It looks like:
     - Hibernate: Controller > Service > DAO > Hibernate > DB
     - GORM: Controller > Service (optional) > Domain Class (GORM class/DB entity)
+
+
+## Week 5
+2/16/26 - 3h
+
+Tasks Completed:
+- minimal work completed, unexpected funeral and other obligations
+
+Notes:
+
+
+
+
+## Week 6
+2/23/26 - 2h
+
+Tasks Completed:
+- minimal work completed, unexpected funeral and other obligations
+
+
+Notes:
+
+
+
+
+
+## Week 7
+3/2/26 - 25h + ?
+
+Tasks Completed:
+- Built out base functionality of the game/website/UI design
+- Integrated a signed-in and signed-out experience
+- Integrated game processes into website session to build an end-to-end gameplay process
+- Added CSS to give basic styling and UX features
+
+Notes:
+- Busy week, many parts of the code/logic/current setup were overhauled to work smoothly together
+
+
+
+## Week 8
+3/7/ - 20h + ?
+
+Tasks Completed:
+- Smoothed out UX experience and game-logic opponent, game-logic opponent can run autonomously against a player
+- Fixed UI components to render more smoothly
+- Merged Dev into Main to allow feature-based development
+
+Notes:
+- Fixed/finalized a lot of the temp/messy aspects of the code and logic
 - 
+
