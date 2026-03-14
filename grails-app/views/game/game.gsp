@@ -11,10 +11,6 @@
   <h2>GAME</h2>
   <h3>Dice: ${session['dice']}</h3>
 
-  <g:link controller="gameAction" action="runOpponentBoard" params="[opponentBoard: session['opponentBoard']]">
-    <button type="button">Add number to Opponent Board</button>
-  </g:link>
-
 
   %{-- IMPORTANT adds delay to the opponent placing a dice value, see GameController GameInitialization() for timeout --}%
   <g:if test="${!session['playerTurn']}">
