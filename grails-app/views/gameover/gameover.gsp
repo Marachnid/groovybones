@@ -8,11 +8,16 @@
 <body>
 
   <h2>GAME OVER</h2>
-  <h3>Player: ${session['user'].userName}</h3>
-  <h3>Board: ${session['userBoard'].board}</h3>
 
+  <h3>Player: ${session['player'].userName}</h3>
   <ul>
-    <li>${session['userBoard'].calculateScore()}</li>
+    <li>Score: ${session['playerBoard'].calculateScore()}</li>
+  </ul>
+
+
+  <h3>Opponent: ${session['opponent'].userName}</h3>
+  <ul>
+    <li>Score: ${session['opponentBoard'].calculateScore()}</li>
   </ul>
 
 
