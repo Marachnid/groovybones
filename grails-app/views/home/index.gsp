@@ -10,13 +10,13 @@
 <div class="content-container">
     <g:if test="${session['player']}">
         <ul class="menu-list">
-            <li><g:link controller="game" action="gameInitialization">Play</g:link></li>
-            <li><g:link controller="profile" action="profile">Profile</g:link></li>
+            <li><g:link controller="Game" action="gameInitialization">Play</g:link></li>
+            <li><g:link controller="Profile" action="profile">Profile</g:link></li>
         </ul>
     </g:if>
     <g:else>
         <ul class="menu-list">
-            <li><g:link controller="SignIn" action="signIn">Sign In</g:link></li>
+            <li><g:link controller="Login" action="login">Sign In</g:link></li>
             <li><g:link controller="Register" action="register">Register</g:link></li>
         </ul>
     </g:else>
