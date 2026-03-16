@@ -1,5 +1,7 @@
 package home
 
+import groovybones.UserService
+import user.User
 import groovy.json.JsonSlurper
 import groovybones.CognitoOAuthService
 
@@ -19,17 +21,17 @@ class LoginController {
     /**
      * signs a user out of both cognito and the session, redirects users to home
      * grabs AWS logout URL from properties
-     * @return logout redirect
+     * @return logout redirect, redirects to home after Cognito signout
      */
     def logout() {
         session.invalidate()
-        redirect(url: "${grailsApplication.config.aws.cognito.loginUI}")
+        redirect(url: "${grailsApplication.config.aws.cognito.logoutUI}")
     }
 
 
     /**
      * call back method to validate sign-in code with authentication
-     * @return redirect user to home for successful login, otherwise authorization error
+     * @return redirect user to home for successful login, otherwise render authorization error
      */
     def callback() {
         String code = params.code
@@ -49,12 +51,23 @@ class LoginController {
         def parsedPayload = new JsonSlurper().parseText(decodedPayload)
 
 
-//        println 'PAYLOAD ---------------------------------------'
-//        println parsedPayload
-//        println parsedPayload['sub']
-//        println parsedPayload['cognito:username']
+        //sync Cognito account with DB entities by cognitoSub
+        User player = User.findByCognitoSub(parsedPayload['sub'] as String) as User
 
+        //if player is found via sub token, auto-update username and set session
+        if (player != null) {
+            player.username = parsedPayload['cognito:username']
+            player.save(failOnError: true)
+            session['player'] = player
 
+        //else create a new User entity linked to sub token
+        } else {
+            UserService service = new UserService()
+            session['player'] = service.createUser(
+                    parsedPayload['sub'] as String,
+                    parsedPayload['cognito:username'] as String
+            )
+        }
 
         //redirect to home after successful login
         redirect(controller: "home", action: "index")
