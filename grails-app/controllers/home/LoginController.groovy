@@ -53,16 +53,16 @@ class LoginController {
 
         //sync Cognito account with DB entities by cognitoSub
         User player = User.findByCognitoSub(parsedPayload['sub'] as String) as User
+        UserService service = new UserService()
 
         //if player is found via sub token, auto-update username and set session
         if (player != null) {
             player.username = parsedPayload['cognito:username']
-            player.save(failOnError: true)
+            service.updateUser(player)
             session['player'] = player
 
         //else create a new User entity linked to sub token
         } else {
-            UserService service = new UserService()
             session['player'] = service.createUser(
                     parsedPayload['sub'] as String,
                     parsedPayload['cognito:username'] as String

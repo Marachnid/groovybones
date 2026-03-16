@@ -22,12 +22,8 @@ class UserService {
     /**
      * updates a User entity
      * @param user entity to be updated
-     * @return updated User entity
      */
-    User updateUser(User user) {
-        user.save(failOnError: true)
-        return user
-    }
+    def updateUser(User user) { user.save(failOnError: true) }
 
 
     /**
