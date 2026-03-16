@@ -34,7 +34,7 @@ class LoginController {
      * @return redirect user to home for successful login, otherwise render authorization error
      */
     def callback() {
-        String code = params.code
+        String code = params['code']
 
         //in case of any issue with retrieving a code
         if (!code) {render "Missing authorization code"}
