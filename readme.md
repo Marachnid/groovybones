@@ -1,5 +1,28 @@
 # GroovyBones
 
+## Problem Statement
+My goal with GroovyBones is to build a browser game recreation of the dice minigame 'Knucklebones' found in the game 'Cult of the Lamb'
+(https://www.cultofthelamb.com/). The main problem is Knucklebones is a minigame and not conveniently accessed as a standalone game. Not to mention
+Cult of the Lamb's unique ability to brick my entire Xbox which makes playing it risky. 
+
+The desired outcome of GroovyBones is to allow a player to:
+- Conveniently access GroovyBones (Knucklebones) publicly
+- register and manage a player profile 
+- play GroovyBones against a competitive game-logic opponent
+- accumulate persistent player statistics to build their profile records
+
+### How to Play
+> - The game consists of two 3x3 boards, each belonging to their respective player.
+> - The players take turns. On a player's turn, they roll a single 6-sided die, and must place it in a column on their board. A filled column does not accept any more dice.
+> - Each player has a score, which is the sum of all the dice values on their board. The score awarded by each column is also displayed.
+> - If a player places multiple dice of the same value in the same column, the score awarded for each of those dice is multiplied by the number of dice of the same value in that column. e.g. if a column contains 4-1-4, then the score for that column is 4x2 + 1x1 + 4x2 = 17.
+> * **source:** https://cult-of-the-lamb.fandom.com/wiki/Knucklebones
+
+### Constraints
+- Knucklebones as a browser game will be missing some of the throughlines that make it exciting within 'Cult of the Lamb'
+(mostly gambling aspects/rewards that carry over into the main game)
+
+
 ## Project environment:
 - **Language**
   - Groovy 3.0.25
@@ -18,8 +41,8 @@
 - **CSS**
   - bootstrap
 - **Validation**: 
-  - Bootstrap front end validation
-  - backend TBD
+  - Cognito hosted UI
+  - TBD
 - **Security/Authentication**
   - AWS Cognito
 - **Hosting**
