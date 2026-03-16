@@ -122,16 +122,18 @@ Notes:
 
 
 ## Week 7
-3/2/26 - 25h + ?
+3/2/26 - 35h
 
 Tasks Completed:
 - Built out base functionality of the game/website/UI design
 - Integrated a signed-in and signed-out experience
 - Integrated game processes into website session to build an end-to-end gameplay process
 - Added CSS to give basic styling and UX features
+- Built out AWS Cognito signin/registration/authentication and synced to local DB
 
 Notes:
 - Busy week, many parts of the code/logic/current setup were overhauled to work smoothly together
+- Feature-based development is much easier with the platform figured/built out
 
 
 
