@@ -8,12 +8,12 @@ class UserService {
 
     /**
      * initializes and creates a new User entity
-     * @param firstName first name of user
-     * @param userName user's userName
+     * @param cognitoSub token parsed from Cognito account ID
+     * @param username username pulled from Account ID
      * @return new user with pre-initialized wins/losses/totalScore = 0
      */
-    User createUser(String firstName, String userName) {
-        User user = new User(firstName: firstName, userName: userName, wins: 0, losses: 0, totalScore: 0)
+    User createUser(String cognitoSub, String username) {
+        User user = new User(cognitoSub: cognitoSub, username: username,  wins: 0, losses: 0, totalScore: 0)
         user.save(failOnError: true)
         return user
     }

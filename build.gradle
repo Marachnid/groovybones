@@ -64,6 +64,11 @@ dependencies {
     //MYSQL connector
     implementation "com.mysql:mysql-connector-j:8.3.0"
 
+    //AWS Cognito
+    implementation 'software.amazon.awssdk:cognitoidentityprovider:2.25.0'
+    implementation 'software.amazon.awssdk:auth:2.25.0'
+
+
     compileOnly "io.micronaut:micronaut-inject-groovy"
     console "org.grails:grails-console"
     runtimeOnly "com.bertramlabs.plugins:asset-pipeline-grails:4.5.1"

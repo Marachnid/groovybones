@@ -13,7 +13,7 @@
   <div class="content-container">
     <div class="profile-lists">
       <ul class="menu-list profile-list">
-        <li>${session['player'].userName}</li>
+        <li>${session['player'].username}</li>
         <li>Manage Account (eventual link)</li>
         <li>Manage Mods (eventual link)</li>
         <li>Delete Account (eventual link)</li>
