@@ -25,13 +25,13 @@ class GameController {
         println 'GameController gameInitialization()'
 
         //create player GameBoard object
-        session['playerBoard'] = new GameBoard(boardName: session['player'].userName)
+        session['playerBoard'] = new GameBoard(boardName: session['player'].username)
 
         //initialize opponent and opponent GameBoard object
         //TODO this will eventually include opponent behavior profiles (easy/medium/hard)
-        User opponent = new User(userName: 'Game Opponent')
+        User opponent = new User(username: 'Game Opponent')
         session['opponent'] = opponent
-        session['opponentBoard'] = new GameBoard(boardName: opponent.userName)
+        session['opponentBoard'] = new GameBoard(boardName: opponent.username)
 
 
         //initiate to player turn first - eventually might make a 50/50 chance between opponent or player starting
