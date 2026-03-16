@@ -11,8 +11,8 @@ class User {
         camelCase is parsed into snake_case
         if DB id column name = 'id', id attribute is implicit
      */
-    String firstName
-    String userName
+    String cognitoSub
+    String username
     Integer wins
     Integer losses
     Integer totalScore
@@ -21,8 +21,8 @@ class User {
      * closure for matching input field constraints to DB column constraints (not null, varchar(20))
      */
     static constraints = {
-        firstName blank: false, maxSize: 20
-        userName blank: false, maxSize: 20
+        cognitoSub blank: false, maxSize: 36
+        username blank: false, maxSize: 25
         wins min: 0, max: 255
         losses min: 0, max: 255
         totalScore min: 0
