@@ -2,13 +2,36 @@
 <!doctype html>
 <html>
 <head>
-  <meta name="layout" content="main"/>
-  %{-- can ignore this error --}%
+  %{-- can ignore these errors --}%
+  <asset:stylesheet src="main.css"/>
   <asset:stylesheet src="game.css"/>
   <title>GAME</title>
 </head>
 <body>
-  <h2>GAME</h2>
+
+<div class="dropdown-navbar">
+  <input type="checkbox" id="menuToggle" class="menu-toggle">
+  <label for="menuToggle" class="navbar-header">
+    GroovyBones <span class="arrow"></span>
+  </label>
+
+  <nav class="navbar-menu">
+    <ul>
+      <li><g:link controller="home" action="index">Home</g:link></li>
+      <li><g:link controller="Tutorial" action="tutorial">Tutorial</g:link></li>
+      <li><g:link controller="About" action="about">About</g:link></li>
+
+      <g:if test="${session['player']}">
+        <li><g:link controller="Login" action="logout">
+          sign-out(${session['player'].username})
+        </g:link></li>
+      </g:if>
+    </ul>
+  </nav>
+</div>
+
+
+  <h2>${session['player'].username} VS ${session['opponent'].username}</h2>
   <h3>Dice: ${session['dice']}</h3>
 
 
