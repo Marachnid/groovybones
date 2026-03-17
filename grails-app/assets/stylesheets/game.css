@@ -14,8 +14,12 @@
 }
 
 /*fix table/gameboard size*/
-.game-board {flex: 0 0 auto;}
-.board-info {flex: 1 1 auto;}
+.game-board {flex: 0 0 auto}
+.board-info {flex: 1 1 auto}
+
+/*prevents opponent vs. player board interaction confusion*/
+.player-column {cursor: pointer}
+.opponent-column {cursor: default}
 
 .game-board td {
     width: 10vmin;
@@ -31,16 +35,13 @@
     vertical-align: middle;
     font-size: 5vmin;
     font-weight: bold;
-    cursor: pointer;
     transition: background-color 0.2s ease;
 }
 
 .game-board tr:hover td {background-color: #f0f0f0;}
 
 
-/*
-    Transform player and opponent boards to mirror each other
-*/
+/*Transform player and opponent boards to mirror each other*/
 #opponent-board, #player-board, #opponent-board td, #player-board td {transform-origin: center}
 
 #player-board {transform: rotate(90deg) scaleY(-1)}
@@ -57,3 +58,51 @@
 }
 
 
+
+/*GAME NAVBAR*/
+.dropdown-navbar {
+    background-color: #222;
+    color: #fff;
+    font-family: Arial, sans-serif;
+}
+
+.navbar-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px 16px;
+    cursor: pointer;
+    user-select: none;
+    font-size: 20px;
+    font-weight: bold;
+}
+
+/*workaround so I don't have to add JavaScript*/
+.arrow::after {
+    content: ">";
+    margin-left: 8px;
+    transition: transform 0.2s ease;
+}
+.menu-toggle:checked + .navbar-header .arrow::after {content: "v"}
+.menu-toggle {display: none}
+
+.navbar-menu {
+    display: none;
+    background-color: #333;
+}
+
+.menu-toggle:checked ~ .navbar-menu {display: block}
+
+.navbar-menu ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+.navbar-menu li {border-top: 1px solid #444}
+.navbar-menu li a:hover {background-color: #444}
+.navbar-menu li a {
+    display: block;
+    padding: 10px 16px;
+    color: #fff;
+    text-decoration: none;
+}

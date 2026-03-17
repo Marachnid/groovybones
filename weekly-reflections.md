@@ -138,7 +138,7 @@ Notes:
 
 
 ## Week 8
-3/7/ - 20h + ?
+3/9/ - 20h + ?
 
 Tasks Completed:
 - Smoothed out UX experience and game-logic opponent, game-logic opponent can run autonomously against a player
@@ -149,3 +149,13 @@ Notes:
 - Fixed/finalized a lot of the temp/messy aspects of the code and logic
 - 
 
+## Week 9
+3/16/ - 6
+
+Tasks Completed:
+- Updated project documentation/design documents
+- Reworked game and gameover screens
+
+Notes:
+- Fixed/finalized a lot of the temp/messy aspects of the code and logic
+- 
