@@ -42,7 +42,7 @@
 - [x] Implement AWS Cognito user processes
 
 ## Week 9
-- [ ] Rework game.gsp - create a dedicated game page with limited/hideable Navbar for save & exits
+- [x] Rework game.gsp - create a dedicated game page with limited/hideable Navbar for save & exits
 - [ ] Add 'intelligent' opponent actions - game opponent detects player columns and targets stacked values (i.e. col1[3, 3])
 - [ ] Add 'intelligent' difficulty scaling (i.e. if (random <= 3 ? hostileAction() : randomAction())
 
