@@ -95,6 +95,7 @@
           </g:each>
         </table>
 
+        %{--player info--}%
         <div class="board-info">
           <h3>${session['playerBoard'].boardName}</h3>
           <h3>Score: ${session['playerBoard'].calculateScore()}</h3>
