@@ -5,7 +5,7 @@
   %{-- can ignore these errors --}%
   <asset:stylesheet src="main.css"/>
   <asset:stylesheet src="game.css"/>
-  <title>GAME</title>
+  <title>Game</title>
 </head>
 <body>
 
@@ -31,7 +31,7 @@
     </nav>
   </div>
 
-  <h2>${session['player'].username} VS ${session['opponent'].username}</h2>
+  <h2>${session['player'].username.toUpperCase()} VS ${session['opponent'].username}</h2>
 
 
   %{-- IMPORTANT adds delay to the opponent placing a dice value, see GameController GameInitialization() for timeout --}%
@@ -97,7 +97,7 @@
 
         %{--player info--}%
         <div class="board-info">
-          <h3>${session['playerBoard'].boardName}</h3>
+          <h3>${session['playerBoard'].boardName.toUpperCase()}</h3>
           <h3>Score: ${session['playerBoard'].calculateScore()}</h3>
           <h3>${session['playerTurn'] ? "Dice: ${session['dice']}" : ''}</h3>
         </div>
