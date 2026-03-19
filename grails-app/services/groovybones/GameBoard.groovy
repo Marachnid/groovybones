@@ -7,7 +7,6 @@ class GameBoard {
     final int range = 6
     int score = 0
     ArrayList board = [[], [], []]
-    String boardName
     List<Closure<Boolean>> actions
 
 
@@ -18,10 +17,8 @@ class GameBoard {
      * @return boolean true if append, false if not
      */
     boolean addNumber(int index, int number) {
-        if (board[index].size() + 1 <= columnMaxSize)
-            board[index] << number
-        else
-            return false
+        if (board[index].size() + 1 <= columnMaxSize) board[index] << number
+        else false
     }
 
     /**

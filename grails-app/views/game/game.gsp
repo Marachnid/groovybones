@@ -63,7 +63,7 @@
 
         %{--opponent info--}%
         <div class="board-info">
-          <h3>${session['opponentBoard'].boardName}</h3>
+          <h3>${session['opponent'].username}</h3>
           <h3>Score: ${session['opponentBoard'].calculateScore()}</h3>
           <h3>${session['playerTurn'] ? '' : "Dice: ${session['dice']}"}</h3>
           <div class="thinking">${session['playerTurn'] ? '' : 'Opponent is plotting your demise'}</div>
@@ -97,7 +97,7 @@
 
         %{--player info--}%
         <div class="board-info">
-          <h3>${session['playerBoard'].boardName.toUpperCase()}</h3>
+          <h3>${session['player'].username.toUpperCase()}</h3>
           <h3>Score: ${session['playerBoard'].calculateScore()}</h3>
           <h3>${session['playerTurn'] ? "Dice: ${session['dice']}" : ''}</h3>
         </div>
