@@ -8,6 +8,7 @@ class GameBoard {
     int score = 0
     ArrayList board = [[], [], []]
     String boardName
+    List<Closure<Boolean>> actions
 
 
     /**
@@ -79,10 +80,61 @@ class GameBoard {
 
 
     /**
-     * generates a random number per a set range
-     * @return random number/int
+     * generates a random number per a set range + 1 to avoid 0
+     * @return random number/int + 1
      */
     int generateRandomDice() { r.nextInt(range) + 1 }
+
+
+    /** WIP
+     * orchestrates opponent behavior and likelihood for random, attack, stack moves
+     *
+     * @param dice
+     * @param player
+     * @return
+     */
+    def opponentOrchestrator(int dice, GameBoard player) {
+
+        //method of sequencing actions - if attackBoard fails, stackBoard, else runBoardRandomly()
+        actions = [
+                {attackBoard(dice, player)},
+                {stackBoard(dice, player)},
+                {runBoardRandomly(dice, player)}
+        ]
+
+        return actions.any { it() }
+        /*
+            hard = [
+                {attackBoard(dice, player)},
+                {stackBoard(dice, player)},
+                {runBoardRandomly(dice, player)}
+            ]
+
+            medium = [
+                {stackBoard(dice, player)},
+                {attackBoard(dice, player)},
+                {runBoardRandomly(dice, player)}
+            ]
+
+            easy = [
+                {stackBoard(dice, player)},
+                {runBoardRandomly(dice, player)}
+            ]
+
+            MIGHT be able to organize these into a switch/case statement
+
+            enum Difficulty {EASY, MEDIUM, HARD}
+            switch (difficulty) {
+            case Difficulty.EASY:
+                return actions.take(1)
+            case Difficulty.Medium:
+                return actions.take(2)
+            case Difficulty.Hard:
+                return actions
+         */
+    }
+
+
 
 
     /**
@@ -92,6 +144,8 @@ class GameBoard {
      * @return true if can place randomly, false if not
      */
     boolean runBoardRandomly(int dice, GameBoard player) {
+        println 'Run Randomly'
+
         int column = r.nextInt(3)
 
         if (addNumber(column, dice)) {
@@ -116,6 +170,7 @@ class GameBoard {
      * @return true if attack, false if not
      */
     boolean attackBoard(int dice, GameBoard player) {
+        println 'Attack Board'
 
         //target player columns containing dice value
         ArrayList playerIndexes = player.findIndexes(dice)
@@ -129,6 +184,8 @@ class GameBoard {
             int ran = r.nextInt(playerIndexes.size())
             player.deleteNumber(playerIndexes[ran] as int, dice)
             return addNumber(playerIndexes[ran] as int, dice)
+
+            //random fallback
         } else return false
     }
 
@@ -143,6 +200,9 @@ class GameBoard {
      * @return true if stack, false if not
      */
     boolean stackBoard(int dice, GameBoard player) {
+        println 'Stacking Board'
+
+        //target own columns containing dice value
         ArrayList opponentIndexes = findIndexes(dice)
 
         //check to see if columns are already full before stacking
@@ -154,6 +214,8 @@ class GameBoard {
             int ran = r.nextInt(opponentIndexes.size())
             player.deleteNumber(opponentIndexes[ran] as int, dice)
             return addNumber(opponentIndexes[ran] as int, dice)
+
+            //random fallback
         } else return false
     }
 
