@@ -50,7 +50,7 @@ class GameController {
      */
     def gameOrchestrator() {
         println 'gameAction gameOrchestrator()'
-        session['dice'] = new GameBoard().generateNumber()
+        session['dice'] = new GameBoard().generateRandomDice()
 
         //redirect prevents gameOrchestrator from being reinstantiated and dice regenerating on browser refresh
         redirect(controller: 'game', action: 'game')

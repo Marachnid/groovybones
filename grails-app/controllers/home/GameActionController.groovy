@@ -21,17 +21,20 @@ class GameActionController {
         //allows opponent to run autonomously after player turn is finished
         session['playerTurn'] = false
 
-        GameBoard board = session['playerBoard'] as GameBoard
+        GameBoard playerBoard = session['playerBoard'] as GameBoard
+        GameBoard opponentBoard = session['opponentBoard'] as GameBoard
         int columnIndex = params['col'] as int
         int dice = session['dice'] as int
         session['columnFullHint'] = null                        //initialize/reinitialize to null to remove old message
 
 
         //if the dice can be added to the specific column and returns true
-        if (board.addNumber(columnIndex, dice)) {
+        if (playerBoard.addNumber(columnIndex, dice)) {
+
+            opponentBoard.deleteNumber(columnIndex, dice)
 
             //if the player's board is full after adding the dice, redirect to gameover page
-            if (board.detectFullBoard()) {
+            if (playerBoard.detectFullBoard()) {
 
                 println 'full board detected'
                 redirect(controller: 'gameOver', action: 'gameOver')
@@ -63,14 +66,15 @@ class GameActionController {
         //allows player to execute their turn after opponent's
         session['playerTurn'] = true
 
-        GameBoard board = session['opponentBoard'] as GameBoard
+        GameBoard opponentBoard = session['opponentBoard'] as GameBoard
+        GameBoard playerBoard = session['playerBoard'] as GameBoard
         int dice = session['dice'] as int
 
         //if the dice can be added to the opponent board and returns true
-        if (board.runBoard(dice)) {session['opponentBoard'] = board
+        if (opponentBoard.opponentOrchestrator(dice, playerBoard)) {session['opponentBoard'] = opponentBoard
 
             //if the opponent board is full after adding, redirect to gameover
-            if (board.detectFullBoard()) redirect(controller: 'gameOver', action: 'gameOver')
+            if (opponentBoard.detectFullBoard()) redirect(controller: 'gameOver', action: 'gameOver')
 
             //if the opponent's board is not full, redirect back to game for player's turn
             else redirect(controller: 'game', action: 'gameOrchestrator')
