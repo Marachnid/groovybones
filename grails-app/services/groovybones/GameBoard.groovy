@@ -28,7 +28,7 @@ class GameBoard {
      */
     boolean deleteNumber(int index, int number) {
         if (board[index].contains(number)) board[index].removeAll {it == number}
-        else return false
+        else false
     }
 
     /**
@@ -45,7 +45,7 @@ class GameBoard {
                 values << [index: i, number: v, repetitions: column.count(v)]
             }
         }
-        return values
+        values
     }
 
     /**
@@ -56,13 +56,11 @@ class GameBoard {
      * @return updated score
      */
     int calculateScore() {
-        //TODO - temporary, have to relook at methods/game needs later
         score = 0
-
         mapBoardValues().each {entry ->
             score += entry['number'] ** entry['repetitions']
         }
-        return score
+        score
     }
 
     /**
@@ -107,7 +105,7 @@ class GameBoard {
                 actions = [stack, random]
                 break
         }
-        return actions.any { it() }
+        actions.any { it() }
     }
 
 
@@ -125,11 +123,11 @@ class GameBoard {
             return true
         }
 
+        //try to place in the next open column if random fails
         return board.withIndex().any {col, index ->
             if (addNumber(index as int, dice)) {
                 player.deleteNumber(index as int, dice)
                 true
-
             } else false
         }
     }
@@ -158,7 +156,7 @@ class GameBoard {
             player.deleteNumber(playerIndexes[ran] as int, dice)
             return addNumber(playerIndexes[ran] as int, dice)
 
-        } else return false
+        } else false
     }
 
 
@@ -185,7 +183,7 @@ class GameBoard {
             player.deleteNumber(opponentIndexes[ran] as int, dice)
             return addNumber(opponentIndexes[ran] as int, dice)
 
-        } else return false
+        } else false
     }
 
 
@@ -208,7 +206,6 @@ class GameBoard {
         board.eachWithIndex {column, index ->
             if (column.size() == columnMaxSize) indexes -= index
         }
-
-        return indexes
+        indexes
     }
 }
