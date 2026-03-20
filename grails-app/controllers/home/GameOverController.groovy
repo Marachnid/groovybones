@@ -1,14 +1,13 @@
 package home
 
 /**
- * Default homepage controller that renders index view
- * views/home/index.gsp is implicitly rendered
+ * Responsible for handling post-game operations
  */
 class GameOverController {
 
     /**
-     * 
-     * @return render gameover.gsp
+     * default method to render gameOver
+     * @return render gameOver
      */
     def gameOver() { println 'GameOverController gameOver()' }
 }

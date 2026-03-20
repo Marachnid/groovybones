@@ -1,5 +1,6 @@
 package home
 import groovybones.GameBoard
+import groovybones.OpponentActions
 import user.User
 
 /**
@@ -19,25 +20,29 @@ class GameController {
     /**
      * initializes session variables to setup player and opponent game boards
      * activates gameOrchestrator for player vs. opponent turn sequencing
-     * @return initiate gameOrchestrator()
+     * @return gameOrchestrator()
      */
     def gameInitialization() {
         println 'GameController gameInitialization()'
 
-        //create player GameBoard object
+        //instantiate player session GameBoard
         session['playerBoard'] = new GameBoard()
 
-        //initialize opponent and opponent GameBoard object
-        //TODO this will eventually include opponent behavior profiles (easy/medium/hard)
-        User opponent = new User(username: 'Game Opponent')
-        session['opponent'] = opponent
+        //instantiate opponent session User and GameBoard
+        session['opponent'] = new User(username: 'Game Opponent')
         session['opponentBoard'] = new GameBoard()
 
+        session['opponentActions'] = new OpponentActions(
+                opponent: session['opponentBoard'] as GameBoard,
+                player: session['playerBoard'] as GameBoard,
+                difficulty: OpponentActions.Difficulty.medium   //TODO eventually user-selected
+        )
 
-        //initiate to player turn first - eventually might make a 50/50 chance between opponent or player starting
+
+        //initiate to player turn first
         session['playerTurn'] = true
 
-        //if !playerTurn, game.gsp scriptlet will auto execute GameActionController runOpponenBoard() after timeout
+        //timeout to delay instant opponent turn
         session['timeout'] = 3000
         gameOrchestrator()
     }

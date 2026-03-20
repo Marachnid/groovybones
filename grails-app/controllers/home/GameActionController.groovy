@@ -1,10 +1,11 @@
 package home
 
 import groovybones.GameBoard
+import groovybones.OpponentActions
 
 
 /**
- * Responsible for controlling player and opponent board actions
+ * Responsible for controlling player and opponent routing based on GameBoard board actions/results
  */
 class GameActionController {
 
@@ -12,8 +13,8 @@ class GameActionController {
      * handles logic behind running a player turn
      * redirects player back to game with hint if trying to place in a full column
      * redirects player back to game if column add successful
-     * redirects player to gameover if they fill their board
-     * @return redirect to game or gameover
+     * redirects player to gameOver if they fill their board
+     * @return redirect to game or gameOver
      */
     def runPlayerBoard() {
         println 'GameActionController runPlayerBoard()'
@@ -25,27 +26,18 @@ class GameActionController {
         GameBoard opponentBoard = session['opponentBoard'] as GameBoard
         int columnIndex = params['col'] as int
         int dice = session['dice'] as int
-        session['columnFullHint'] = null                        //initialize/reinitialize to null to remove old message
+        session['columnFullHint'] = null        //initialize/reinitialize to null to remove old message
 
 
-        //if the dice can be added to the specific column and returns true
+        //if the dice can be added to the specific column, delete matching dice in same opponent column
         if (playerBoard.addNumber(columnIndex, dice)) {
-
             opponentBoard.deleteNumber(columnIndex, dice)
 
-            //if the player's board is full after adding the dice, redirect to gameover page
-            if (playerBoard.detectFullBoard()) {
+            //redirect to gameOver if board is full after placing, else redirect to game:gameOrchestrator
+            if (playerBoard.detectFullBoard()) redirect(controller: 'gameOver', action: 'gameOver')
+            else redirect(controller: 'game', action: 'gameOrchestrator')
 
-                println 'full board detected'
-                redirect(controller: 'gameOver', action: 'gameOver')
-
-            //if the player's board is not full, redirect back to gameOrchestrator to run opponent turn
-            } else {
-                println 'Trying to call game gameOrchestrator()'
-                redirect(controller: 'game', action: 'gameOrchestrator')
-            }
-
-        //if the number can't be added to the column, send the player back to game with a session hint
+        //redirect to game with hint if column already full
         } else {
             session['columnFullHint'] = 'column is full, try another'
             redirect(controller: 'game', action: 'game')
@@ -56,9 +48,9 @@ class GameActionController {
     /**
      * handles logic for game logic opponent turn
      * redirects back to game for player turn if add was successful
-     * redirects to gameover if the board is filled
-     * redirects to gameover if add is unsuccessful for any reason ("shouldn't happen")
-     * @return redirect to game or gameover
+     * redirects to gameOver if the board is filled
+     * redirects to gameOver if add is unsuccessful for any reason ("shouldn't happen")
+     * @return redirect to game or gameOver
      */
     def runOpponentBoard() {
         println 'GameActionController runOpponentBoard()'
@@ -66,24 +58,20 @@ class GameActionController {
         //allows player to execute their turn after opponent's
         session['playerTurn'] = true
 
-        //TODO TEMP
-        session['difficulty'] = 'medium'
-
-        GameBoard.Difficulty difficulty = session['difficulty'] as GameBoard.Difficulty
+        OpponentActions opponentActions = session['opponentActions'] as OpponentActions
         GameBoard opponentBoard = session['opponentBoard'] as GameBoard
-        GameBoard playerBoard = session['playerBoard'] as GameBoard
         int dice = session['dice'] as int
 
         //if the dice can be added to the opponent board and returns true
-        if (opponentBoard.opponentOrchestrator(difficulty, dice, playerBoard)) {session['opponentBoard'] = opponentBoard
+        if (opponentActions.opponentOrchestrator(dice)) {
 
-            //if the opponent board is full after adding, redirect to gameover
+            //if the opponent board is full after adding, redirect to gameOver
             if (opponentBoard.detectFullBoard()) redirect(controller: 'gameOver', action: 'gameOver')
 
             //if the opponent's board is not full, redirect back to game for player's turn
             else redirect(controller: 'game', action: 'gameOrchestrator')
 
-            //if no dice can be added, redirect to gameover page (this condition "shouldn't" happen, but is a failsafe)
+            //if no dice can be added, redirect to gameOver page ("shouldn't" happen, but is a failsafe)
         } else {redirect(controller: 'gameOver', action: 'gameOver')}
     }
 }
