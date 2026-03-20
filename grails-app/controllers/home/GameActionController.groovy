@@ -66,12 +66,16 @@ class GameActionController {
         //allows player to execute their turn after opponent's
         session['playerTurn'] = true
 
+        //TODO TEMP
+        session['difficulty'] = 'medium'
+
+        GameBoard.Difficulty difficulty = session['difficulty'] as GameBoard.Difficulty
         GameBoard opponentBoard = session['opponentBoard'] as GameBoard
         GameBoard playerBoard = session['playerBoard'] as GameBoard
         int dice = session['dice'] as int
 
         //if the dice can be added to the opponent board and returns true
-        if (opponentBoard.opponentOrchestrator(dice, playerBoard)) {session['opponentBoard'] = opponentBoard
+        if (opponentBoard.opponentOrchestrator(difficulty, dice, playerBoard)) {session['opponentBoard'] = opponentBoard
 
             //if the opponent board is full after adding, redirect to gameover
             if (opponentBoard.detectFullBoard()) redirect(controller: 'gameOver', action: 'gameOver')
