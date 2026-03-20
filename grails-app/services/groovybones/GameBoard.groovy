@@ -1,13 +1,12 @@
 package groovybones
 
 class GameBoard {
-
+    final enum Difficulty {easy, medium, hard}
     final Random r = new Random()
     final int columnMaxSize = 3
     final int range = 6
     int score = 0
     ArrayList board = [[], [], []]
-    List<Closure<Boolean>> actions
 
 
     /**
@@ -57,14 +56,12 @@ class GameBoard {
      * @return updated score
      */
     int calculateScore() {
-
         //TODO - temporary, have to relook at methods/game needs later
         score = 0
 
         mapBoardValues().each {entry ->
             score += entry['number'] ** entry['repetitions']
         }
-
         return score
     }
 
@@ -83,55 +80,35 @@ class GameBoard {
     int generateRandomDice() { r.nextInt(range) + 1 }
 
 
-    /** WIP
-     * orchestrates opponent behavior and likelihood for random, attack, stack moves
-     *
-     * @param dice
-     * @param player
-     * @return
+    /**
+     * orchestrates opponent behavior
+     * difficulty is based on sequencing actions by true/false to determine priority
+     * hard and medium 'see' the player
+     * easy only 'sees' its own board
+     * @param difficulty enum reference to control cases
+     * @param dice int value generated each turn
+     * @param player GameBoard object to act against
+     * @return opponent action
      */
-    def opponentOrchestrator(int dice, GameBoard player) {
+    def opponentOrchestrator(Difficulty difficulty, int dice, GameBoard player) {
+        def attack = { attackBoard(dice, player) }
+        def stack = { stackBoard(dice, player) }
+        def random = { runBoardRandomly(dice, player) }
 
-        //method of sequencing actions - if attackBoard fails, stackBoard, else runBoardRandomly()
-        actions = [
-                {attackBoard(dice, player)},
-                {stackBoard(dice, player)},
-                {runBoardRandomly(dice, player)}
-        ]
-
+        def actions
+        switch(difficulty) {
+            case difficulty.hard:
+                actions = [attack, stack, random]
+                break
+            case difficulty.medium:
+                actions = [stack, attack, random]
+                break
+            case difficulty.easy:
+                actions = [stack, random]
+                break
+        }
         return actions.any { it() }
-        /*
-            hard = [
-                {attackBoard(dice, player)},
-                {stackBoard(dice, player)},
-                {runBoardRandomly(dice, player)}
-            ]
-
-            medium = [
-                {stackBoard(dice, player)},
-                {attackBoard(dice, player)},
-                {runBoardRandomly(dice, player)}
-            ]
-
-            easy = [
-                {stackBoard(dice, player)},
-                {runBoardRandomly(dice, player)}
-            ]
-
-            MIGHT be able to organize these into a switch/case statement
-
-            enum Difficulty {EASY, MEDIUM, HARD}
-            switch (difficulty) {
-            case Difficulty.EASY:
-                return actions.take(1)
-            case Difficulty.Medium:
-                return actions.take(2)
-            case Difficulty.Hard:
-                return actions
-         */
     }
-
-
 
 
     /**
@@ -141,18 +118,19 @@ class GameBoard {
      * @return true if can place randomly, false if not
      */
     boolean runBoardRandomly(int dice, GameBoard player) {
-        println 'Run Randomly'
-
         int column = r.nextInt(3)
 
         if (addNumber(column, dice)) {
             player.deleteNumber(column, dice)
             return true
-        } else {
-            board.withIndex().any {col, index ->
-                if (addNumber(index as int, dice)) player.deleteNumber(index as int, dice)
-                else return false
-            }
+        }
+
+        return board.withIndex().any {col, index ->
+            if (addNumber(index as int, dice)) {
+                player.deleteNumber(index as int, dice)
+                true
+
+            } else false
         }
     }
 
@@ -167,8 +145,6 @@ class GameBoard {
      * @return true if attack, false if not
      */
     boolean attackBoard(int dice, GameBoard player) {
-        println 'Attack Board'
-
         //target player columns containing dice value
         ArrayList playerIndexes = player.findIndexes(dice)
 
@@ -182,7 +158,6 @@ class GameBoard {
             player.deleteNumber(playerIndexes[ran] as int, dice)
             return addNumber(playerIndexes[ran] as int, dice)
 
-            //random fallback
         } else return false
     }
 
@@ -197,8 +172,6 @@ class GameBoard {
      * @return true if stack, false if not
      */
     boolean stackBoard(int dice, GameBoard player) {
-        println 'Stacking Board'
-
         //target own columns containing dice value
         ArrayList opponentIndexes = findIndexes(dice)
 
@@ -212,7 +185,6 @@ class GameBoard {
             player.deleteNumber(opponentIndexes[ran] as int, dice)
             return addNumber(opponentIndexes[ran] as int, dice)
 
-            //random fallback
         } else return false
     }
 
