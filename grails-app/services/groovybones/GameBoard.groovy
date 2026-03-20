@@ -1,5 +1,10 @@
 package groovybones
 
+/**
+ * Class defines the gameboard used to play GroovyBones
+ * Defines a board object and all related gameplay operations against board for both player and game-ai opponent
+ * Defines and orchestrates opponent difficulty, actions, and priorities
+ */
 class GameBoard {
     final enum Difficulty {easy, medium, hard}
     final Random r = new Random()
@@ -39,11 +44,8 @@ class GameBoard {
      */
     Set mapBoardValues() {
         Set values = []
-
         board.eachWithIndex {column, i ->
-            column.each {v ->
-                values << [index: i, number: v, repetitions: column.count(v)]
-            }
+            column.each {v -> values << [index: i, number: v, repetitions: column.count(v)]}
         }
         values
     }
@@ -76,6 +78,29 @@ class GameBoard {
      * @return random number/int + 1
      */
     int generateRandomDice() { r.nextInt(range) + 1 }
+
+
+    /**
+     * finds column indexes for all columns containing the dice value
+     * @param dice random int rolled each player turn
+     * @return arrayList of columns containing dice, may be empty
+     */
+    ArrayList findIndexes(int dice) { board.findIndexValues {it.contains(dice)} }
+
+
+    /**
+     * responsible for mutating index lists against the current object board
+     * for every column that is full, the matching index is removed from indexes
+     * empty index list represents all board columns are full where matches exist
+     * @param indexes list of indexes for columns that contain a dice value
+     * @return indexes - minus any indexes of full columns
+     */
+    ArrayList mutateIndexes(ArrayList indexes) {
+        board.eachWithIndex {column, index ->
+            if (column.size() == columnMaxSize) indexes -= index
+        }
+        indexes
+    }
 
 
     /**
@@ -116,7 +141,7 @@ class GameBoard {
      * @return true if can place randomly, false if not
      */
     boolean runBoardRandomly(int dice, GameBoard player) {
-        int column = r.nextInt(3)
+        int column = r.nextInt(columnMaxSize)
 
         if (addNumber(column, dice)) {
             player.deleteNumber(column, dice)
@@ -143,19 +168,14 @@ class GameBoard {
      * @return true if attack, false if not
      */
     boolean attackBoard(int dice, GameBoard player) {
-        //target player columns containing dice value
-        ArrayList playerIndexes = player.findIndexes(dice)
-
-        //check to see if columns are already full before attacking
-        playerIndexes = mutateIndexes(playerIndexes)
-
+        ArrayList playerIndexes = player.findIndexes(dice)      //target player columns containing dice
+        playerIndexes = mutateIndexes(playerIndexes)            //remove opponent column choices if already full
 
         //if columns are open, attack randomly based on player column/dice instances
         if (!playerIndexes.isEmpty()) {
             int ran = r.nextInt(playerIndexes.size())
             player.deleteNumber(playerIndexes[ran] as int, dice)
             return addNumber(playerIndexes[ran] as int, dice)
-
         } else false
     }
 
@@ -170,42 +190,14 @@ class GameBoard {
      * @return true if stack, false if not
      */
     boolean stackBoard(int dice, GameBoard player) {
-        //target own columns containing dice value
-        ArrayList opponentIndexes = findIndexes(dice)
-
-        //check to see if columns are already full before stacking
-        opponentIndexes = mutateIndexes(opponentIndexes)
-
+        ArrayList opponentIndexes = findIndexes(dice)           //target opponent columns containing dice
+        opponentIndexes = mutateIndexes(opponentIndexes)        //remove opponent column choices if already full
 
         //if columns are open, stack randomly based on opponent column/dice instances
         if (!opponentIndexes.isEmpty()) {
             int ran = r.nextInt(opponentIndexes.size())
             player.deleteNumber(opponentIndexes[ran] as int, dice)
             return addNumber(opponentIndexes[ran] as int, dice)
-
         } else false
-    }
-
-
-    /**
-     * finds column indexes for all columns containing the dice value
-     * @param dice random int rolled each player turn
-     * @return arrayList of columns containing dice, may be empty
-     */
-    ArrayList findIndexes(int dice) { board.findIndexValues {it.contains(dice)} }
-
-
-    /**
-     * responsible for mutating index lists against the current object board
-     * for every column that is full, the matching index is removed from indexes
-     * empty index list represents all board columns are full where matches exist
-     * @param indexes list of indexes for columns that contain a dice value
-     * @return indexes - minus any indexes of full columns
-     */
-    ArrayList mutateIndexes(ArrayList indexes) {
-        board.eachWithIndex {column, index ->
-            if (column.size() == columnMaxSize) indexes -= index
-        }
-        indexes
     }
 }
