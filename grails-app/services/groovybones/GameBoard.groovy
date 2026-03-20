@@ -1,12 +1,12 @@
 package groovybones
 
 class GameBoard {
-
+    final enum Difficulty {easy, medium, hard}
+    final Random r = new Random()
     final int columnMaxSize = 3
     final int range = 6
     int score = 0
     ArrayList board = [[], [], []]
-    String boardName
 
 
     /**
@@ -17,7 +17,7 @@ class GameBoard {
      */
     boolean addNumber(int index, int number) {
         if (board[index].size() + 1 <= columnMaxSize) board[index] << number
-        else return false
+        else false
     }
 
     /**
@@ -28,7 +28,7 @@ class GameBoard {
      */
     boolean deleteNumber(int index, int number) {
         if (board[index].contains(number)) board[index].removeAll {it == number}
-        else return false
+        else false
     }
 
     /**
@@ -45,7 +45,7 @@ class GameBoard {
                 values << [index: i, number: v, repetitions: column.count(v)]
             }
         }
-        return values
+        values
     }
 
     /**
@@ -56,43 +56,11 @@ class GameBoard {
      * @return updated score
      */
     int calculateScore() {
-
-        //TODO - temporary, have to relook at methods/game needs later
         score = 0
-
         mapBoardValues().each {entry ->
             score += entry['number'] ** entry['repetitions']
         }
-
-        return score
-    }
-
-
-    /**
-     * Simulates a player placing dice on their board until no more can be placed
-     * if the current column if full, it seeks to fill the next available column
-     * the loop ends once all columns are full
-     * @param board GameBoard object representing a player board
-     * @return true if looping, false if not
-     */
-    boolean runBoard(int dice) {
-        final Random r = new Random()
-        int column = r.nextInt(3)
-        boolean placed
-
-        println "Player: $boardName ---Random dice: $dice --- Random column: $column"
-
-        //try to place randomly first
-        if (addNumber(column, dice)) {
-            placed = true
-
-            //else try to place in next sequential column
-        } else {
-            placed = board.withIndex().any {col, index ->
-                return addNumber(index, dice)
-            }
-        }
-        return placed
+        score
     }
 
     /**
@@ -104,8 +72,140 @@ class GameBoard {
 
 
     /**
-     * generates a random number per a set range
-     * @return random number/int
+     * generates a random number per a set range + 1 to avoid 0
+     * @return random number/int + 1
      */
-    int generateNumber() { new Random().nextInt(range) + 1 }
+    int generateRandomDice() { r.nextInt(range) + 1 }
+
+
+    /**
+     * orchestrates opponent behavior
+     * difficulty is based on sequencing actions by true/false to determine priority
+     * hard and medium 'see' the player
+     * easy only 'sees' its own board
+     * @param difficulty enum reference to control cases
+     * @param dice int value generated each turn
+     * @param player GameBoard object to act against
+     * @return opponent action
+     */
+    def opponentOrchestrator(Difficulty difficulty, int dice, GameBoard player) {
+        def attack = { attackBoard(dice, player) }
+        def stack = { stackBoard(dice, player) }
+        def random = { runBoardRandomly(dice, player) }
+
+        def actions
+        switch(difficulty) {
+            case difficulty.hard:
+                actions = [attack, stack, random]
+                break
+            case difficulty.medium:
+                actions = [stack, attack, random]
+                break
+            case difficulty.easy:
+                actions = [stack, random]
+                break
+        }
+        actions.any { it() }
+    }
+
+
+    /**
+     * responsible for placing opponent dice randomly
+     * deletes matching player dice in column if they exist
+     * @param dice int value generated each turn
+     * @return true if can place randomly, false if not
+     */
+    boolean runBoardRandomly(int dice, GameBoard player) {
+        int column = r.nextInt(3)
+
+        if (addNumber(column, dice)) {
+            player.deleteNumber(column, dice)
+            return true
+        }
+
+        //try to place in the next open column if random fails
+        return board.withIndex().any {col, index ->
+            if (addNumber(index as int, dice)) {
+                player.deleteNumber(index as int, dice)
+                true
+            } else false
+        }
+    }
+
+
+    /**
+     * allows opponent to identify player board columns containing dice value
+     * checks opponent board columns.size() to see if attack is possible
+     * places dice in opponent column and deletes player dice if attack possible
+     * executes attacks randomly if more than one column matches
+     * @param dice int value generated each turn
+     * @param player GameBoard object to attack
+     * @return true if attack, false if not
+     */
+    boolean attackBoard(int dice, GameBoard player) {
+        //target player columns containing dice value
+        ArrayList playerIndexes = player.findIndexes(dice)
+
+        //check to see if columns are already full before attacking
+        playerIndexes = mutateIndexes(playerIndexes)
+
+
+        //if columns are open, attack randomly based on player column/dice instances
+        if (!playerIndexes.isEmpty()) {
+            int ran = r.nextInt(playerIndexes.size())
+            player.deleteNumber(playerIndexes[ran] as int, dice)
+            return addNumber(playerIndexes[ran] as int, dice)
+
+        } else false
+    }
+
+
+    /**
+     * allows opponent to identify own columns containing dice value
+     * checks own board columns.size() to see if stacking is possible
+     * stacks randomly if more than one column containing dice
+     * deletes matching player dice in column if they exist
+     * @param dice int value generated each turn
+     * @param player GameBoard object to delete from
+     * @return true if stack, false if not
+     */
+    boolean stackBoard(int dice, GameBoard player) {
+        //target own columns containing dice value
+        ArrayList opponentIndexes = findIndexes(dice)
+
+        //check to see if columns are already full before stacking
+        opponentIndexes = mutateIndexes(opponentIndexes)
+
+
+        //if columns are open, stack randomly based on opponent column/dice instances
+        if (!opponentIndexes.isEmpty()) {
+            int ran = r.nextInt(opponentIndexes.size())
+            player.deleteNumber(opponentIndexes[ran] as int, dice)
+            return addNumber(opponentIndexes[ran] as int, dice)
+
+        } else false
+    }
+
+
+    /**
+     * finds column indexes for all columns containing the dice value
+     * @param dice random int rolled each player turn
+     * @return arrayList of columns containing dice, may be empty
+     */
+    ArrayList findIndexes(int dice) { board.findIndexValues {it.contains(dice)} }
+
+
+    /**
+     * responsible for mutating index lists against the current object board
+     * for every column that is full, the matching index is removed from indexes
+     * empty index list represents all board columns are full where matches exist
+     * @param indexes list of indexes for columns that contain a dice value
+     * @return indexes - minus any indexes of full columns
+     */
+    ArrayList mutateIndexes(ArrayList indexes) {
+        board.eachWithIndex {column, index ->
+            if (column.size() == columnMaxSize) indexes -= index
+        }
+        indexes
+    }
 }
