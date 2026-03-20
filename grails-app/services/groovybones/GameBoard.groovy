@@ -62,7 +62,6 @@ class GameBoard {
             if (it['number'] == 1) (it['number'] * 10) ** it['repetitions']
             else {it['number'] ** it['repetitions']}
         } as int
-
     }
 
     /**
