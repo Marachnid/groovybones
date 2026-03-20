@@ -1,0 +1,183 @@
+/* ============================
+   Utility Classes
+   ============================ */
+
+/* Flex helpers */
+.flex-center {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.flex-col {
+    display: flex;
+    flex-direction: column;
+}
+
+.flex-row {
+    display: flex;
+    flex-direction: row;
+}
+
+/* Borders & boxes */
+.border-dark {
+    border: 2px solid #333;
+    border-radius: 8px;
+}
+
+/* Transitions */
+.scale-transition {
+    transition: transform 0.25s ease, box-shadow 0.25s ease;
+    transform-origin: center;
+}
+
+/* ============================
+   Layout Containers
+   ============================ */
+
+.content-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 30px;
+}
+
+/* Opponent row */
+#opponents {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: flex-start;
+    gap: 20px;
+    width: 100%;
+}
+
+/* ============================
+   Opponent Cards
+   ============================ */
+
+.opponent-container {
+    width: 200px;
+    height: 300px;
+    overflow: hidden;
+    border: 2px solid #333;
+    border-radius: 8px;
+    display: flex;
+    flex-direction: column;
+}
+
+/* Top 70% card area */
+.opponent-card {
+    flex: 0 0 70%;
+    background: #ddd;
+    border-bottom: 2px solid #333;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+
+/* Hover effect on whole card */
+.opponent-container:hover .opponent-card {
+    transform: scale(1.08);
+    box-shadow: 0 8px 18px rgba(0, 0, 0, 0.25);
+}
+
+/* Bottom label */
+.opponent-container h3 {
+    flex: 0 0 30%;
+    margin: 0;
+    background: #eee;
+    font-size: 1.2rem;
+    font-weight: bold;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+/* ============================
+   Play Button
+   ============================ */
+
+#playContainer {
+    display: flex;
+    justify-content: center;
+}
+
+#playButton {
+    width: 200px;
+    height: 80px;
+    background: #ddd;
+    font-size: 1.5rem;
+    font-weight: bold;
+    cursor: pointer;
+    border: 2px solid #333;
+    border-radius: 8px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+
+
+/* ============================
+   Load Game Section
+   ============================ */
+
+#loadGame {
+    margin-top: 30px;
+    padding: 20px;
+    background: #f7f7f7;
+    gap: 20px;
+    box-sizing: border-box;
+
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+
+    border: 2px solid #333;
+    border-radius: 8px;
+}
+
+/* Select menu */
+#loadGame select {
+    padding: 8px 12px;
+    font-size: 1rem;
+    border: 2px solid #333;
+    border-radius: 6px;
+    background: white;
+}
+
+/* Buttons */
+#loadGame button {
+    padding: 10px 16px;
+    font-size: 1rem;
+    font-weight: bold;
+    border: 2px solid #333;
+    border-radius: 6px;
+    cursor: pointer;
+    background: #e0e0e0;
+    transition: background 0.2s ease, transform 0.2s ease;
+}
+
+
+/* ============================
+   Misc
+   ============================ */
+#loadGame button:hover, #playContainer button:hover {
+    background: #d0d0d0;
+    transform: scale(1.05);
+}
+
+label {
+    font-weight: bold;
+    font-size: 1.5rem;
+}
+
+#title {
+    font-size: 2.5rem;
+    margin: 0;
+    padding: 0;
+}
