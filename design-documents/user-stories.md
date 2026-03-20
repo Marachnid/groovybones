@@ -35,13 +35,13 @@
 - [x] As a user, I want to be able to play against a computer-controlled opponent
 
 #### Difficulty *
-- [ ] As a user, I want to play against an 'intelligent' computer-controlled opponent
+- [x] As a user, I want to play against an 'intelligent' computer-controlled opponent
 
 
 ## NON-MVP User Stories
 ### Gameplay
 #### Difficulty
-- [ ] As a user, I want to have options for different difficulty levels
+- [x] As a user, I want to have options for different difficulty levels
 
 #### Multiplayer
 - [ ] As a user, I want to be able to play against other, real, people

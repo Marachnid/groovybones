@@ -43,13 +43,13 @@
 
 ## Week 9
 - [x] Rework game.gsp - create a dedicated game page with limited/hideable Navbar for save & exits
-- [ ] Add 'intelligent' opponent actions - game opponent detects player columns and targets stacked values (i.e. col1[3, 3])
-- [ ] Add 'intelligent' difficulty scaling (i.e. if (random <= 3 ? hostileAction() : randomAction())
+- [x] Add 'intelligent' opponent actions - game opponent detects player columns and targets stacked values (i.e. col1[3, 3])
+- [x] Add 'intelligent' difficulty scaling (i.e. if (random <= 3 ? hostileAction() : randomAction())
 
 ### Features:
 - [ ] As a registered user, I want to be able to read cumulative game records/stats from past games
 - [ ] As a registered user, I want to be able to save(add) unfinished games or delete them
-- [ ] As a user, I want to play against an 'intelligent' computer-controlled opponent
+- [x] As a user, I want to play against an 'intelligent' computer-controlled opponent
 
 
 

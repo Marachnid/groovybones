@@ -150,11 +150,13 @@ Notes:
 - 
 
 ## Week 9
-3/16/ - 6
+3/16/ - 20h
 
 Tasks Completed:
 - Updated project documentation/design documents
 - Reworked game and gameover screens
+- Completed feature/intelligent-opponents
+- Completed feature/difficulty-scaling 
 
 Notes:
 - Fixed/finalized a lot of the temp/messy aspects of the code and logic
