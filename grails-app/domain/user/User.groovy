@@ -2,47 +2,25 @@ package user
 
 /**
  * Represents a User DB entity in MySQL table, 'user'
- * Convention over Configuration - GORM/Grails doesn't really use tags/annotations for mapping
  * Implicitly maps User class to 'user' table
- * User attributes are automatically paired with matching DB columns
+ * GORM domain classes have persistence built-in, no DAO needed
  */
 class User {
-    /*
-        camelCase is parsed into snake_case
-        if DB id column name = 'id', id attribute is implicit
-     */
     String cognitoSub
     String username
-    Integer wins
-    Integer losses
-    Integer totalScore
+    int wins
+    int losses
+    int totalScore
 
-    /**
-     * closure for matching input field constraints to DB column constraints (not null, varchar(20))
-     */
+    //enforce DB constraints
     static constraints = {
-        cognitoSub blank: false, maxSize: 36
-        username blank: false, maxSize: 25
-        wins min: 0, max: 255
-        losses min: 0, max: 255
-        totalScore min: 0
+        cognitoSub nullable: false, blank: false, maxSize: 36
+        username nullable: false, blank: false, maxSize: 25
+        wins nullable: false, min: 0
+        losses nullable: false, min: 0
+        totalScore nullable: false, min: 0
     }
 
-    /**
-     * closure for default mappings - Grails/GORM uses 'optimistic locking' and expects a version number column
-     * set to false if not using versioning/a version column
-     */
-    static mapping = {
-        version false
-
-        //IF DB table/column names did not match class conventions, declare:
-        //table 'my_table'
-        //id column: 'column_name'
-        //firstName column: 'column_name'
-        //...
-
-        wins sqlType: 'TINYINT UNSIGNED'
-        losses sqlType: 'TINYINT UNSIGNED'
-        totalScore sqlType: 'INT'
-    }
+    //define datatype mappings
+    static mapping = { version false }
 }
