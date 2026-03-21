@@ -2,55 +2,40 @@
 <!doctype html>
 <html>
 <head>
-  %{-- can ignore these errors --}%
   <asset:stylesheet src="main.css"/>
   <asset:stylesheet src="game.css"/>
   <title>Game</title>
 </head>
+
 <body>
-
-  %{--unique to game.gsp--}%
-  <div class="dropdown-navbar">
-    <input type="checkbox" id="menuToggle" class="menu-toggle">
-    <label for="menuToggle" class="navbar-header">
-      GroovyBones <span class="arrow"></span>
-    </label>
-
-    <nav class="navbar-menu">
-      <ul>
-        <li><g:link controller="home" action="index">Home</g:link></li>
-        <li><g:link controller="Tutorial" action="tutorial">Tutorial</g:link></li>
-        <li><g:link controller="About" action="about">About</g:link></li>
-
-        <g:if test="${session['player']}">
-          <li><g:link controller="Login" action="logout">
-            sign-out(${session['player'].username})
-          </g:link></li>
-        </g:if>
-      </ul>
-    </nav>
-  </div>
-
-  <h2>${session['player'].username.toUpperCase()} VS ${session['opponent'].username}</h2>
-
-
-  %{-- IMPORTANT adds delay to the opponent placing a dice value, see GameController GameInitialization() for timeout --}%
-  <g:if test="${!session['playerTurn']}">
-    <script>
-      setTimeout(() => {
-        window.location.href = "${createLink(controller:'gameAction', action:'runOpponentBoard')}";
-      }, ${session['timeout']});
-    </script>
-  </g:if>
-
-
   <div class="content-container">
+    <h2>${session['player'].username.toUpperCase()} VS ${session['opponent'].username}</h2>
+
+  <!--delay opponent from executing turn immediately-->
+    <g:if test="${!session['playerTurn']}">
+      <script>
+        setTimeout(() => {
+          window.location.href = "${createLink(controller:'gameAction', action:'runOpponentBoard')}";
+        }, ${session['timeout']});
+      </script>
+    </g:if>
+
+    <!--the overall game area containing player boards and info as 2 rows 3 wide-->
     <div id="game-area">
 
-      %{--opponent container--}%
-      <div class="game-container">
+      <!--opponent row - opponent board and lefthand/righthand containers-->
+      <div class="game-container opponent-row">
 
-        %{--opponent board--}%
+        <!--left-hand info-card for score display-->
+        <div class="info-left">
+          <div class="info-card">
+            <h3>Score</h3>
+            <h3>${session['player'].username}: ${session['playerBoard'].calculateScore()}</h3>
+            <h3>${session['opponent'].username}: ${session['opponentBoard'].calculateScore()}</h3>
+          </div>
+        </div>
+
+        <!--center table for opponent board-->
         <table id="opponent-board" class="game-board">
           <g:each in="${session['opponentBoard'].board}" var="column">
             <tr class="opponent-column">
@@ -61,47 +46,66 @@
           </g:each>
         </table>
 
-        %{--opponent info--}%
-        <div class="board-info">
-          <h3>${session['opponent'].username}</h3>
-          <h3>Score: ${session['opponentBoard'].calculateScore()}</h3>
-          <h3>${session['playerTurn'] ? '' : "Dice: ${session['dice']}"}</h3>
-          <div class="thinking">${session['playerTurn'] ? '' : 'Opponent is plotting your demise'}</div>
+        <!--right-hand opponent-card-->
+        <div class="opponent-container flex-col border-dark">
+          <div class="opponent-card flex-center">
+            IMG
+          </div>
+            <h3>placeholder</h3>
         </div>
       </div>
 
-      %{--player container--}%
-      <div class="game-container">
+      <!--player row - player board and lefthand/righthand containers-->
+      <div class="game-container player-row">
 
-        %{--player board--}%
+      <!--WIP - will be adapting opponent-card into a player card-->
+      <div class="opponent-container flex-col border-dark">
+        <div class="opponent-card flex-center">
+          IMG
+        </div>
+        <h3>placeholder</h3>
+      </div>
+
+        <!--center table for player board-->
         <table id="player-board" class="game-board">
           <g:each in="${session['playerBoard'].board}" var="column" status="colIndex">
 
-            %{--creates opening <tr> with onclick action only if it's the player's turn--}%
+            <!--clickable actions are disabled if not player turn-->
             <g:if test="${session['playerTurn'] == true}">
               <tr class="player-column"
                   onclick="window.location='${createLink(
-                  controller:'gameAction', action:'runPlayerBoard',
-                  params:[col: colIndex])}'">
-            </g:if>
+                    controller:'gameAction',
+                    action:'runPlayerBoard',
+                    params:[col: colIndex])}'">
+            </g:if><g:else>
+              <tr>
+            </g:else>
 
-            %{--generic <tr> rendered if not player's turn--}%
-            <g:else><tr></g:else>
-
-              <g:each in="${0..(session['playerBoard'].columnMaxSize-1)}" var="i">
-                <td>${column[i] == null ? ' ' : column[i]}</td>
-              </g:each>
+            <g:each in="${0..(session['playerBoard'].columnMaxSize-1)}" var="i">
+              <td>${column[i] == null ? ' ' : column[i]}</td>
+            </g:each>
             </tr>
           </g:each>
         </table>
 
-        %{--player info--}%
-        <div class="board-info">
-          <h3>${session['player'].username.toUpperCase()}</h3>
-          <h3>Score: ${session['playerBoard'].calculateScore()}</h3>
-          <h3>${session['playerTurn'] ? "Dice: ${session['dice']}" : ''}</h3>
+        <!--right-hand info-card for turn# and random dice value-->
+        <div class="info-right">
+          <div class="info-card">
+            <h3>Dice: ${session['dice']}</h3>
+            <h3>Turn: ${session['turn']}</h3>
+
+            <!--indicate opponent is 'thinking' (waiting via delay scriptlet above)-->
+            <div class="thinking">
+              ${session['playerTurn'] ? '' : 'Opponent is plotting your demise'}
+            </div>
+          </div>
         </div>
       </div>
     </div>
   </div>
+
+  <!--TODO eventually need to style this in somewhere -->
+  <!--TODO eventually need to add a save-game button -->
+  <button><g:link controller="home" action="index">RETURN HOME</g:link></button>
 </body>
+</html>

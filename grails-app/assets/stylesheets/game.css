@@ -1,25 +1,85 @@
-/*centers the overall game area*/
+/* ============================
+   Layout
+   ============================ */
+
+.content-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2rem;
+}
+
 #game-area {
     display: flex;
     flex-direction: column;
     gap: 2rem;
+    align-items: center;
 }
 
-
-/*aligns player table and info*/
+/* Each row (opponent / player) */
 .game-container {
     display: flex;
     flex-direction: row;
-    gap: 1.5rem;
+    justify-content: center;
+    align-items: center;
+    gap: 2rem;
+    width: 100%;
 }
 
-/*fix table/gameboard size*/
-.game-board {flex: 0 0 auto}
-.board-info {flex: 1 1 auto}
+/* Row shifts for character */
+.opponent-row {
+    transform: translateX(45px);
+}
 
-/*prevents opponent vs. player board interaction confusion*/
-.player-column {cursor: pointer}
-.opponent-column {cursor: default}
+.player-row {
+    transform: translateX(-45px);
+}
+
+/* ============================
+   Info Slots
+   ============================ */
+
+.info-left,
+.info-right {
+    flex: 1 1 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+/* Card styling */
+.info-card {
+    background: #f7f7f7;
+    border: 2px solid #333;
+    border-radius: 8px;
+    padding: 1rem 1.25rem;
+    min-width: 160px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.25rem;
+}
+
+.info-card h3 {
+    margin: 0.25rem 0;
+}
+
+.info-card .thinking {
+    font-style: italic;
+    font-size: 0.9rem;
+    margin-top: 0.5rem;
+}
+
+/* ============================
+   Boards
+   ============================ */
+
+.game-board {
+    flex: 0 0 auto;
+    border-collapse: collapse;
+}
 
 .game-board td {
     width: 10vmin;
@@ -27,7 +87,6 @@
     max-width: 100px;
     max-height: 100px;
 
-    /*box-shadow: inset 1px 1px 1px 2px lightcoral;*/
     outline: 2px solid black;
     outline-offset: -2px;
 
@@ -38,14 +97,34 @@
     transition: background-color 0.2s ease;
 }
 
-.game-board tr:hover td {background-color: #f0f0f0;}
+.game-board tr:hover td {
+    background-color: #f0f0f0;
+}
 
+/* Interaction cues */
+.player-column {
+    cursor: pointer;
+}
 
-/*Transform player and opponent boards to mirror each other*/
-#opponent-board, #player-board, #opponent-board td, #player-board td {transform-origin: center}
+.opponent-column {
+    cursor: default;
+}
 
-#player-board {transform: rotate(90deg) scaleY(-1)}
-#opponent-board {transform: rotate(-90deg)}
+/* Mirroring logic */
+#opponent-board,
+#player-board,
+#opponent-board td,
+#player-board td {
+    transform-origin: center;
+}
+
+#player-board {
+    transform: rotate(90deg) scaleY(-1);
+}
+
+#opponent-board {
+    transform: rotate(-90deg);
+}
 
 #opponent-board td {
     background-color: #fafafa;
@@ -57,9 +136,10 @@
     transform: rotate(90deg) scaleY(-1);
 }
 
+/* ============================
+   Navbar
+   ============================ */
 
-
-/*GAME NAVBAR*/
 .dropdown-navbar {
     background-color: #222;
     color: #fff;
@@ -77,32 +157,46 @@
     font-weight: bold;
 }
 
-/*workaround so I don't have to add JavaScript*/
 .arrow::after {
     content: ">";
     margin-left: 8px;
     transition: transform 0.2s ease;
 }
-.menu-toggle:checked + .navbar-header .arrow::after {content: "v"}
-.menu-toggle {display: none}
+
+.menu-toggle:checked + .navbar-header .arrow::after {
+    content: "v";
+}
+
+.menu-toggle {
+    display: none;
+}
 
 .navbar-menu {
     display: none;
     background-color: #333;
 }
 
-.menu-toggle:checked ~ .navbar-menu {display: block}
+.menu-toggle:checked ~ .navbar-menu {
+    display: block;
+}
 
 .navbar-menu ul {
     list-style: none;
     margin: 0;
     padding: 0;
 }
-.navbar-menu li {border-top: 1px solid #444}
-.navbar-menu li a:hover {background-color: #444}
+
+.navbar-menu li {
+    border-top: 1px solid #444;
+}
+
 .navbar-menu li a {
     display: block;
     padding: 10px 16px;
     color: #fff;
     text-decoration: none;
+}
+
+.navbar-menu li a:hover {
+    background-color: #444;
 }
