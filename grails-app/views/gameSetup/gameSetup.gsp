@@ -30,7 +30,9 @@
 
         %{--play button--}%
         <div id="playContainer" class="flex-center">
-            <button id="playButton">PLAY</button>
+            <button id="playButton">
+                <g:link controller="GameSetup" action="gameInitialization">Start</g:link>
+            </button>
         </div>
 
         %{--load game container--}%
