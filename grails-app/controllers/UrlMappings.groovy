@@ -1,4 +1,4 @@
-package home
+
 
 /**
  * Responsible for defining URL mapping and pathing
@@ -11,6 +11,12 @@ class UrlMappings {
      */
     static mappings = {
         "/"(controller: "home", action: "index")
+
+        //webservice routes
+        "/opponent"(controller: "opponentService") {action = [GET: "get", POST: "post"]}
+
+        "/opponent/$id"(controller: "opponentService") {action = [GET: 'getById']}
+
 
         /*
           catch-all route that allows implicit rendering from controllers
