@@ -96,7 +96,7 @@
 
             <!--indicate opponent is 'thinking' (waiting via delay scriptlet above)-->
             <div class="thinking">
-              ${session['playerTurn'] ? '' : 'Opponent is plotting your demise'}
+              ${session['playerTurn'] ? '' : 'Opponent thinking'}
             </div>
           </div>
         </div>
