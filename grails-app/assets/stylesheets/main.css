@@ -1,3 +1,30 @@
+/* ============================
+   Utility Classes
+   ============================ */
+
+/* Flex helpers */
+.flex-center {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.flex-col {
+    display: flex;
+    flex-direction: column;
+}
+
+.flex-row {
+    display: flex;
+    flex-direction: row;
+}
+
+/* Borders & boxes */
+.border-dark {
+    border: 2px solid #333;
+    border-radius: 8px;
+}
+
 
 h1 {
     font-size: 7rem;
@@ -84,3 +111,29 @@ body {
 
 .menu-list li a {color: black;}
 .menu-list li a:hover {color: #007bff;}
+
+
+/* ============================
+   Opponent Cards
+   ============================ */
+
+.opponent-container {
+    width: 200px;
+    height: 300px;
+    overflow: hidden;
+    border: 2px solid #333;
+    border-radius: 8px;
+    display: flex;
+    flex-direction: column;
+}
+
+/* Top 70% card area */
+.opponent-card {
+    flex: 0 0 70%;
+    background: #ddd;
+    border-bottom: 2px solid #333;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
