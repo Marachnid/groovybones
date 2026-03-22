@@ -14,7 +14,7 @@ class User {
 
     //enforce DB constraints
     static constraints = {
-        cognitoSub nullable: false, blank: false, maxSize: 36
+        cognitoSub nullable: false, blank: false, maxSize: 36, updateable: false
         username nullable: false, blank: false, maxSize: 25
         wins nullable: false, min: 0
         losses nullable: false, min: 0

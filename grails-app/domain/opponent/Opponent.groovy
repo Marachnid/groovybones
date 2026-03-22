@@ -7,15 +7,15 @@ package opponent
  */
 class Opponent {
     String username
-    int difficulty      //TODO difficulty as is here wouldn't be normalized to 3rd degree, meh for now
+    int difficulty      //Not expecting to exceed 1 opponent per difficulty tier for now
     int wins
     int losses
     int totalScore
 
     //enforce DB constraints
     static constraints = {
-        username nullable: false, blank: false, maxSize: 25
-        difficulty nullable: false, inList: [1,2,3]
+        username nullable: false, blank: false, maxSize: 25, updateable: false
+        difficulty nullable: false, inList: [1,2,3], updateable: false
         wins nullable: false, min: 0
         losses nullable: false, min: 0
         totalScore nullable: false, min: 0
