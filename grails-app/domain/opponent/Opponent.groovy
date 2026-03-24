@@ -26,4 +26,13 @@ class Opponent {
         version false
         difficulty sqlType: 'TINYINT UNSIGNED'
     }
+
+
+    /**
+     * convenience method to print object for validation
+     * @return prints object
+     */
+    def printOpponent() {
+        println "username: $username && difficulty: $difficulty && wins: $wins && losses: $losses && totalScore: $totalScore"
+    }
 }
