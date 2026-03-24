@@ -6,12 +6,36 @@ package groovybones
  * opponent difficulty is based on ranking action priority and availability of actions
  */
 class OpponentActions {
-    final enum Difficulty {easy, medium, hard}
-    final Random r = new Random()
+    final enum Difficulty {EASY, MEDIUM, HARD}
+    final Map difficultyMap = [(Difficulty.EASY): 1, (Difficulty.MEDIUM): 2, (Difficulty.HARD): 3]
+
     final GameBoard game = new GameBoard()  //utility purposes
+    final Random r = new Random()
+
     Difficulty difficulty
+    int opponentDifficulty
     GameBoard opponent
     GameBoard player
+
+
+
+    /** default class constructor */
+    OpponentActions() {}
+
+    /**
+     * loaded constructor to map opponentDifficulty to enum difficulty
+     * @param opponentDifficulty int value corresponding to difficultyMap
+     * @param opponent GameBoard object
+     * @param player GameBoard object
+     */
+    OpponentActions(int opponentDifficulty, GameBoard opponent, GameBoard player) {
+        this.opponentDifficulty = opponentDifficulty
+        this.opponent = opponent
+        this.player = player
+        difficulty = difficultyMap
+                .find { it.value == opponentDifficulty}
+                .key as Difficulty
+    }
 
 
     /**
@@ -26,17 +50,16 @@ class OpponentActions {
         def attack = { attackBoard(dice) }
         def stack = { stackBoard(dice) }
         def random = { runBoardRandomly(dice) }
-
-        //TODO it might be interesting to replace selectable difficulty with opponent avatars of fixed difficulty
         def actions
+
         switch(difficulty) {
-            case difficulty.hard:
+            case difficulty.HARD:
                 actions = [attack, stack, random]       //a bastard to play against
                 break
-            case difficulty.medium:
+            case difficulty.MEDIUM:
                 actions = [stack, attack, random]       //might actually be the most difficult
                 break
-            case difficulty.easy:
+            case difficulty.EASY:
                 actions = [stack, random]               //most selfish
                 break
         }

@@ -29,21 +29,21 @@ class CognitoOAuthService {
 
         //build and encode auth request body
         def body = [
-                grant_type: "authorization_code",
+                grant_type: 'authorization_code',
                 client_id: cfg.clientId,
                 code: code,
-                redirect_uri: "http://localhost:8080/login/callback"
+                redirect_uri: 'http://localhost:8080/login/callback'
         ]
             .collect { k, v -> "${k}=${URLEncoder.encode(v, 'UTF-8')}" }
-            .join("&")
+            .join('&')
 
 
         //build auth POST request
         HttpURLConnection conn = (HttpURLConnection) new URL(url).openConnection()
-        conn.setRequestProperty("Authorization", "Basic ${credentials}")
-        conn.setRequestMethod("POST")
+        conn.setRequestProperty('Authorization', "Basic ${credentials}")
+        conn.setRequestMethod('POST')
         conn.doOutput = true
-        conn.setRequestProperty("Content-Type", "application/x-www-form-urlencoded")
+        conn.setRequestProperty('Content-Type', 'application/x-www-form-urlencoded')
         conn.outputStream.withWriter { it << body }
 
         //execute request

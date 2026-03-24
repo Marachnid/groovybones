@@ -2,50 +2,71 @@ package home
 
 import groovybones.GameBoard
 import groovybones.OpponentActions
-import user.User
+import groovybones.OpponentRetriever
+import opponent.Opponent
 
 /**
- * Default homepage controller that renders index view
- * views/home/index.gsp is implicitly rendered
+ * Responsible for initializing and instantiating a new game
+ * Loads opponent profiles via OpponentServiceController (webservice) HTTP requests
+ * Instantiates player and opponent session variables for gameplay
  */
 class GameSetupController {
+    final String key = grailsApplication.config.apiKey.secretkey
+    final String opponentAPI = 'http://localhost:8080/opponent'
+
 
     /**
-     * single-line method to print a test message and render gameSetup
+     * renders gameSetup
+     * makes request against OpponentServiceController to gather opponent entities
      * @return render gameSetup
      */
-    def gameSetup() { println 'GameSetup gameSetup()' }
+    def gameSetup() {
+        println 'GameSetup gameSetup()'
+
+        OpponentRetriever opRet = new OpponentRetriever(key, opponentAPI, false)
+        ArrayList<Opponent> opponents = opRet.opponent
+        session['opponentsList'] = opponents
+
+        render(view: 'gameSetup')
+    }
 
     /**
      * initializes session variables to setup player and opponent game boards
+     * retrieves opponent details from gameSetup opponent form
      * activates gameOrchestrator for player vs. opponent turn sequencing
-     * @return gameOrchestrator()
+     * @return GameController gameOrchestrator() -> game
      */
     def gameInitialization() {
         println 'GameSetup gameInitialization()'
 
-        //instantiate player session GameBoard
-        session['playerBoard'] = new GameBoard()
+        //grab opponent from form params
+        Opponent op = new Opponent(
+                username: params.username,
+                difficulty: params.difficulty,
+                wins: params.wins,
+                losse: params.losses,
+                totalScore: params.totalscore
+        )
 
-        //instantiate opponent session User and GameBoard
-        session['opponent'] = new User(username: 'Game Opponent')
+        //instantiate GameBoards to session
+        session['playerBoard'] = new GameBoard()
         session['opponentBoard'] = new GameBoard()
 
+        //instantiate opponent to session
+        session['opponent'] = op
+
+
+        //instantiate OpponentActions to session
         session['opponentActions'] = new OpponentActions(
-                opponent: session['opponentBoard'] as GameBoard,
-                player: session['playerBoard'] as GameBoard,
-                difficulty: OpponentActions.Difficulty.medium   //TODO eventually user-selected
+                op.difficulty,
+                session['opponentBoard'] as GameBoard,
+                session['playerBoard'] as GameBoard
         )
 
 
-        //randomly pick first turn
-        session['playerTurn'] = new Random().nextInt(2) == 1
-
-
-        //timeout to delay instant opponent turn
-        session['timeout'] = 3000
-
-        println 'ATTEMPTING REDIRECT TO GameController gameOrchestrator'
+        session['turn'] = 0                                            //initialize turn counter (visual only)
+        session['playerTurn'] = new Random().nextInt(2) == 1    //randomly pick first turn
+        session['timeout'] = 3000                                     //timeout to delay instant opponent turn
         redirect(controller: 'Game', action: "gameOrchestrator")
     }
 }
