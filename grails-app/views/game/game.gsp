@@ -51,7 +51,7 @@
           <div class="opponent-card flex-center">
             IMG
           </div>
-            <h3>placeholder</h3>
+            <h3>${session['opponent'].username}</h3>
         </div>
       </div>
 
@@ -63,7 +63,7 @@
         <div class="opponent-card flex-center">
           IMG
         </div>
-        <h3>placeholder</h3>
+        <h3>${session['player'].username}</h3>
       </div>
 
         <!--center table for player board-->
