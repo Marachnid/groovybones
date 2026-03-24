@@ -43,21 +43,21 @@ class OpponentRetriever {
     }
 
     /**
-     * WIP
      * loaded constructor to execute and parse POST requests to OpponentServiceController webservice
      * @param apiAuthKey webservice auth key (easier to pass config props from controllers)
      * @param path path to execute
      * @param postBody
      */
-    OpponentRetriever(String apiAuthKey, String path, Map postBody) {
+    OpponentRetriever(String apiAuthKey, String path, Opponent op) {
         this.apiAuthKey = apiAuthKey
         this.path = path
-        this.postBody = postBody
+        this.postBody = op.opponentAsMap()
 
         request = new RequestCaller(apiAuthKey: apiAuthKey, path: path, body: postBody)
-        response = request.callGET()
+        response = request.callPOST()
         responseCode = response.responseCode
         responseBody = response.get('body') as Map
+        opponent = returnOpponent()
     }
 
 
