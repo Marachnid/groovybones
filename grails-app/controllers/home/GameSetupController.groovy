@@ -64,14 +64,16 @@ class GameSetupController {
         //instantiate opponent to session
         session['opponent'] = op
 
+
         //instantiate OpponentActions to session
         session['opponentActions'] = new OpponentActions(
-                opponent: session['opponentBoard'] as GameBoard,
-                player: session['playerBoard'] as GameBoard,
-                difficulty: op.difficulty
+                op.difficulty,
+                session['opponentBoard'] as GameBoard,
+                session['playerBoard'] as GameBoard
         )
 
 
+        session['turn'] = 0
         session['playerTurn'] = new Random().nextInt(2) == 1      //randomly pick first turn
         session['timeout'] = 3000                                       //timeout to delay instant opponent turn
         redirect(controller: 'Game', action: "gameOrchestrator")

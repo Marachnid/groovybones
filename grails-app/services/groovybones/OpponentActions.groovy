@@ -11,9 +11,32 @@ class OpponentActions {
 
     final GameBoard game = new GameBoard()  //utility purposes
     final Random r = new Random()
-    def difficulty
+
+    Difficulty difficulty
+    int opponentDifficulty
     GameBoard opponent
     GameBoard player
+
+
+
+    /** default class constructor */
+    OpponentActions() {}
+
+    /**
+     * loaded constructor to map opponentDifficulty to enum difficulty
+     * @param opponentDifficulty int value corresponding to difficultyMap
+     * @param opponent GameBoard object
+     * @param player GameBoard object
+     */
+    OpponentActions(int opponentDifficulty, GameBoard opponent, GameBoard player) {
+        this.opponentDifficulty = opponentDifficulty
+        this.opponent = opponent
+        this.player = player
+        difficulty = difficultyMap
+                .find { it.value == opponentDifficulty}
+                .key as Difficulty
+    }
+
 
     /**
      * orchestrates opponent behavior
@@ -27,11 +50,7 @@ class OpponentActions {
         def attack = { attackBoard(dice) }
         def stack = { stackBoard(dice) }
         def random = { runBoardRandomly(dice) }
-        def actions = [random]
-
-
-        //map Opponent difficulty to enum Difficulty
-        difficulty = difficultyMap.find { it.value == difficulty}.key
+        def actions
 
         switch(difficulty) {
             case difficulty.HARD:
