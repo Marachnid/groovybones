@@ -29,10 +29,24 @@ class Opponent {
 
 
     /**
-     * convenience method to print object for validation
-     * @return prints object
+     * handles updating an existing opponent's wins, losses, and totalScore
+     * @return updated opponent
      */
-    def printOpponent() {
-        println "username: $username && difficulty: $difficulty && wins: $wins && losses: $losses && totalScore: $totalScore"
+    def updateOpponent() {
+        Opponent existing = Opponent.findByUsername('Chug Chug')
+
+        existing.wins = wins as int
+        existing.losses = losses as int
+        existing.totalScore = totalScore as int
+        existing.save(failOnError: true)
+    }
+
+
+    /**
+     * utility method for returning opponent as a map of values
+     * @return opponent as map
+     */
+    Map opponentAsMap() {
+        [username: username, difficulty: difficulty, wins: wins, losses: losses, totalScore: totalScore]
     }
 }

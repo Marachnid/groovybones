@@ -70,10 +70,11 @@ class OpponentServiceController {
         if (!json) respond([errorText: 'Bad Request'], status: 400)
         else opponent = new Opponent(json as Map)
 
+
         //if invalid entry, respond with 500
         if (!opponent.validate()) respond([errorText: opponent.errors], status: 500)
         else
-            opponent.save(flush: true)
+            opponent.updateOpponent()
             respond opponent, status: 201
     }
 }
