@@ -33,7 +33,7 @@ class Opponent {
      * @return updated opponent
      */
     def updateOpponent() {
-        Opponent existing = Opponent.findByUsername('Chug Chug')
+        Opponent existing = Opponent.findByUsername(username)
 
         existing.wins = wins as int
         existing.losses = losses as int
