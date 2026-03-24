@@ -2,46 +2,39 @@ package home
 
 import groovybones.GameBoard
 import groovybones.OpponentActions
-import groovybones.RequestCaller
+import groovybones.OpponentRetriever
 import opponent.Opponent
-import user.User
 
 /**
- * Default homepage controller that renders index view
- * views/home/index.gsp is implicitly rendered
+ * Responsible for initializing and instantiating a new game
+ * Loads opponent profiles via OpponentServiceController (webservice) HTTP requests
+ * Instantiates player and opponent session variables for gameplay
  */
 class GameSetupController {
-
     final String key = grailsApplication.config.apiKey.secretkey
     final String opponentAPI = 'http://localhost:8080/opponent'
 
 
     /**
-     * single-line method to print a test message and render gameSetup
+     * renders gameSetup
+     * makes request against OpponentServiceController to gather opponent entities
      * @return render gameSetup
      */
     def gameSetup() {
         println 'GameSetup gameSetup()'
 
-        //retrieve opponent profiles from webservice/OpponentServiceController
-        RequestCaller request = new RequestCaller(apiAuthKey: key)
-        ArrayList<Map> opponentsMap = request.returnOpponents(request.callGET(opponentAPI))
-        ArrayList<Opponent>collectedOpponents = []
-
-        //collect opponents from API call, limit the list to 3 for now
-        opponentsMap.eachWithIndex {it, i ->
-            i++
-            (i <= 3) ? collectedOpponents << (it.opponent as Opponent) : null
-        }
-        session['opponentsList'] = collectedOpponents
+        OpponentRetriever opRet = new OpponentRetriever(key, opponentAPI, false)
+        ArrayList<Opponent> opponents = opRet.opponent
+        session['opponentsList'] = opponents
 
         render(view: 'gameSetup')
     }
 
     /**
      * initializes session variables to setup player and opponent game boards
+     * retrieves opponent details from gameSetup opponent form
      * activates gameOrchestrator for player vs. opponent turn sequencing
-     * @return gameOrchestrator()
+     * @return GameController gameOrchestrator() -> game
      */
     def gameInitialization() {
         println 'GameSetup gameInitialization()'
@@ -54,8 +47,6 @@ class GameSetupController {
                 losse: params.losses,
                 totalScore: params.totalscore
         )
-        op.printOpponent()
-
 
         //instantiate GameBoards to session
         session['playerBoard'] = new GameBoard()
@@ -73,9 +64,9 @@ class GameSetupController {
         )
 
 
-        session['turn'] = 0
-        session['playerTurn'] = new Random().nextInt(2) == 1      //randomly pick first turn
-        session['timeout'] = 3000                                       //timeout to delay instant opponent turn
+        session['turn'] = 0                                            //initialize turn counter (visual only)
+        session['playerTurn'] = new Random().nextInt(2) == 1    //randomly pick first turn
+        session['timeout'] = 3000                                     //timeout to delay instant opponent turn
         redirect(controller: 'Game', action: "gameOrchestrator")
     }
 }
