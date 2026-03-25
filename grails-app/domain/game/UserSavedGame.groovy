@@ -16,7 +16,6 @@ class UserSavedGame {
 
     static mapping = {
         table 'user_saved_game'
-        id column: 'id', type: 'int'
         user column: 'user_id'
         savedGame column: 'saved_game_id'
         version false
