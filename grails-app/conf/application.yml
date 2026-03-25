@@ -62,13 +62,24 @@ dataSource:
   pooled: true
   jmxExport: true
   dialect: org.hibernate.dialect.MySQL8Dialect
+
 environments:
+
   development:
     dataSource:
+      driverClassName: com.mysql.cj.jdbc.Driver
+      dialect: org.hibernate.dialect.MySQL8Dialect
+      url: jdbc:mysql://localhost:3306/groovy
       dbCreate: none
+
   test:
     dataSource:
+      driverClassName: com.mysql.cj.jdbc.Driver
+      dialect: org.hibernate.dialect.MySQL8Dialect
+      url: jdbc:mysql://localhost:3306/groovy_test
       dbCreate: none
+
+
   production:
     dataSource:
       dbCreate: none
