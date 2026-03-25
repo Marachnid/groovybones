@@ -9,21 +9,17 @@ CREATE TABLE user (
 );
 
 INSERT INTO user (cognito_sub, username, wins, losses, total_score) VALUES
-('014bc500-0071-70f4-e700-763d5e76f3a1', 'chosenOne', 0, 0, 0);
-
-INSERT INTO user (cognito_sub, username, wins, losses, total_score) VALUES
 ('123', 'testUser', 1, 1, 100);
 
 
 CREATE TABLE opponent (
-id INT AUTO_INCREMENT PRIMARY KEY,
-username VARCHAR(25) NOT NULL,
-difficulty TINYINT UNSIGNED NOT NULL,
-wins INT NOT NULL,
-losses INT NOT NULL,
-total_score INT NOT NULL
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    username VARCHAR(25) NOT NULL,
+    difficulty TINYINT UNSIGNED NOT NULL,
+    wins INT NOT NULL,
+    losses INT NOT NULL,
+    total_score INT NOT NULL
 );
-
 
 INSERT INTO opponent (username, difficulty, wins, losses, total_score) VALUES
     ('Chug Chug', 1, 0, 0, 0),
@@ -44,18 +40,18 @@ INSERT INTO opponent (username, difficulty, wins, losses, total_score) VALUES
 
 
 CREATE TABLE saved_game (
-id INT NOT NULL AUTO_INCREMENT,
-user_board VARCHAR(60),
-opponent_board VARCHAR(60),
-turn INT NOT NULL,
-user_id INT NOT NULL,
-opponent_id INT NOT NULL,
-
-PRIMARY KEY (id),
-CONSTRAINT fk_saved_game_user
-    FOREIGN KEY (user_id) REFERENCES user(id),
-CONSTRAINT fk_saved_game_opponent
-    FOREIGN KEY (opponent_id) REFERENCES opponent(id)
+    id INT NOT NULL AUTO_INCREMENT,
+    user_board VARCHAR(60),
+    opponent_board VARCHAR(60),
+    turn INT NOT NULL,
+    user_id INT NOT NULL,
+    opponent_id INT NOT NULL,
+    
+    PRIMARY KEY (id),
+    CONSTRAINT fk_saved_game_user
+        FOREIGN KEY (user_id) REFERENCES user(id),
+    CONSTRAINT fk_saved_game_opponent
+        FOREIGN KEY (opponent_id) REFERENCES opponent(id)
 );
 
 
@@ -76,7 +72,6 @@ CREATE TABLE opponent_saved_game (
 id INT NOT NULL AUTO_INCREMENT,
     opponent_id INT NOT NULL,
     saved_game_id INT NOT NULL,
-
 
     PRIMARY KEY (id),
     CONSTRAINT fk_opponent_saved_game_opponent

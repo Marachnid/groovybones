@@ -18,11 +18,69 @@ class SQLRunner {
      */
     SQLRunner(DataSource dataSource) { sql = new Sql(dataSource) }
 
+    /** control db operations */
+    void refreshDB() {
+        dropTables()
+        insertTables()
+        populateTables()
+    }
 
-    /** drop, recreate, repopulate opponent table */
-    void recreateOpponentTable() {
+    /** controls dropping tables */
+    void dropTables() {
+        sql.execute('DROP TABLE IF EXISTS opponent_saved_game')
+        sql.execute('DROP TABLE IF EXISTS user_saved_game')
+        sql.execute('DROP TABLE IF EXISTS saved_game')
         sql.execute('DROP TABLE IF EXISTS opponent')
+        sql.execute('DROP TABLE IF EXISTS user')
+    }
 
+    /** controls inserting tables */
+    void insertTables() {
+        insertOpponentTable()
+        insertUserTable()
+        insertSavedGameTable()
+        insertOpponentJoin()
+        insertUserJoin()
+    }
+
+    /** populates existing tables with sample data */
+    void populateTables() {
+        //opponent
+        sql.execute("""
+            INSERT INTO opponent (username, difficulty, wins, losses, total_score) VALUES
+                ('Chug Chug', 1, 0, 0, 0),
+                ('Big Slight', 2, 0, 0, 0),
+                ('Vindictive One', 3, 0, 0, 0);
+        """)
+
+        //user
+        sql.execute("""
+            INSERT INTO user (cognito_sub, username, wins, losses, total_score) VALUES
+            ('123', 'testUser', 1, 1, 100);
+        """)
+
+        //saved_game
+        sql.execute("""
+            INSERT INTO saved_game (user_board, opponent_board, turn, user_id, opponent_id) VALUES
+            ('user-board', 'opponent-board', 3, 1, 1);
+        """)
+
+        //opponent_saved_game
+        sql.execute("""
+            INSERT INTO opponent_saved_game(opponent_id, saved_game_id) VALUES
+            (1, 1);
+        """)
+
+        //user_saved_game
+        sql.execute("""
+            INSERT INTO user_saved_game(user_id, saved_game_id) VALUES
+            (1, 1);
+        """)
+    }
+
+
+    /** insert opponent table */
+    void insertOpponentTable() {
         sql.execute("""
             CREATE TABLE opponent (
                 id INT AUTO_INCREMENT PRIMARY KEY,
@@ -31,19 +89,11 @@ class SQLRunner {
                 wins INT NOT NULL,
                 losses INT NOT NULL,
                 total_score INT NOT NULL);
-            """)
-
-        sql.execute("""
-            INSERT INTO opponent (username, difficulty, wins, losses, total_score) VALUES
-                ('Chug Chug', 1, 0, 0, 0),
-                ('Big Slight', 2, 0, 0, 0),
-                ('Vindictive One', 3, 0, 0, 0);
-            """)
+        """)
     }
 
-
-    /** drop, recreate, repopulate user table */
-    void recreateUserTable() {
+    /** insert user table */
+    void insertUserTable() {
         sql.execute("""
             CREATE TABLE user (
                 id INT AUTO_INCREMENT PRIMARY KEY,
@@ -52,13 +102,59 @@ class SQLRunner {
                 wins INT NOT NULL,
                 losses INT NOT NULL,
                 total_score INT NOT NULL);
-            """)
-
-        sql.execute("""
-            INSERT INTO user (cognito_sub, username, wins, losses, total_score) VALUES
-            ('123', 'testUser', 1, 1, 100);
         """)
-
     }
 
+    /** insert saved_game table*/
+    void insertSavedGameTable() {
+        sql.execute("""
+            CREATE TABLE saved_game (
+                id INT NOT NULL AUTO_INCREMENT,
+                user_board VARCHAR(60),
+                opponent_board VARCHAR(60),
+                turn INT NOT NULL,
+                user_id INT NOT NULL,
+                opponent_id INT NOT NULL,
+            PRIMARY KEY (id),
+            CONSTRAINT fk_saved_game_user
+                FOREIGN KEY (user_id) REFERENCES user(id),
+            CONSTRAINT fk_saved_game_opponent
+                FOREIGN KEY (opponent_id) REFERENCES opponent(id)
+            );
+        """)
+    }
+
+    /** insert opponent join table */
+    void insertOpponentJoin() {
+        sql.execute("""
+            CREATE TABLE opponent_saved_game (
+                id INT NOT NULL AUTO_INCREMENT,
+                opponent_id INT NOT NULL,
+                saved_game_id INT NOT NULL,
+            
+                PRIMARY KEY (id),
+                CONSTRAINT fk_opponent_saved_game_opponent
+                    FOREIGN KEY (opponent_id) REFERENCES opponent(id),
+                CONSTRAINT fk_opponent_saved_game_saved
+                    FOREIGN KEY (saved_game_id) REFERENCES saved_game(id)
+            );
+        """)
+    }
+
+    /** insert user join table */
+    void insertUserJoin() {
+        sql.execute("""
+            CREATE TABLE user_saved_game (
+                id INT NOT NULL AUTO_INCREMENT,
+                user_id INT NOT NULL,
+                saved_game_id INT NOT NULL,
+            
+                PRIMARY KEY (id),
+                CONSTRAINT fk_user_saved_game_user
+                    FOREIGN KEY (user_id) REFERENCES user(id),
+                CONSTRAINT fk_user_saved_game_saved
+                    FOREIGN KEY (saved_game_id) REFERENCES saved_game(id)
+            );
+        """)
+    }
 }
