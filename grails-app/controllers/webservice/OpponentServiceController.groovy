@@ -1,6 +1,7 @@
 package webservice
 
 import grails.gorm.transactions.Transactional
+import groovybones.OpponentService
 import opponent.Opponent
 
 /**
@@ -12,6 +13,7 @@ class OpponentServiceController {
     static final responseFormats = ['json']
     final String key = grailsApplication.config.apiKey.secretkey
     final Map forbiddenError = [errorText: 'Forbidden']
+    OpponentService opService
     String requestKey
     Opponent opponent
 
@@ -74,7 +76,8 @@ class OpponentServiceController {
         //if invalid entry, respond with 500
         if (!opponent.validate()) respond([errorText: opponent.errors], status: 500)
         else
-            opponent.updateOpponent()
+            opService = new OpponentService()
+            opponent = opService.updateOpponent(opponent)
             respond opponent, status: 201
     }
 }
