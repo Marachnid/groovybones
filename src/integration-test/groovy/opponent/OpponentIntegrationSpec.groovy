@@ -23,19 +23,16 @@ class OpponentIntegrationSpec extends Specification {
 
 
     /** basic setup method to instantiate objects and refresh test schema*/
-    def setup() {
-        new SQLRunner(dataSource).recreateOpponentTable()
+    void setup() {
+        new SQLRunner(dataSource).refreshDB()
 
         opService = new OpponentService()
         opponent = new Opponent(username: 'tester', difficulty: 1, wins: 0, losses: 0, totalScore: 0)
                 .save(failOnError: true)
     }
 
-    /**
-     * tests that opponent difficulty update is ignored
-     * @return pass/fail
-     */
-    def "opponentUpdate() ignores updates to difficulty"() {
+    /** tests that opponent difficulty update is ignored */
+    void "opponentUpdate() ignores updates to difficulty"() {
         when: 'opponent difficulty is changed'
         opponent.difficulty = 2
 
@@ -46,11 +43,8 @@ class OpponentIntegrationSpec extends Specification {
         opponent.difficulty == 1
     }
 
-    /**
-     * tests an update to username fails to find existing user
-     * @return pass/fail
-     */
-    def "updateOpponent() fails to find username to update"() {
+    /** tests an update to username fails to find existing user */
+    void "updateOpponent() fails to find username to update"() {
         when: 'opponent name is changed'
         opponent.username = 'tester2'
 
@@ -61,11 +55,8 @@ class OpponentIntegrationSpec extends Specification {
         thrown(NullPointerException)
     }
 
-    /**
-     * tests successfully updating opponent wins, losses, totalScore
-     * @return pass/fail
-     */
-    def "updateOpponent() successfully updates opponent"() {
+    /** tests successfully updating opponent wins, losses, totalScore */
+    void "updateOpponent() successfully updates opponent"() {
         when: 'opponent wins, losses, totalScore is updated'
         opponent.wins = 1
         opponent.losses = 1
@@ -80,11 +71,8 @@ class OpponentIntegrationSpec extends Specification {
         newOp.totalScore == opponent.totalScore
     }
 
-    /**
-     * tests overall successful update that results in difficulty ignored
-     * @return pass/fail
-     */
-    def "updateOpponent() updates wins, losses, totalScore and ignores difficulty"() {
+    /** tests overall successful update that results in difficulty ignored */
+    void "updateOpponent() updates wins, losses, totalScore and ignores difficulty"() {
         when: 'opponent wins, losses, totalScore, and difficulty is updated'
         opponent.wins = 1
         opponent.losses = 1
