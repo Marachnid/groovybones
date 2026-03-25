@@ -2,7 +2,7 @@ package home
 
 import groovybones.GameBoard
 import groovybones.OpponentActions
-import groovybones.OpponentRetriever
+import groovybones.opponent.OpponentRetriever
 import opponent.Opponent
 
 /**

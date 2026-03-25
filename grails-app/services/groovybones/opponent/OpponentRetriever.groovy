@@ -1,4 +1,5 @@
-package groovybones
+package groovybones.opponent
+
 
 import opponent.Opponent
 

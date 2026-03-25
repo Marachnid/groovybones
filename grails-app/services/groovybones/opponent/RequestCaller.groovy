@@ -1,4 +1,4 @@
-package groovybones
+package groovybones.opponent
 
 import groovy.json.JsonSlurper
 import groovy.json.JsonOutput

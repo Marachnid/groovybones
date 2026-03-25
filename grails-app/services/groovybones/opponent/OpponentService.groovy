@@ -1,4 +1,4 @@
-package groovybones
+package groovybones.opponent
 
 import grails.gorm.transactions.Transactional
 import opponent.Opponent
