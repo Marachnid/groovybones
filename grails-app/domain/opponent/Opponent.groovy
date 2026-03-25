@@ -20,7 +20,7 @@ class Opponent {
 
     //enforce DB constraints
     static constraints = {
-        username nullable: false, blank: false, maxSize: 25, updatable: false
+        username nullable: false, blank: false, maxSize: 25, updatable: false, unique: true
         difficulty nullable: false, inList: [1,2,3], updatable: false
         wins nullable: false, min: 0
         losses nullable: false, min: 0
