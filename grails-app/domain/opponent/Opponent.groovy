@@ -20,8 +20,8 @@ class Opponent {
 
     //enforce DB constraints
     static constraints = {
-        username nullable: false, blank: false, maxSize: 25, updateable: false
-        difficulty nullable: false, inList: [1,2,3], updateable: false
+        username nullable: false, blank: false, maxSize: 25, updatable: false
+        difficulty nullable: false, inList: [1,2,3], updatable: false
         wins nullable: false, min: 0
         losses nullable: false, min: 0
         totalScore nullable: false, min: 0
@@ -29,24 +29,11 @@ class Opponent {
 
     //define datatype mappings
     static mapping = {
+        username updateable: false
+        difficulty updateable: false
         version false
         difficulty sqlType: 'TINYINT UNSIGNED'
     }
-
-
-    /**
-     * handles updating an existing opponent's wins, losses, and totalScore
-     * @return updated opponent
-     */
-    def updateOpponent() {
-        Opponent existing = Opponent.findByUsername(username)
-
-        existing.wins = wins as int
-        existing.losses = losses as int
-        existing.totalScore = totalScore as int
-        existing.save(failOnError: true)
-    }
-
 
     /**
      * utility method for returning opponent as a map of values
