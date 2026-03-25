@@ -1,10 +1,9 @@
 package opponent
 
-import grails.testing.gorm.DomainUnitTest
 import spock.lang.Specification
 
 /** Tests Opponent instance methods */
-class OpponentSpec extends Specification implements DomainUnitTest<Opponent> {
+class OpponentSpec extends Specification {
     Opponent opponent
 
     /** basic setup method */

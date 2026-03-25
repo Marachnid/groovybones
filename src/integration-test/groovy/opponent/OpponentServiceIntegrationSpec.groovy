@@ -2,7 +2,7 @@ package opponent
 
 import grails.testing.mixin.integration.Integration
 import grails.gorm.transactions.*
-import groovybones.OpponentService
+import groovybones.opponent.OpponentService
 import spock.lang.Shared
 import spock.lang.Specification
 import spock.lang.Stepwise
@@ -14,7 +14,7 @@ import javax.sql.DataSource
 @Integration
 @Rollback
 @Stepwise
-class OpponentIntegrationSpec extends Specification {
+class OpponentServiceIntegrationSpec extends Specification {
     @Shared
     DataSource dataSource
 

@@ -1,7 +1,7 @@
 package webservice
 
 import grails.gorm.transactions.Transactional
-import groovybones.OpponentService
+import groovybones.opponent.OpponentService
 import opponent.Opponent
 
 /**
