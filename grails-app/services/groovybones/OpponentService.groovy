@@ -18,5 +18,6 @@ class OpponentService {
         existing.losses = opponent.losses
         existing.totalScore = opponent.totalScore
         existing.save(failOnError: true)
+        existing
     }
 }
