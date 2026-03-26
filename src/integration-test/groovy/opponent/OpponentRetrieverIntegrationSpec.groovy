@@ -4,7 +4,6 @@ import grails.core.GrailsApplication
 import grails.gorm.transactions.Rollback
 import grails.testing.mixin.integration.Integration
 import groovybones.opponent.OpponentRetriever
-import groovybones.opponent.RequestCaller
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.boot.test.web.server.LocalServerPort
 import spock.lang.Shared
@@ -32,7 +31,7 @@ class OpponentRetrieverIntegrationSpec extends Specification {
     String basePath
 
 
-    /** basic setup method to instantiate objects and refresh test schema*/
+    /** basic setup method to instantiate objects and refresh test schema */
     void setup() {
         new SQLRunner(dataSource).refreshDB()
         key = grailsApplication.config.apiKey.secretkey
@@ -41,7 +40,7 @@ class OpponentRetrieverIntegrationSpec extends Specification {
 
 
     /** tests retrieving and mapping an ArrayList<Opponent> of opponents */
-    void "successfully map a list of retrieved opponents from webservice"() {
+    void "return mapped list of opponents"() {
         when: 'OpponentServiceController base GET path is called'
         opRet =  new OpponentRetriever(key, basePath, false)
 
@@ -52,7 +51,7 @@ class OpponentRetrieverIntegrationSpec extends Specification {
     }
 
     /** tests retrieving and mapping a single opponent */
-    void "successfully map a single opponent retrieved from webservice"() {
+    void "return mapped opponent"() {
         when: 'OpponentServiceController getById path is called'
         String path = basePath + '/1/'
         opRet = new OpponentRetriever(key, path, true)
@@ -69,7 +68,7 @@ class OpponentRetrieverIntegrationSpec extends Specification {
     }
 
     /** tests returning null opponent if ID not found */
-    void "opponent is null no ID found"() {
+    void "return null opponent if ID not found"() {
         when: 'a non-existent ID is called'
         opRet = new OpponentRetriever(key, basePath + '/10', true)
 
@@ -79,7 +78,7 @@ class OpponentRetrieverIntegrationSpec extends Specification {
     }
 
     /** tests returning null opponent if incorrect path called */
-    void "opponent is null if incorrect path"() {
+    void "return null opponent if incorrect path"() {
         when: 'incorrect path is called'
         opRet = new OpponentRetriever(key, basePath + '1', true)
 
@@ -89,7 +88,7 @@ class OpponentRetrieverIntegrationSpec extends Specification {
     }
 
     /** tests returning null opponent if incorrect auth key */
-    void "opponent is null if incorrect API key"() {
+    void "return null opponent if incorrect API key"() {
         when: 'incorrect auth is used'
         opRet = new OpponentRetriever('bad-key', basePath, true)
 
@@ -99,7 +98,7 @@ class OpponentRetrieverIntegrationSpec extends Specification {
     }
 
     /** tests successfully returning an updated opponent */
-    void "return 201 by post() for successful opponent update"() {
+    void "return opponent with updated values"() {
         when: 'opponent receives a new value'
         opponent = Opponent.get(1)
         opponent.totalScore = 100
@@ -113,7 +112,7 @@ class OpponentRetrieverIntegrationSpec extends Specification {
     }
 
     /** tests returning null opponent for failed update */
-    void "return null opponent"() {
+    void "return null opponent if invalid"() {
         when: 'an opponent is invalid'
         opponent = Opponent.get(1)
         opponent.id = null
