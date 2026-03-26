@@ -2,6 +2,7 @@ package groovybones.opponent
 
 
 import groovybones.Opponent
+import groovybones.util.RequestCaller
 
 /**
  * Responsible for mapping Opponents from OpponentServiceController responses
