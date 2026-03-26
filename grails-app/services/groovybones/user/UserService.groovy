@@ -1,4 +1,4 @@
-package groovybones
+package groovybones.user
 
 import grails.gorm.transactions.Transactional
 import groovybones.User

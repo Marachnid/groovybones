@@ -1,9 +1,9 @@
 package home
 
-import groovybones.UserService
+import groovybones.user.UserService
 import groovybones.User
 import groovy.json.JsonSlurper
-import groovybones.CognitoOAuthService
+import groovybones.user.CognitoOAuthService
 
 /**
  * Responsible for managing login routing, callback processes, and logout

@@ -1,6 +1,7 @@
 package groovybones
 
 import grails.testing.services.ServiceUnitTest
+import groovybones.user.UserService
 import spock.lang.Specification
 
 class UserServiceSpec extends Specification implements ServiceUnitTest<UserService>{
