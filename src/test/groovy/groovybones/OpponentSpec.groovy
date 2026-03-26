@@ -1,4 +1,4 @@
-package opponent
+package groovybones
 
 import spock.lang.Specification
 

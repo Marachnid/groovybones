@@ -1,4 +1,4 @@
-package game
+package groovybones
 
 import spock.lang.Specification
 
