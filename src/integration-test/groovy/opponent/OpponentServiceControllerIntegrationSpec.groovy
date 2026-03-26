@@ -167,7 +167,8 @@ class OpponentServiceControllerIntegrationSpec extends Specification {
     void "return 500 by post() for invalid opponent"() {
         when: 'the opponent body is invalid'
         opponent = Opponent.get(1)
-        opponent.id = null
+        opponent.difficulty = 0
+
         body = opponent.returnAsMap()
         conn = returnConnection('POST', key, url)
 
