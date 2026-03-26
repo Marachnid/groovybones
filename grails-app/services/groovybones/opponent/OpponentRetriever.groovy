@@ -70,14 +70,7 @@ class OpponentRetriever {
      */
     Opponent returnOpponent() {
         Opponent opponent
-        if (responseCode == 200) {
-            opponent = new Opponent(
-                    username: responseBody.username,
-                    difficulty: responseBody.difficulty as int,
-                    wins: responseBody.wins as int,
-                    losses: responseBody.losses as int,
-                    totalScore: responseBody.totalScore as int
-            )
+        if (responseCode == 200) { opponent = new Opponent(responseBody)
         } else opponent = null
         opponent
     }
@@ -91,13 +84,7 @@ class OpponentRetriever {
         if (responseCode == 200) {
             ArrayList<Map> opponents = responseBody as ArrayList<Map>
             opponents.each {
-                opponent = new Opponent(
-                        username: it.username,
-                        difficulty: it.difficulty as int,
-                        wins: it.wins as int,
-                        losses: it.losses as int,
-                        totalScore: it.totalScore as int
-                )
+                opponent = new Opponent(it)
                 collectedOpponents << opponent
             }
         }
