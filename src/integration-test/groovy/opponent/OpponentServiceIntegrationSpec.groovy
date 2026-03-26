@@ -28,12 +28,11 @@ class OpponentServiceIntegrationSpec extends Specification {
         new SQLRunner(dataSource).refreshDB()
 
         opService = new OpponentService()
-        opponent = new Opponent(username: 'tester', difficulty: 1, wins: 0, losses: 0, totalScore: 0)
-                .save(failOnError: true)
+        opponent = Opponent.get(1)
     }
 
     /** tests that opponent difficulty update is ignored */
-    void "opponentUpdate() ignores updates to difficulty"() {
+    void "updateOpponent() ignores updates to difficulty"() {
         when: 'opponent difficulty is changed'
         opponent.difficulty = 2
 
@@ -44,9 +43,9 @@ class OpponentServiceIntegrationSpec extends Specification {
         opponent.difficulty == 1
     }
 
-    /** tests an update to username fails to find existing user */
+    /** tests an invalid id fails to find existing user */
     void "updateOpponent() fails to find id to update"() {
-        when: 'opponent name is changed'
+        when: 'opponent id is invalid'
         opponent.id = 100
 
         and: 'opponent tries to update'

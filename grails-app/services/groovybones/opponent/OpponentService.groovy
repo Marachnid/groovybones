@@ -3,6 +3,11 @@ package groovybones.opponent
 import grails.gorm.transactions.Transactional
 import groovybones.Opponent
 
+/**
+ * Responsible for handling Opponent persistence operations
+ * Opponent entities not intended to be created from/in the app
+ * Opponent entities only update wins, losses, totalScore
+ */
 @Transactional
 class OpponentService {
 
