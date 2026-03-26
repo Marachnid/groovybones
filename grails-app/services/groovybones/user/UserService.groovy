@@ -3,6 +3,9 @@ package groovybones.user
 import grails.gorm.transactions.Transactional
 import groovybones.User
 
+/**
+ * Responsible for handling User persistence operations
+ */
 @Transactional
 class UserService {
 
@@ -14,17 +17,36 @@ class UserService {
      */
     User createUser(String cognitoSub, String username) {
         User user = new User(cognitoSub: cognitoSub, username: username,  wins: 0, losses: 0, totalScore: 0)
-        user.save(failOnError: true)
-        return user
-    }
 
+        if (user.validate()) {
+            user.save(flush: true, failOnError: true)
+            user.cognitoSub = null                  //nullify cognito sub on return - in case of reserialization on accident
+        } else user = null
+
+        user
+    }
 
     /**
      * updates a User entity
      * @param user entity to be updated
+     * @return updated user entity
      */
-    def updateUser(User user) { user.save(failOnError: true) }
+    User updateUser(User user) {
+        User existing = null
 
+        if (user.validate()) {
+            existing = User.get(user.id)
+            user.cognitoSub = null                      //nullify original user cognitoSub
+
+            existing.username = user.username
+            existing.wins = user.wins
+            existing.losses = user.losses
+            existing.totalScore = user.totalScore
+            existing.save(flush: true, failOnError: true)
+            existing.cognitoSub = null                  //nullify cognitoSub on return - in case of reserialization on accident
+        }
+        existing
+    }
 
     /**
      * deletes an existing DB entity
