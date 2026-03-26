@@ -23,6 +23,8 @@ class OpponentRetriever {
     //resulting opponent(s)
     def opponent
 
+
+    /** default constructor */
     OpponentRetriever() {}
 
     /**
