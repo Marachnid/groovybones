@@ -64,20 +64,31 @@ class OpponentServiceController {
     @Transactional
     def post() {
         requestKey = request.getHeader('X-API-KEY')
-        if (!validateAuthKey(requestKey)) respond(forbiddenError, status: 403)
+        if (!validateAuthKey(requestKey)) {
+            respond(forbiddenError, status: 403)
+            return
+        }
 
         final json = request.JSON
 
         //if missing a JSON body, respond with 400, else assign opponent to JSON body
-        if (!json) respond([errorText: 'Bad Request'], status: 400)
-        else opponent = Opponent.get(json.id)
+        if (!json) {
+            respond([errorText: 'Bad Request'], status: 400)
+            return
+        } else opponent = Opponent.get(json.id)
 
-        //don't cast to binding result, nullifies updates
-        opponent.properties = json
+        //validate ID is found
+        if(!opponent) {
+            respond([errorText: "ID ${json.id} not found"], status: 404)
+            return
+        } else opponent.properties = json
+
 
         //if invalid entry, respond with 500
-        if (!opponent.validate()) respond([errorText: opponent.errors], status: 500)
-        else
+        if (!opponent.validate()) {
+            respond([errorText: opponent.errors], status: 500)
+            return
+        } else
             opService = new OpponentService()
             opponent = opService.updateOpponent(opponent)
             respond opponent, status: 201
