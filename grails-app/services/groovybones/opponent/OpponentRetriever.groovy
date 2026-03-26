@@ -70,7 +70,9 @@ class OpponentRetriever {
      */
     Opponent returnOpponent() {
         Opponent opponent
-        if (responseCode == 200 || responseCode == 201) { opponent = new Opponent(responseBody)
+        if (responseCode == 200 || responseCode == 201) {
+            opponent = new Opponent(responseBody)
+            opponent.id = responseBody.id as Long
         } else opponent = null
         opponent
     }
@@ -85,6 +87,7 @@ class OpponentRetriever {
             ArrayList<Map> opponents = responseBody as ArrayList<Map>
             opponents.each {
                 opponent = new Opponent(it)
+                opponent.id = it.id as Long
                 collectedOpponents << opponent
             }
         }
