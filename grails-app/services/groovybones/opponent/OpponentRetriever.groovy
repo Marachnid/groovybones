@@ -70,7 +70,7 @@ class OpponentRetriever {
      */
     Opponent returnOpponent() {
         Opponent opponent
-        if (responseCode == 200) { opponent = new Opponent(responseBody)
+        if (responseCode == 200 || responseCode == 201) { opponent = new Opponent(responseBody)
         } else opponent = null
         opponent
     }
