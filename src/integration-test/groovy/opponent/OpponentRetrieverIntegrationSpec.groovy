@@ -26,10 +26,8 @@ class OpponentRetrieverIntegrationSpec extends Specification {
     int port
 
     GrailsApplication grailsApplication
-    RequestCaller requestCaller
     OpponentRetriever opRet
     Opponent opponent
-    ArrayList<Opponent> opponents
     String key
     String basePath
 
