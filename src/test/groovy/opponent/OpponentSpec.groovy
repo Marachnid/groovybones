@@ -11,13 +11,10 @@ class OpponentSpec extends Specification {
         opponent = new Opponent(username: 'Chug Chug', difficulty: 1, wins: 0, losses: 0, totalScore: 0)
     }
 
-    /**
-     * tests returning opponent instance variables as a map
-     * @return pass/fail
-     */
-    def "opponentAsMap() returns correct opponent instance variables"() {
+    /** tests returning opponent instance variables as a map */
+    def "returnAsMap() returns correct opponent instance variables"() {
         when: 'opponent instance variables are extracted to a map'
-        Map map = opponent.opponentAsMap()
+        Map map = opponent.returnAsMap()
 
         then: 'all values should match'
         map.username == opponent.username

@@ -10,7 +10,7 @@ import util.SQLRunner
 import javax.sql.DataSource
 
 
-/** Carries out integration tests for Opponent domain persistence operations */
+/** Performs integration tests on OpponentService persistence methods */
 @Integration
 @Rollback
 @Stepwise

@@ -54,7 +54,7 @@ class OpponentRetriever {
     OpponentRetriever(String apiAuthKey, String path, Opponent op) {
         this.apiAuthKey = apiAuthKey
         this.path = path
-        this.postBody = op.opponentAsMap()
+        this.postBody = op.returnAsMap()
 
         request = new RequestCaller(apiAuthKey: apiAuthKey, path: path, body: postBody)
         response = request.callPOST()
