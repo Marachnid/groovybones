@@ -1,7 +1,7 @@
 package groovybones.opponent
 
 import grails.gorm.transactions.Transactional
-import opponent.Opponent
+import groovybones.Opponent
 
 @Transactional
 class OpponentService {

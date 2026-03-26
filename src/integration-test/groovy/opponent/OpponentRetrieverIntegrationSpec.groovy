@@ -3,6 +3,7 @@ package opponent
 import grails.core.GrailsApplication
 import grails.gorm.transactions.Rollback
 import grails.testing.mixin.integration.Integration
+import groovybones.Opponent
 import groovybones.opponent.OpponentRetriever
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.boot.test.web.server.LocalServerPort

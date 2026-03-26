@@ -1,26 +1,24 @@
-package user
-
-import game.SavedGame
-
+package groovybones
 /**
- * Represents a User DB entity in MySQL table, 'user'
- * Implicitly maps User class to 'user' table
+ * Represents an Opponent DB entity in MySQL table, 'opponent'
+ * Implicitly maps Opponent class to 'opponent' table
  * GORM domain classes have persistence built-in, no DAO needed
  */
-class User {
-    String cognitoSub
+class Opponent {
     String username
+    int difficulty      //Not expecting to exceed 1 opponent per difficulty tier for now
     int wins
     int losses
     int totalScore
+
 
     //foreign key - one to many relationship
     static hasMany = [savedGames: SavedGame]
 
     //enforce DB constraints
     static constraints = {
-        cognitoSub nullable: false, blank: false, maxSize: 36, updateable: false
-        username nullable: false, blank: false, maxSize: 25
+        username nullable: false, blank: false, maxSize: 25, updatable: false, unique: true
+        difficulty nullable: false, inList: [1,2,3], updatable: false
         wins nullable: false, min: 0
         losses nullable: false, min: 0
         totalScore nullable: false, min: 0
@@ -28,8 +26,10 @@ class User {
 
     //define datatype mappings
     static mapping = {
-        cognitoSub updateable: false
+        username updateable: false
+        difficulty updateable: false
         version false
+        difficulty sqlType: 'TINYINT UNSIGNED'
     }
 
     /**
@@ -37,6 +37,6 @@ class User {
      * @return opponent as map
      */
     Map returnAsMap() {
-        [id: id, cognitoSub: cognitoSub, username: username, wins: wins, losses: losses, totalScore: totalScore]
+        [id: id, username: username, difficulty: difficulty, wins: wins, losses: losses, totalScore: totalScore]
     }
 }

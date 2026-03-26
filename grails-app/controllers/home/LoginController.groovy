@@ -1,7 +1,7 @@
 package home
 
 import groovybones.UserService
-import user.User
+import groovybones.User
 import groovy.json.JsonSlurper
 import groovybones.CognitoOAuthService
 

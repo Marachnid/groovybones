@@ -3,7 +3,7 @@ package home
 import groovybones.GameBoard
 import groovybones.OpponentActions
 import groovybones.opponent.OpponentRetriever
-import opponent.Opponent
+import groovybones.Opponent
 
 /**
  * Responsible for initializing and instantiating a new game

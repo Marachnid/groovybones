@@ -5,6 +5,7 @@ import grails.gorm.transactions.Rollback
 import grails.testing.mixin.integration.Integration
 import groovy.json.JsonOutput
 import groovy.json.JsonSlurper
+import groovybones.Opponent
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.boot.test.web.server.LocalServerPort
 import spock.lang.Shared

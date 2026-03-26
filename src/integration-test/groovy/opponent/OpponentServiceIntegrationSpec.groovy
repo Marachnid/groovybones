@@ -2,6 +2,7 @@ package opponent
 
 import grails.testing.mixin.integration.Integration
 import grails.gorm.transactions.*
+import groovybones.Opponent
 import groovybones.opponent.OpponentService
 import spock.lang.Shared
 import spock.lang.Specification

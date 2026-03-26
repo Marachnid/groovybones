@@ -1,7 +1,7 @@
 package groovybones.opponent
 
 
-import opponent.Opponent
+import groovybones.Opponent
 
 /**
  * Responsible for mapping Opponents from OpponentServiceController responses

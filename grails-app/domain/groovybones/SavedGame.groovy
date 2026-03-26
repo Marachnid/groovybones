@@ -1,8 +1,4 @@
-package game
-
-import opponent.Opponent
-import user.User
-
+package groovybones
 /**
  * Represents SavedGame DB entity in MySQL table, 'saved_game'
  * Opponent one-to-many -> SavedGame

@@ -1,7 +1,7 @@
 package groovybones
 
 import grails.gorm.transactions.Transactional
-import user.User
+import groovybones.User
 
 @Transactional
 class UserService {

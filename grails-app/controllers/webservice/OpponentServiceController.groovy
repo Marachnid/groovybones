@@ -2,7 +2,7 @@ package webservice
 
 import grails.gorm.transactions.Transactional
 import groovybones.opponent.OpponentService
-import opponent.Opponent
+import groovybones.Opponent
 
 /**
  * Opponent WEBSERVICE (paths are defined in URLMappings --- localhost:8080/opponent)
