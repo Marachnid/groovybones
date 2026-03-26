@@ -36,8 +36,6 @@ class UserService {
 
         if (user.validate()) {
             existing = User.get(user.id)
-            user.cognitoSub = null                      //nullify original user cognitoSub
-
             existing.username = user.username
             existing.wins = user.wins
             existing.losses = user.losses
@@ -45,6 +43,7 @@ class UserService {
             existing.save(flush: true, failOnError: true)
             existing.cognitoSub = null                  //nullify cognitoSub on return - in case of reserialization on accident
         }
+        user.cognitoSub = null                      //nullify original user cognitoSub
         existing
     }
 
