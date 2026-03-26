@@ -52,7 +52,8 @@ class SQLRunner {
         //user
         sql.execute("""
             INSERT INTO user (cognito_sub, username, wins, losses, total_score) VALUES
-            ('123', 'testUser', 1, 1, 100);
+            ('123', 'testUser', 1, 1, 1),
+            ('234', 'otherTestUser', 0, 0, 0);
         """)
 
         //saved_game
