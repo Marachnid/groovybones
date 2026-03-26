@@ -12,7 +12,7 @@ class OpponentService {
      * @return updated opponent
      */
     Opponent updateOpponent(Opponent opponent) {
-        Opponent existing = Opponent.findByUsername(opponent.username)
+        Opponent existing = Opponent.get(opponent.id)
 
         existing.wins = opponent.wins
         existing.losses = opponent.losses

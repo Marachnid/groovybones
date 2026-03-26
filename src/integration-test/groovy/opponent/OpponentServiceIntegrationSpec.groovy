@@ -45,9 +45,9 @@ class OpponentServiceIntegrationSpec extends Specification {
     }
 
     /** tests an update to username fails to find existing user */
-    void "updateOpponent() fails to find username to update"() {
+    void "updateOpponent() fails to find id to update"() {
         when: 'opponent name is changed'
-        opponent.username = 'tester2'
+        opponent.id = 100
 
         and: 'opponent tries to update'
         opponent = opService.updateOpponent(opponent)
@@ -67,6 +67,7 @@ class OpponentServiceIntegrationSpec extends Specification {
         Opponent newOp = opService.updateOpponent(opponent)
 
         then: 'temp opponent should match wins, losses, totalScore'
+        newOp.id == opponent.id
         newOp.wins == opponent.wins
         newOp.losses == opponent.losses
         newOp.totalScore == opponent.totalScore
@@ -84,6 +85,7 @@ class OpponentServiceIntegrationSpec extends Specification {
         Opponent newOp = opService.updateOpponent(opponent)
 
         then: 'temp opponent should match wins, losses, totalScore, but not difficulty'
+        newOp.id == opponent.id
         newOp.wins == opponent.wins
         newOp.losses == opponent.losses
         newOp.totalScore == opponent.totalScore
