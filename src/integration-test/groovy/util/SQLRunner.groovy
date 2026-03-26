@@ -27,8 +27,6 @@ class SQLRunner {
 
     /** controls dropping tables */
     void dropTables() {
-        sql.execute('DROP TABLE IF EXISTS opponent_saved_game')
-        sql.execute('DROP TABLE IF EXISTS user_saved_game')
         sql.execute('DROP TABLE IF EXISTS saved_game')
         sql.execute('DROP TABLE IF EXISTS opponent')
         sql.execute('DROP TABLE IF EXISTS user')
@@ -39,8 +37,6 @@ class SQLRunner {
         insertOpponentTable()
         insertUserTable()
         insertSavedGameTable()
-        insertOpponentJoin()
-        insertUserJoin()
     }
 
     /** populates existing tables with sample data */
@@ -65,16 +61,16 @@ class SQLRunner {
             ('user-board', 'opponent-board', 3, 1, 1);
         """)
 
-        //opponent_saved_game
+        //saved_game
         sql.execute("""
-            INSERT INTO opponent_saved_game(opponent_id, saved_game_id) VALUES
-            (1, 1);
+            INSERT INTO saved_game (user_board, opponent_board, turn, user_id, opponent_id) VALUES
+            ('user-board', 'opponent-board', 3, 1, 2);
         """)
 
-        //user_saved_game
+        //saved_game
         sql.execute("""
-            INSERT INTO user_saved_game(user_id, saved_game_id) VALUES
-            (1, 1);
+            INSERT INTO saved_game (user_board, opponent_board, turn, user_id, opponent_id) VALUES
+            ('user-board', 'opponent-board', 3, 2, 1);
         """)
     }
 
@@ -120,40 +116,6 @@ class SQLRunner {
                 FOREIGN KEY (user_id) REFERENCES user(id),
             CONSTRAINT fk_saved_game_opponent
                 FOREIGN KEY (opponent_id) REFERENCES opponent(id)
-            );
-        """)
-    }
-
-    /** insert opponent join table */
-    void insertOpponentJoin() {
-        sql.execute("""
-            CREATE TABLE opponent_saved_game (
-                id INT NOT NULL AUTO_INCREMENT,
-                opponent_id INT NOT NULL,
-                saved_game_id INT NOT NULL,
-            
-                PRIMARY KEY (id),
-                CONSTRAINT fk_opponent_saved_game_opponent
-                    FOREIGN KEY (opponent_id) REFERENCES opponent(id),
-                CONSTRAINT fk_opponent_saved_game_saved
-                    FOREIGN KEY (saved_game_id) REFERENCES saved_game(id)
-            );
-        """)
-    }
-
-    /** insert user join table */
-    void insertUserJoin() {
-        sql.execute("""
-            CREATE TABLE user_saved_game (
-                id INT NOT NULL AUTO_INCREMENT,
-                user_id INT NOT NULL,
-                saved_game_id INT NOT NULL,
-            
-                PRIMARY KEY (id),
-                CONSTRAINT fk_user_saved_game_user
-                    FOREIGN KEY (user_id) REFERENCES user(id),
-                CONSTRAINT fk_user_saved_game_saved
-                    FOREIGN KEY (saved_game_id) REFERENCES saved_game(id)
             );
         """)
     }

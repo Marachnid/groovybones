@@ -1,6 +1,6 @@
 package user
 
-import game.UserSavedGame
+import game.SavedGame
 
 /**
  * Represents a User DB entity in MySQL table, 'user'
@@ -15,7 +15,7 @@ class User {
     int totalScore
 
 
-    static hasMany = [savedGames: UserSavedGame]
+    static hasMany = [savedGames: SavedGame]
 
     //enforce DB constraints
     static constraints = {
@@ -27,5 +27,8 @@ class User {
     }
 
     //define datatype mappings
-    static mapping = { version false }
+    static mapping = {
+        cognitoSub updateable: false
+        version false
+    }
 }

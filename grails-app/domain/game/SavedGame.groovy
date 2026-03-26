@@ -15,8 +15,8 @@ class SavedGame {
     static belongsTo = [user: User, opponent: Opponent]
 
     static constraints = {
-        userBoard maxSize: 60, nullable: true
-        opponentBoard maxSize: 60, nullable: true
+        userBoard maxSize: 60, nullable: false
+        opponentBoard maxSize: 60, nullable: false
         turn nullable: false
         user nullable: false
         opponent nullable: false
@@ -24,7 +24,6 @@ class SavedGame {
 
     static mapping = {
         table 'saved_game'
-        id column: 'id', type: 'int'
         user column: 'user_id'
         opponent column: 'opponent_id'
         version false

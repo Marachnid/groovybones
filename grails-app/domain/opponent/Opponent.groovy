@@ -1,6 +1,6 @@
 package opponent
 
-import game.OpponentSavedGame
+import game.SavedGame
 
 /**
  * Represents an Opponent DB entity in MySQL table, 'opponent'
@@ -16,7 +16,7 @@ class Opponent {
 
 
     //
-    static hasMany = [savedGames: OpponentSavedGame]
+    static hasMany = [savedGames: SavedGame]
 
     //enforce DB constraints
     static constraints = {
