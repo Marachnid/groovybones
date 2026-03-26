@@ -70,8 +70,10 @@ class OpponentServiceController {
 
         //if missing a JSON body, respond with 400, else assign opponent to JSON body
         if (!json) respond([errorText: 'Bad Request'], status: 400)
-        else opponent = new Opponent(json as Map)
+        else opponent = Opponent.get(json.id)
 
+        //don't cast to binding result, nullifies updates
+        opponent.properties = json
 
         //if invalid entry, respond with 500
         if (!opponent.validate()) respond([errorText: opponent.errors], status: 500)

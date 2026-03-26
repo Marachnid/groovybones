@@ -39,7 +39,7 @@ class Opponent {
      * utility method for returning opponent as a map of values
      * @return opponent as map
      */
-    Map opponentAsMap() {
-        [username: username, difficulty: difficulty, wins: wins, losses: losses, totalScore: totalScore]
+    Map returnAsMap() {
+        [id: id, username: username, difficulty: difficulty, wins: wins, losses: losses, totalScore: totalScore]
     }
 }
