@@ -15,7 +15,7 @@ class Opponent {
     int totalScore
 
 
-    //
+    //foreign key - one to many relationship
     static hasMany = [savedGames: SavedGame]
 
     //enforce DB constraints

@@ -14,7 +14,7 @@ class User {
     int losses
     int totalScore
 
-
+    //foreign key - one to many relationship
     static hasMany = [savedGames: SavedGame]
 
     //enforce DB constraints
@@ -30,5 +30,13 @@ class User {
     static mapping = {
         cognitoSub updateable: false
         version false
+    }
+
+    /**
+     * utility method for returning opponent as a map of values
+     * @return opponent as map
+     */
+    Map returnAsMap() {
+        [id: id, cognitoSub: cognitoSub, username: username, wins: wins, losses: losses, totalScore: totalScore]
     }
 }
