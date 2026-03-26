@@ -34,6 +34,6 @@ class User {
      * @return opponent as map
      */
     Map returnAsMap() {
-        [id: id, cognitoSub: cognitoSub, username: username, wins: wins, losses: losses, totalScore: totalScore]
+        [id: id, username: username, wins: wins, losses: losses, totalScore: totalScore]
     }
 }

@@ -59,14 +59,17 @@ class LoginController {
         if (player != null) {
             player.username = parsedPayload['cognito:username']
             service.updateUser(player)
+            player.cognitoSub = null
             session['player'] = player
 
         //else create a new User entity linked to sub token
         } else {
-            session['player'] = service.createUser(
+            player = service.createUser(
                     parsedPayload['sub'] as String,
                     parsedPayload['cognito:username'] as String
             )
+            player.cognitoSub = null
+            session['player'] = player
         }
 
         //redirect to home after successful login
