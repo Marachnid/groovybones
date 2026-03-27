@@ -65,13 +65,13 @@ class SQLRunner {
         //saved_game
         sql.execute("""
             INSERT INTO saved_game (user_board, opponent_board, turn, user_id, opponent_id) VALUES
-            ('user-board', 'opponent-board', 3, 1, 2);
+            ('user-board', 'opponent-board', 2, 1, 2);
         """)
 
         //saved_game
         sql.execute("""
             INSERT INTO saved_game (user_board, opponent_board, turn, user_id, opponent_id) VALUES
-            ('user-board', 'opponent-board', 3, 2, 1);
+            ('user-board', 'opponent-board', 1, 2, 1);
         """)
     }
 
