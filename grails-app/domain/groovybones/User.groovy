@@ -14,9 +14,8 @@ class User {
     //foreign key - one to many relationship
     static hasMany = [savedGames: SavedGame]
 
-    //enforce DB constraints
+    //validates fields beforehand - cognitoSub is removed from in-memory retrievals and can't be validated
     static constraints = {
-        cognitoSub nullable: false, blank: false, maxSize: 36, updateable: false
         username nullable: false, blank: false, maxSize: 25
         wins nullable: false, min: 0
         losses nullable: false, min: 0
@@ -25,7 +24,7 @@ class User {
 
     //define datatype mappings
     static mapping = {
-        cognitoSub updateable: false
+        cognitoSub updatable: false //doesn't work as intended, working around it manually in service
         version false
     }
 
@@ -34,6 +33,6 @@ class User {
      * @return opponent as map
      */
     Map returnAsMap() {
-        [id: id, username: username, wins: wins, losses: losses, totalScore: totalScore]
+        [id: id, username: username, wins: wins, losses: losses, totalScore: totalScore, savedGames: savedGames]
     }
 }
