@@ -44,35 +44,35 @@ class SQLRunner {
         //opponent
         sql.execute("""
             INSERT INTO opponent (username, difficulty, wins, losses, total_score) VALUES
-                ('Chug Chug', 1, 0, 0, 0),
-                ('Big Slight', 2, 0, 0, 0),
-                ('Vindictive One', 3, 0, 0, 0);
+                ('Chug Chug', 1, 5, 5, 5),
+                ('Big Slight', 2, 6, 6, 6),
+                ('Vindictive One', 3, 7, 7, 7);
         """)
 
-        //user
-        sql.execute("""
-            INSERT INTO user (cognito_sub, username, wins, losses, total_score) VALUES
-            ('123', 'testUser', 1, 1, 1),
-            ('234', 'otherTestUser', 0, 0, 0);
-        """)
-
-        //saved_game
-        sql.execute("""
-            INSERT INTO saved_game (user_board, opponent_board, turn, user_id, opponent_id) VALUES
-            ('user-board', 'opponent-board', 3, 1, 1);
-        """)
-
-        //saved_game
-        sql.execute("""
-            INSERT INTO saved_game (user_board, opponent_board, turn, user_id, opponent_id) VALUES
-            ('user-board', 'opponent-board', 2, 1, 2);
-        """)
-
-        //saved_game
-        sql.execute("""
-            INSERT INTO saved_game (user_board, opponent_board, turn, user_id, opponent_id) VALUES
-            ('user-board', 'opponent-board', 1, 2, 1);
-        """)
+//        //user
+//        sql.execute("""
+//            INSERT INTO user (cognito_sub, username, wins, losses, total_score) VALUES
+//            ('123', 'testUser', 1, 1, 1),
+//            ('234', 'otherTestUser', 0, 0, 0);
+//        """)
+//
+//        //saved_game
+//        sql.execute("""
+//            INSERT INTO saved_game (user_board, opponent_board, turn, user_id, opponent_id) VALUES
+//            ('user-board', 'opponent-board', 3, 1, 1);
+//        """)
+//
+//        //saved_game
+//        sql.execute("""
+//            INSERT INTO saved_game (user_board, opponent_board, turn, user_id, opponent_id) VALUES
+//            ('user-board', 'opponent-board', 2, 1, 2);
+//        """)
+//
+//        //saved_game
+//        sql.execute("""
+//            INSERT INTO saved_game (user_board, opponent_board, turn, user_id, opponent_id) VALUES
+//            ('user-board', 'opponent-board', 1, 2, 1);
+//        """)
     }
 
 
