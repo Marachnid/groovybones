@@ -7,14 +7,15 @@ import groovybones.User
 
 /**
  * Responsible for handling User persistence operations
- * Methods perform persistence operations on detached Domain references to prevent direct-to-DB GORM executions
- * Includes user-driven SavedGame operations
+ * Users are detached from persistence layer to prevent cognitoSub ever making it to front end
+ * In-memory (session) users are shallow reference copies of DB/persistence entities (GORM/Hibernate persistence entities)
+ * User-driven SavedGame operations included (will only ever be user-driven)
  */
 @Transactional
 class UserService {
 
     /**
-     * retrieves a user without cognitoSub
+     * retrieves a user with cognitoSub nullified
      * attaches found ID to returned user
      * detaches user savedGames from persistence to keep behavior predictable
      * @param id to query and attach to reference if found
@@ -25,22 +26,20 @@ class UserService {
         User user
 
         if (existing) {
-            user = new User(existing.returnAsMap())     //ignores pulling cognitoSub
+            user = new User(existing.returnAsMap())     //ignores pulling cognitoSub from persistence
+            user.id = id
 
-            //detach child persistence
+            //detach savedGames from persistence layer (will cause type problems in addSavedGame() if not)
             user.savedGames = existing.savedGames.collect { SavedGame record ->
                 new SavedGame(record.properties).tap {it.id = record.id}
             }
-
-            user.id = id
-
             return user
         } else null
     }
 
 
     /**
-     * updates a User entity
+     * updates only updatable fields of existing User entity
      * returns false if user is null or fails to validate
      * @param user entity to be updated
      * @return true for updated, else false
@@ -49,21 +48,22 @@ class UserService {
         User existing = User.get(user.id)
         if (!existing) return false
 
-        existing.username = user.username
+        existing.username = user.username           //in event of username change in Cognito
         existing.wins = user.wins
         existing.losses = user.losses
         existing.totalScore = user.totalScore
 
-        if (existing.validate()) existing.save(flush: true, failOnError: true)
+        if (existing.validate() && existing.save(flush: true, failOnError: true)) true
         else false
     }
 
 
     /**
-     * initializes and creates a new User entity with default updatable values
-     * @param cognitoSub aws auth sub token
-     * @param username pulled from Account ID
+     * initializes and creates a new User entity with default wins/losses/totalScore
+     * @param cognitoSub cognito profile token
+     * @param username pulled from cognito Account ID
      * @return new user with pre-initialized wins/losses/totalScore == 0
+     * @See CognitoOAuthService
      */
     User createUser(String cognitoSub, String username) {
         User user = new User(cognitoSub: cognitoSub, username: username,  wins: 0, losses: 0, totalScore: 0)
@@ -81,7 +81,7 @@ class UserService {
 
     /**
      * deletes an existing DB user if found
-     * deletes savedGame children if the exist
+     * deletes savedGame children if they exist
      * @param id of User entity to be deleted
      * @return true if user exists and deletion does not return error, else false
      */
@@ -122,7 +122,7 @@ class UserService {
      * deletes a user's saved game and returns the savedGame deleted
      * @param user User to delete savedGame from
      * @param savedGame to be deleted
-     * @return savedGame removed
+     * @return savedGame removed else null (might change to true/false returns)
      */
     SavedGame deleteSavedGame(User user, SavedGame savedGame) {
         SavedGame existing = SavedGame.get(savedGame.id)

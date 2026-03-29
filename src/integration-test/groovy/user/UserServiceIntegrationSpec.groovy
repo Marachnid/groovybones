@@ -12,24 +12,33 @@ import spock.lang.Stepwise
 import util.SQLRunner
 import javax.sql.DataSource
 
-/** Performs integration tests for user domain persistence operations */
+/**
+ * Performs integration tests for user domain persistence operations
+ * Each test transaction rolled back after execution
+ * Instantiations kept within test methods to make in-memory detachment from persistence layer clear
+ * Users are detached from persistence layer to prevent cognitoSub ever making it to front end
+ */
 @Integration
 @Rollback
 @Stepwise
 class UserServiceIntegrationSpec extends Specification {
     @Shared
-    DataSource dataSource
+    DataSource dataSource   //secrets file
     UserService userService = new UserService()
 
 
-    /** basic setup method to instantiate objects and refresh db schema*/
+    /**
+     * default setup method to refresh DB before tests run
+     * entities generated in setup aren't rolled back - persist post-test
+     * arbitrary opponents added in SQLRunner
+     */
     void setup() {
         new SQLRunner(dataSource).refreshDB()
 
-        //sample user
+        //user
         userService.createUser('123', 'TEST-USER')
 
-        //sample savedGame
+        //savedGame
         User user = userService.getUserById(1)
         Opponent opponent = Opponent.get(1)
         SavedGame savedGame = new SavedGame(user: user, opponent: opponent, userBoard: 'user-board', opponentBoard: 'opponent-board', turn: 1)
