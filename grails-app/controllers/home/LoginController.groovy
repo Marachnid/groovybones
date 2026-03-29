@@ -1,9 +1,9 @@
 package home
 
-import groovybones.UserService
-import user.User
+import groovybones.user.UserService
+import groovybones.User
 import groovy.json.JsonSlurper
-import groovybones.CognitoOAuthService
+import groovybones.user.CognitoOAuthService
 
 /**
  * Responsible for managing login routing, callback processes, and logout
@@ -51,22 +51,30 @@ class LoginController {
         def parsedPayload = new JsonSlurper().parseText(decodedPayload)
 
 
-        //sync Cognito account with DB entities by cognitoSub
-        User player = User.findByCognitoSub(parsedPayload['sub'] as String) as User
+        //TODO: might come back to add a method in UserService for this
         UserService service = new UserService()
+        User player = new User(
+                service
+                    .getUserById(User.findByCognitoSub(parsedPayload['sub'] as String).id)
+                    .returnAsMap()
+        )
+
 
         //if player is found via sub token, auto-update username and set session
         if (player != null) {
             player.username = parsedPayload['cognito:username']
             service.updateUser(player)
+            player.cognitoSub = null
             session['player'] = player
 
         //else create a new User entity linked to sub token
         } else {
-            session['player'] = service.createUser(
+            player = service.createUser(
                     parsedPayload['sub'] as String,
                     parsedPayload['cognito:username'] as String
             )
+            player.cognitoSub = null
+            session['player'] = player
         }
 
         //redirect to home after successful login

@@ -1,8 +1,7 @@
-package groovybones
+package groovybones.util
 
 import groovy.json.JsonSlurper
 import groovy.json.JsonOutput
-import opponent.Opponent
 
 /**
  * Responsible for building, executing, and returning parsed HTTP responses

@@ -1,7 +1,8 @@
 package webservice
 
 import grails.gorm.transactions.Transactional
-import opponent.Opponent
+import groovybones.opponent.OpponentService
+import groovybones.Opponent
 
 /**
  * Opponent WEBSERVICE (paths are defined in URLMappings --- localhost:8080/opponent)
@@ -12,6 +13,7 @@ class OpponentServiceController {
     static final responseFormats = ['json']
     final String key = grailsApplication.config.apiKey.secretkey
     final Map forbiddenError = [errorText: 'Forbidden']
+    OpponentService opService
     String requestKey
     Opponent opponent
 
@@ -62,19 +64,33 @@ class OpponentServiceController {
     @Transactional
     def post() {
         requestKey = request.getHeader('X-API-KEY')
-        if (!validateAuthKey(requestKey)) respond(forbiddenError, status: 403)
+        if (!validateAuthKey(requestKey)) {
+            respond(forbiddenError, status: 403)
+            return
+        }
 
         final json = request.JSON
 
         //if missing a JSON body, respond with 400, else assign opponent to JSON body
-        if (!json) respond([errorText: 'Bad Request'], status: 400)
-        else opponent = new Opponent(json as Map)
+        if (!json) {
+            respond([errorText: 'Bad Request'], status: 400)
+            return
+        } else opponent = Opponent.get(json.id)
+
+        //validate ID is found
+        if(!opponent) {
+            respond([errorText: "ID ${json.id} not found"], status: 404)
+            return
+        } else opponent.properties = json
 
 
         //if invalid entry, respond with 500
-        if (!opponent.validate()) respond([errorText: opponent.errors], status: 500)
-        else
-            opponent.updateOpponent()
+        if (!opponent.validate()) {
+            respond([errorText: opponent.errors], status: 500)
+            return
+        } else
+            opService = new OpponentService()
+            opponent = opService.updateOpponent(opponent)
             respond opponent, status: 201
     }
 }

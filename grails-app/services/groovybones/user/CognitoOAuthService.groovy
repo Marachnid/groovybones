@@ -1,8 +1,6 @@
-package groovybones
+package groovybones.user
 
 import groovy.json.JsonSlurper
-import java.net.URLEncoder
-
 
 /**Class is responsible for managing 3rd party Cognito authentication requests*/
 class CognitoOAuthService {

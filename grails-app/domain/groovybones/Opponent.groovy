@@ -1,5 +1,4 @@
-package opponent
-
+package groovybones
 /**
  * Represents an Opponent DB entity in MySQL table, 'opponent'
  * Implicitly maps Opponent class to 'opponent' table
@@ -12,10 +11,14 @@ class Opponent {
     int losses
     int totalScore
 
+
+    //foreign key - one to many relationship
+    static hasMany = [savedGames: SavedGame]
+
     //enforce DB constraints
     static constraints = {
-        username nullable: false, blank: false, maxSize: 25, updateable: false
-        difficulty nullable: false, inList: [1,2,3], updateable: false
+        username nullable: false, blank: false, maxSize: 25, updatable: false, unique: true
+        difficulty nullable: false, inList: [1,2,3], updatable: false
         wins nullable: false, min: 0
         losses nullable: false, min: 0
         totalScore nullable: false, min: 0
@@ -23,30 +26,17 @@ class Opponent {
 
     //define datatype mappings
     static mapping = {
+        username updateable: false
+        difficulty updateable: false
         version false
         difficulty sqlType: 'TINYINT UNSIGNED'
     }
-
-
-    /**
-     * handles updating an existing opponent's wins, losses, and totalScore
-     * @return updated opponent
-     */
-    def updateOpponent() {
-        Opponent existing = Opponent.findByUsername(username)
-
-        existing.wins = wins as int
-        existing.losses = losses as int
-        existing.totalScore = totalScore as int
-        existing.save(failOnError: true)
-    }
-
 
     /**
      * utility method for returning opponent as a map of values
      * @return opponent as map
      */
-    Map opponentAsMap() {
-        [username: username, difficulty: difficulty, wins: wins, losses: losses, totalScore: totalScore]
+    Map returnAsMap() {
+        [id: id, username: username, difficulty: difficulty, wins: wins, losses: losses, totalScore: totalScore]
     }
 }
