@@ -25,37 +25,37 @@ class UserServiceIntegrationSpec extends Specification {
     /** basic setup method to instantiate objects and refresh db schema*/
     void setup() {
         new SQLRunner(dataSource).refreshDB()
-        User user = userService.createUser('123', 'TEST-USER')
-        Opponent opponent = Opponent.get(1)
 
-        Map savedGame1 = [userBoard: 'user-board', opponentBoard: 'opponent-board', turn: 3, user: user, opponent: opponent]
-        Map savedGame2 = [userBoard: 'board', opponentBoard: 'board', turn: 5, user: user, opponent: opponent]
-        SavedGame sg1 = new SavedGame(savedGame1)
-        SavedGame sg2 = new SavedGame(savedGame2)
-        user.addToSavedGames(sg1)
-        user.addToSavedGames(sg2)
+        //sample user
+        userService.createUser('123', 'TEST-USER')
+
+        //sample savedGame
+        User user = userService.getUserById(1)
+        Opponent opponent = Opponent.get(1)
+        SavedGame savedGame = new SavedGame(user: user, opponent: opponent, userBoard: 'user-board', opponentBoard: 'opponent-board', turn: 1)
+        userService.addSavedGame(user, savedGame)
     }
 
 
     /*
-       ======================= getByUserId() =======================
+       ======================= getUserById() =======================
      */
     /** tests successfully returning a user by ID with null in-memory cognitoSub */
-    void "getById() returns User by ID with null cognitoSub"() {
+    void "getUserById() returns User by ID with null cognitoSub"() {
         when: 'a user is retrieved'
         final def id = 1
         User user = userService.getUserById(id)
 
         then: 'the user is not null and cognitoSub is nullified'
         user
-        user.cognitoSub == null
+        !user.cognitoSub
         user.id == id
     }
 
     /** tests successfully returning a null user if ID not found*/
     void "getById() returns null user if ID not found"() {
         expect: 'user queried with unfound ID returns null'
-        new UserService().getUserById(10) == null
+        !userService.getUserById(10)
     }
 
 
@@ -70,6 +70,26 @@ class UserServiceIntegrationSpec extends Specification {
         then: 'update returns true and cognitoSub is null'
         userService.updateUser(user)
         user.cognitoSub == null
+    }
+
+    /** tests successfully returning false if fails to find user */
+    void "updateUser() returns false for not ID found"() {
+        when: 'an unknown user ID attempts to update'
+        User user = userService.getUserById(1)
+        user.id = 100
+
+        then: 'update returns false'
+        !userService.updateUser(user)
+    }
+
+    /** tests successfully returning false if update fails to validate */
+    void "updateUser() returns false for validation failure"() {
+        when: 'a user has an invalid property'
+        User user = userService.getUserById(1)
+        user.wins = -10
+
+        then: 'update returns false'
+        !userService.updateUser(user)
     }
 
     /** tests successfully ignoring update to cognitoSub */
@@ -87,7 +107,7 @@ class UserServiceIntegrationSpec extends Specification {
     }
 
     /** tests successfully updating user wins, losses, totalScore */
-    void "updateUser() updates User successfully"() {
+    void "updateUser() DB updates match in-memory updates"() {
         when: 'user values are changed'
         User user = userService.getUserById(1)
 
@@ -108,128 +128,129 @@ class UserServiceIntegrationSpec extends Specification {
         user.totalScore == newValues.totalScore
     }
 
-    /** tests successfully returning false if fails to find user */
-    void "updateUser() fails to find user"() {
-        when: 'an unknown user ID attempts to update'
-        User user = userService.getUserById(1)
-        user.id = 100
-
-        then: 'update returns false'
-        !userService.updateUser(user)
-    }
-
-    /** tests successfully returning false if update fails to validate */
-    void "updateUser() fails to validate"() {
-        when: 'a user has an invalid property'
-        User user = userService.getUserById(1)
-        user.wins = -10
-
-        then: 'update returns false'
-        !userService.updateUser(user)
-    }
-
-    /** tests successfully creating a new user */
-    void "createUser() creates a new user"() {
-        when: 'a new user is created'
-        User user = userService.createUser('test-sub', 'TEST-USER-2')
-
-        then: 'new user is initialized with default values and nullified in-memory cognitoSub'
-        user.id != null
-        user.username == username
-        user.cognitoSub == null
-        user.wins >= 0
-        user.losses >= 0
-        user.totalScore >= 0
-    }
-
-    /** tests successfully returning null user on failed creation */
-    void "createUser() returns null user on failed "() {
-        when: 'a new user is invalid'
-        String cognitoSub = ''
-        String username = 'test-1'
-        user = userService.createUser(cognitoSub, username)
-
-        then: 'new user is initialized with default values and nullified in-memory cognitoSub'
-        user == null
-    }
-
-    /** tests successfully deleting an existing user */
-    void "deleteUser() removes user record"() {
-        when: 'a user is deleted'
-        userService.deleteUser(User.get(1).id)
-
-        then: 'user no longer exists'
-        User.get(1) == null
-    }
-
-    /** tests throwing a null exception failing to delete an existing user */
-    void "deleteUser() removes user record"() {
-        when: 'a user attempts to be deleted'
-        userService.deleteUser(User.get(199).id)
-
-        then: 'null exception thrown for ID not found'
-        thrown(NullPointerException)
-    }
 
     /*
-      ======================= User-driven SavedGame Operations =======================
+      ======================= createUser() =======================
+    */
+    /** tests successfully creating a new user with default values */
+    void "createUser() creates and returns new user with default values"() {
+        when: 'a new user is created'
+        String username = 'TEST-USER-2'
+        User user = userService.createUser('test-sub', username)
+
+        then: 'new user is initialized with default values and nullified in-memory cognitoSub'
+        user.id
+        user.username == username
+        user.wins == 0
+        user.losses == 0
+        user.totalScore == 0
+        !user.cognitoSub
+    }
+
+    /** tests successfully returning null user on failed validation */
+    void "createUser() returns null for invalid user"() {
+        expect: 'null when adding blank cognitoSub or username'
+        !userService.createUser('', 'test-new')
+        !userService.createUser('1234567', '')
+    }
+
+
+    /*
+      ======================= deleteUser() =======================
+    */
+    /** tests successfully deleting an existing user */
+    void "deleteUser() returns true and removes user record"() {
+        when: 'a user is ready to be deleted'
+        long id = User.findAll()[0].id
+
+        then: 'deletion returns true, null record in db'
+        userService.deleteUser(id)
+        !User.get(id)
+    }
+
+    /** tests successfully returning false if user not found */
+    void "deleteUser() returns false for user not found"() {
+        expect: 'an unfound user to return false'
+        !userService.deleteUser(100)
+    }
+
+    /** tests successfully removing savedGame db children */
+    void "deleteUser() deletes child savedGames"() {
+        when: 'a user is deleted'
+        long id = 1
+        userService.deleteUser(id)
+
+        then: 'no SavedGame entities with userId exist in db'
+        !SavedGame.findAll(userId: id)
+    }
+
+
+    /*
+      ======================= addSavedGame() =======================
      */
     /** tests successfully adding a new saved game */
-    void "createSavedGame() adds a new SavedGame to user"() {
-        when: 'a saved game is ready to be created'
-        user = User.get(1)
-        opponent = Opponent.get(1)
-        int size = user.savedGames.size()
+    void "addSavedGame() adds a new SavedGame to user"() {
+        when: 'a saved game body is built'
+        User user = userService.getUserById(1)
+        Opponent opponent = Opponent.get(1)
+        Map sg = [user: user, opponent: opponent, userBoard: 'user-board', opponentBoard: 'opponent-board', turn: 7]
 
-        and: 'saved game created'
-        userService.createSavedGame(user, opponent, userBoard, opponentBoard, 5)
+        and: 'the saved game is added and returned'
+        int oldSize = user.savedGames.size()
+        SavedGame savedGame = userService.addSavedGame(user, new SavedGame(sg))
 
-        and: 'saved game is found'
-        savedGame = user.savedGames.find {
-            it.userBoard == userBoard &&
-                    it.opponentBoard == opponentBoard &&
-                    it.turn == 5
-        }
-
-        then: 'the found game is not null, savedGames size is increased by 1'
-        savedGame != null
-        user.savedGames.size() == size + 1
+        then: 'an ID is attached and created values match original values'
+        savedGame.id
+        User.get(1).savedGames.size() == oldSize + 1
+        savedGame.userId == sg.user.id
+        savedGame.opponentId == sg.opponent.id
+        savedGame.userBoard == sg.userBoard
+        savedGame.opponentBoard == sg.opponentBoard
+        savedGame.turn == sg.turn
     }
 
-    /** tests throwing null exception for missing items */
-    void "createSavedGame() returns null exception on missing value"() {
-        when: 'a user tries to save a game with a missing value'
-        user = User.get(1)
-        userService.createSavedGame(user, opponent, '', opponentBoard, 5)
+    /** tests successfully returning null for failed savedGame add */
+    void "addSavedGame() returns null on adding bad values"() {
+        when: 'a saved game attempts to be added'
+        User user = userService.getUserById(1)
+        Opponent opponent = Opponent.get(1)
+        Map sg = [user: user, opponent: opponent, userBoard: 'user-board', opponentBoard: 'opponent-board', turn: 7]
 
-        then: 'null exception is thrown'
-        thrown(NullPointerException)
+        then: 'return null for failed adds'
+        !userService.addSavedGame(user, new SavedGame(sg).tap { it.opponent.id = null })
+        !userService.addSavedGame(user, new SavedGame(sg).tap { it.user.id = null })
+        !userService.addSavedGame(user, new SavedGame(sg).tap { it.user.totalScore = -100 })
+        !userService.addSavedGame(user, new SavedGame(sg).tap { it.opponentBoard = null })
+        !userService.addSavedGame(user, new SavedGame(sg).tap { it.userBoard = null })
     }
 
+
+    /*
+      ======================= deleteSavedGame() =======================
+    */
     /** tests successfully deleting a saved game */
     void "deleteSavedGame() deletes a savedGame"() {
         when: 'a user finds a savedGame to delete'
-        user = User.get(1)
-        savedGame = user.savedGames[0]
-        int size = user.savedGames.size()
+        User user = userService.getUserById(1)
+        SavedGame savedGame = user.savedGames[0]
 
         and: 'and they delete it'
-        userService.deleteSavedGame(user, savedGame)
+        savedGame = userService.deleteSavedGame(user, savedGame)
 
-        then: 'their savedGames list size--, deleted savedGame ID not found'
-        user.savedGames.size() == size - 1
-        user.savedGames.find {it.id == savedGame.id} == null
+        then: 'deleted savedGame ID not found in-memory or in db'
+        !user.savedGames.find {it.id == savedGame.id}
+        !SavedGame.get(savedGame.id)
     }
 
-    /** tests throwing null exception for missing items */
-    void "deleteSavedGame() returns null exception user not found"() {
-        when: 'a user tries to delete a game with a missing value'
-        user = User.get(1)
-        savedGame = user.savedGames[0]
-        user.id = 0
-        userService.deleteSavedGame(user, savedGame)
+    /** tests successfully retuning null for failed deletions */
+    void "deleteSavedGame() returns null if fail to delete"() {
+        when: 'a user finds a savedGame to delete'
+        User user = userService.getUserById(1)
+        SavedGame savedGame = User.get(1).savedGames[0]
 
-        then: 'null exception is thrown'
-        thrown(NullPointerException)
+        then: 'return null for failed delete attempts'
+        !userService.deleteSavedGame(user.tap{it.id = 100}, savedGame)
+        !userService.deleteSavedGame(user.tap{it.totalScore = -10}, savedGame)
+        !userService.deleteSavedGame(user, savedGame.tap {it.id = 100})
     }
 }
