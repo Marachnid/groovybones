@@ -51,9 +51,14 @@ class LoginController {
         def parsedPayload = new JsonSlurper().parseText(decodedPayload)
 
 
-        //sync Cognito account with DB entities by cognitoSub
-        User player = User.findByCognitoSub(parsedPayload['sub'] as String) as User
+        //TODO: might come back to add a method in UserService for this
         UserService service = new UserService()
+        User player = new User(
+                service
+                    .getUserById(User.findByCognitoSub(parsedPayload['sub'] as String).id)
+                    .returnAsMap()
+        )
+
 
         //if player is found via sub token, auto-update username and set session
         if (player != null) {
