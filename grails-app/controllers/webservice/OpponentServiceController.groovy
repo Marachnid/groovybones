@@ -11,7 +11,7 @@ import groovybones.Opponent
  */
 class OpponentServiceController {
     static final responseFormats = ['json']
-    final String key = grailsApplication.config.apiKey.secretkey
+    final String key = grailsApplication.config.getProperty('apiKey.secretkey', String)
     final Map forbiddenError = [errorText: 'Forbidden']
     OpponentService opService
     String requestKey

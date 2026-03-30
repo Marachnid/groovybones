@@ -10,13 +10,16 @@ import groovybones.user.CognitoOAuthService
  */
 class LoginController {
 
+
     CognitoOAuthService cognitoOAuthService
 
     /**
      * grabs login URL from AWS properties and redirects to AWS login
      * @return redirect users to login page
      */
-    def login() { redirect(url: "${grailsApplication.config.aws.cognito.loginUI}") }
+//    def login() { redirect(url: "${grailsApplication.config.aws.cognito.loginUI}") }
+    def login() { redirect(url: "${grailsApplication.config.getProperty('aws.cognito.loginUI')}") }
+
 
     /**
      * signs a user out of both cognito and the session, redirects users to home
@@ -25,7 +28,8 @@ class LoginController {
      */
     def logout() {
         session.invalidate()
-        redirect(url: "${grailsApplication.config.aws.cognito.logoutUI}")
+//        redirect(url: "${grailsApplication.config.aws.cognito.logoutUI}")
+        redirect(url: "${grailsApplication.config.getProperty('aws.cognito.logoutUI', String)}")
     }
 
 
@@ -51,7 +55,7 @@ class LoginController {
         def parsedPayload = new JsonSlurper().parseText(decodedPayload)
 
 
-        //TODO: might come back to add a method in UserService for this
+        //TODO: need to add a method in UserService for this
         UserService service = new UserService()
         User player = new User(
                 service
@@ -73,6 +77,8 @@ class LoginController {
                     parsedPayload['sub'] as String,
                     parsedPayload['cognito:username'] as String
             )
+
+            //TODO would need a UserService method to return newly created user by cognitoSub here
             player.cognitoSub = null
             session['player'] = player
         }

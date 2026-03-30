@@ -15,7 +15,7 @@ class CognitoOAuthService {
     def callAuth(String code) {
 
         //pull secrets from application.yml (secrets are imported)
-        def cfg = grailsApplication.config.aws.cognito
+        def cfg = grailsApplication.config.getProperty('aws.cognito', String)
         def url = "${cfg.domain}/oauth2/token"
 
         //set App Client ID and secret

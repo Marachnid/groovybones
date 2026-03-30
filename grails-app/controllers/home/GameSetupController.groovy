@@ -11,7 +11,7 @@ import groovybones.Opponent
  * Instantiates player and opponent session variables for gameplay
  */
 class GameSetupController {
-    final String key = grailsApplication.config.apiKey.secretkey
+    final String key = grailsApplication.config.getProperty('apiKey.secretkey', String)
     final String opponentAPI = 'http://localhost:8080/opponent'
 
 
