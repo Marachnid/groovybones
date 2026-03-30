@@ -4,6 +4,8 @@ import grails.testing.mixin.integration.Integration
 import grails.gorm.transactions.*
 import groovybones.Opponent
 import groovybones.opponent.OpponentService
+import org.slf4j.Logger
+import org.slf4j.LoggerFactory
 import spock.lang.Shared
 import spock.lang.Specification
 import spock.lang.Stepwise
@@ -16,6 +18,8 @@ import javax.sql.DataSource
 @Rollback
 @Stepwise
 class OpponentServiceIntegrationSpec extends Specification {
+    private static final Logger log = LoggerFactory.getLogger(OpponentRetrieverIntegrationSpec)
+
     @Shared
     DataSource dataSource
 
@@ -25,10 +29,12 @@ class OpponentServiceIntegrationSpec extends Specification {
 
     /** basic setup method to instantiate objects and refresh test schema*/
     void setup() {
+        log.info('Running Integration Tests')
         new SQLRunner(dataSource).refreshDB()
 
         opService = new OpponentService()
         opponent = Opponent.get(1)
+        log.info("Opponent Properties: ${opponent.properties} - OpponentID: ${opponent.id}")
     }
 
     /** tests that opponent difficulty update is ignored */

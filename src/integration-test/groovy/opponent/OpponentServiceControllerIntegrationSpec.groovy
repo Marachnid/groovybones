@@ -6,6 +6,8 @@ import grails.testing.mixin.integration.Integration
 import groovy.json.JsonOutput
 import groovy.json.JsonSlurper
 import groovybones.Opponent
+import org.slf4j.Logger
+import org.slf4j.LoggerFactory
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.boot.test.web.server.LocalServerPort
 import spock.lang.Shared
@@ -21,6 +23,8 @@ import javax.sql.DataSource
 @Stepwise
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 class OpponentServiceControllerIntegrationSpec extends Specification {
+    private static final Logger log = LoggerFactory.getLogger(OpponentRetrieverIntegrationSpec)
+
     @Shared
     DataSource dataSource
 
@@ -39,10 +43,13 @@ class OpponentServiceControllerIntegrationSpec extends Specification {
 
     /** basic setup method to instantiate objects and refresh test schema*/
     void setup() {
+        log.info('Running Integration Tests')
         new SQLRunner(dataSource).refreshDB()
         key = grailsApplication.config.apiKey.secretkey
         basePath = "http://localhost:$port/opponent"
         url = new URL(basePath)
+
+        log.info("base testing path: $basePath")
     }
 
     /**
