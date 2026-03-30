@@ -20,11 +20,11 @@
             <level>INFO</level>
         </filter>
 
-        <file>logs/groovybones-dev.log</file>
+        <file>logs/groovybones-integration-test.log</file>
 
         <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
             <!-- rolls according to the smallest time unit present -->
-            <fileNamePattern>logs/dev/groovybones-%d{yyyy-MM-dd_HH}.log</fileNamePattern>
+            <fileNamePattern>logs/test/groovybones-%d{yyyy-MM-dd_HH}.log</fileNamePattern>
 
             <maxHistory>1</maxHistory>
         </rollingPolicy>

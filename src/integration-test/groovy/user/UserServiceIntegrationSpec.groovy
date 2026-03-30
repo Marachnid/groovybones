@@ -25,7 +25,7 @@ import javax.sql.DataSource
 @Rollback
 @Stepwise
 class UserServiceIntegrationSpec extends Specification {
-    private static final Logger log = LoggerFactory.getLogger(OpponentRetrieverIntegrationSpec)
+    private static final Logger log = LoggerFactory.getLogger(UserServiceIntegrationSpec)
 
     @Shared
     DataSource dataSource   //secrets file

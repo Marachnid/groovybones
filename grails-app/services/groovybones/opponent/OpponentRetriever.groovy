@@ -3,12 +3,15 @@ package groovybones.opponent
 
 import groovybones.Opponent
 import groovybones.util.RequestCaller
+import org.slf4j.Logger
+import org.slf4j.LoggerFactory
 
 /**
  * Responsible for mapping Opponents from OpponentServiceController responses
  * Execute requests on class instantiation via concrete constructors
  */
 class OpponentRetriever {
+    private static final Logger log = LoggerFactory.getLogger(OpponentRetrieverIntegrationSpec)
 
     //request defaults
     RequestCaller request
@@ -37,6 +40,7 @@ class OpponentRetriever {
     OpponentRetriever(String apiAuthKey, String path, Boolean singleOp) {
         this.apiAuthKey = apiAuthKey
         this.path = path
+
 
         //perform request on instantiation
         request = new RequestCaller(apiAuthKey: apiAuthKey, path: path)

@@ -23,7 +23,7 @@ import javax.sql.DataSource
 @Stepwise
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 class OpponentServiceControllerIntegrationSpec extends Specification {
-    private static final Logger log = LoggerFactory.getLogger(OpponentRetrieverIntegrationSpec)
+    private static final Logger log = LoggerFactory.getLogger(OpponentServiceControllerIntegrationSpec)
 
     @Shared
     DataSource dataSource

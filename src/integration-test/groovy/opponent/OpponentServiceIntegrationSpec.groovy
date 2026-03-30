@@ -18,7 +18,7 @@ import javax.sql.DataSource
 @Rollback
 @Stepwise
 class OpponentServiceIntegrationSpec extends Specification {
-    private static final Logger log = LoggerFactory.getLogger(OpponentRetrieverIntegrationSpec)
+    private static final Logger log = LoggerFactory.getLogger(OpponentServiceIntegrationSpec)
 
     @Shared
     DataSource dataSource
