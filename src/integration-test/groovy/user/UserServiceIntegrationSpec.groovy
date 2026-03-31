@@ -6,6 +6,9 @@ import groovybones.Opponent
 import groovybones.SavedGame
 import groovybones.User
 import groovybones.user.UserService
+import opponent.OpponentRetrieverIntegrationSpec
+import org.slf4j.Logger
+import org.slf4j.LoggerFactory
 import spock.lang.Shared
 import spock.lang.Specification
 import spock.lang.Stepwise
@@ -22,6 +25,8 @@ import javax.sql.DataSource
 @Rollback
 @Stepwise
 class UserServiceIntegrationSpec extends Specification {
+    private static final Logger log = LoggerFactory.getLogger(UserServiceIntegrationSpec)
+
     @Shared
     DataSource dataSource   //secrets file
     UserService userService = new UserService()
@@ -33,16 +38,22 @@ class UserServiceIntegrationSpec extends Specification {
      * arbitrary opponents added in SQLRunner
      */
     void setup() {
+        log.info('Running Integration Tests')
         new SQLRunner(dataSource).refreshDB()
 
         //user
         userService.createUser('123', 'TEST-USER')
+        log.info(User.findByCognitoSub('123').properties.toString())
 
         //savedGame
         User user = userService.getUserById(1)
         Opponent opponent = Opponent.get(1)
         SavedGame savedGame = new SavedGame(user: user, opponent: opponent, userBoard: 'user-board', opponentBoard: 'opponent-board', turn: 1)
         userService.addSavedGame(user, savedGame)
+
+        log.info(user.properties.toString())
+        log.info(opponent.properties.toString())
+        log.info(savedGame.properties.toString())
     }
 
 

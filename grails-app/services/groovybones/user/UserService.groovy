@@ -28,13 +28,16 @@ class UserService {
         if (existing) {
             user = new User(existing.returnAsMap())     //ignores pulling cognitoSub from persistence
             user.id = id
+            log.info("User ID: $id found")
 
             //detach savedGames from persistence layer (will cause type problems in addSavedGame() if not)
             user.savedGames = existing.savedGames.collect { SavedGame record ->
                 new SavedGame(record.properties).tap {it.id = record.id}
             }
             return user
-        } else null
+        } else
+            log.info("User ID : $id not found")
+            null
     }
 
 
@@ -48,13 +51,26 @@ class UserService {
         User existing = User.get(user.id)
         if (!existing) return false
 
+        log.info("User ID: ${user.id} found")
         existing.username = user.username           //in event of username change in Cognito
         existing.wins = user.wins
         existing.losses = user.losses
         existing.totalScore = user.totalScore
 
-        if (existing.validate() && existing.save(flush: true, failOnError: true)) true
-        else false
+        log.info("New User values: " +
+                "username: ${user.username}, " +
+                "wins: ${user.wins}, " +
+                "losses: ${user.losses}, " +
+                "totalScore: ${user.totalScore}"
+        )
+
+        if (existing.validate() && existing.save(flush: true, failOnError: true)) {
+            log.info("Update successful")
+            true
+        } else {
+            log.info("Update failed")
+            false
+        }
     }
 
 
@@ -74,6 +90,7 @@ class UserService {
 
             user = new User(user.returnAsMap())
             user.id = id
+            log.info("New User created: ${user.id}, ${user.username}")
             return user
         } else null
     }
@@ -88,10 +105,12 @@ class UserService {
     boolean deleteUser(long id) {
         User user = User.get(id)
         if (!user) return false
+        log.info("Deleting User ID: $id")
 
         //if deletion does not return errors, delete savedGame db children
         if (!user.delete(flush: true, failOnError: true)) {
             SavedGame.where { id == user.id }.deleteAll()
+            log.info("Delete successful, savedGames deleted")
             true
         } else false
     }
@@ -107,14 +126,20 @@ class UserService {
      */
     SavedGame addSavedGame(User user, SavedGame savedGame) {
         User existing = User.get(user.id)
-        if (!existing || !Opponent.get(savedGame.opponentId)) return null
+        if (!existing || !Opponent.get(savedGame.opponentId)) {
+            log.info("User ID: ${user.id} or Opponent ID: ${savedGame.opponentId} not found")
+            return null
+        }
 
         existing.addToSavedGames(savedGame)
-        if (!updateUser(existing)) return null
+        if (!updateUser(existing)) {
+            log.info('Update to user failed')
+            return null
+        }
 
         savedGame = new SavedGame(savedGame.properties).tap { it.id = savedGame.id }
         user.savedGames.add(savedGame)
-
+        log.info("Game saved: ${savedGame.id}, ${savedGame.properties}")
         savedGame
     }
 
@@ -128,14 +153,22 @@ class UserService {
         SavedGame existing = SavedGame.get(savedGame.id)
         User existingUser = User.get(user.id)
 
-        if (!existing || !existingUser) return null
+        if (!existing || !existingUser) {
+            log.info("User ID ${user.id} not found")
+            return null
+        }
 
         existingUser.removeFromSavedGames(existing)
         existing.delete()   //persist the delete to saved_game
 
         user.removeFromSavedGames(savedGame)
 
-        if (!updateUser(existingUser)) return null
+        if (!updateUser(existingUser)) {
+            log.info('Update to user failed')
+            return null
+        }
+
+        log.info("Saved game ID: ${savedGame.id} deleted")
         savedGame
     }
 }

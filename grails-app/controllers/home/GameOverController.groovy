@@ -6,8 +6,8 @@ package home
 class GameOverController {
 
     /**
-     * default method to render gameOver
+     * default method to render gameOver page
      * @return render gameOver
      */
-    def gameOver() { println 'GameOverController gameOver()' }
+    def gameOver() { log.info('GameOverController gameOver()') }
 }

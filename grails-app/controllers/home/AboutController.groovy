@@ -1,14 +1,13 @@
 package home
 
 /**
- * Default homepage controller that renders index view
- * views/home/index.gsp is implicitly rendered
+ * Responsible for rendering About page
  */
 class AboutController {
 
     /**
-     * single-line method to print a test message and render index
+     * default method to render about page
      * @return render about.gsp
      */
-    def about() { println 'AboutController about()' }
+    def about() { log.info('AboutController about()') }
 }

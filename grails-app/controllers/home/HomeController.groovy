@@ -12,7 +12,7 @@ class HomeController {
      * @return render index.gsp
      */
     def index() {
-        println 'HomeController index()'
+        log.info('HomeController index()')
         render(view: 'index')
     }
 }

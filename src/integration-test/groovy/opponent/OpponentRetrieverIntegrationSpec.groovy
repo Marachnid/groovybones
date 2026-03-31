@@ -12,6 +12,8 @@ import spock.lang.Specification
 import spock.lang.Stepwise
 import util.SQLRunner
 import javax.sql.DataSource
+import org.slf4j.Logger
+import org.slf4j.LoggerFactory
 
 /** Performs tests on OpponentRetriever Opponent mapping */
 @Integration
@@ -19,6 +21,8 @@ import javax.sql.DataSource
 @Stepwise
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 class OpponentRetrieverIntegrationSpec extends Specification {
+    private static final Logger log = LoggerFactory.getLogger(OpponentRetrieverIntegrationSpec)
+
     @Shared
     DataSource dataSource
 
@@ -34,9 +38,13 @@ class OpponentRetrieverIntegrationSpec extends Specification {
 
     /** basic setup method to instantiate objects and refresh test schema */
     void setup() {
+        log.info('Running Integration Tests')
+
         new SQLRunner(dataSource).refreshDB()
-        key = grailsApplication.config.apiKey.secretkey
+        key = grailsApplication.config.getProperty('apiKey.secretkey', String)
         basePath = "http://localhost:$port/opponent"
+
+        log.info("base testing path: $basePath")
     }
 
 

@@ -1,11 +1,16 @@
 package groovybones
 
+import org.slf4j.Logger
+import org.slf4j.LoggerFactory
+
 /**
  * Responsible for orchestrating opponent actions and difficulty profiles
  * wraps actions around opponent and player GameBoard references persisting through game/session lifetime
  * opponent difficulty is based on ranking action priority and availability of actions
  */
 class OpponentActions {
+    private static final Logger log = LoggerFactory.getLogger(OpponentActions)
+
     final enum Difficulty {EASY, MEDIUM, HARD}
     final Map difficultyMap = [(Difficulty.EASY): 1, (Difficulty.MEDIUM): 2, (Difficulty.HARD): 3]
 
@@ -35,6 +40,8 @@ class OpponentActions {
         difficulty = difficultyMap
                 .find { it.value == opponentDifficulty}
                 .key as Difficulty
+
+        log.info("Opponent Actions instantiated, difficulty: $difficulty")
     }
 
 
@@ -47,10 +54,11 @@ class OpponentActions {
      * @return opponent action
      */
     def opponentOrchestrator(int dice) {
-        def attack = { attackBoard(dice) }
-        def stack = { stackBoard(dice) }
-        def random = { runBoardRandomly(dice) }
-        def actions
+        log.info("Opponent Orchestrator running - Dice: $dice")
+        final def attack = { attackBoard(dice) }
+        final def stack = { stackBoard(dice) }
+        final def random = { runBoardRandomly(dice) }
+        final def actions
 
         switch(difficulty) {
             case difficulty.HARD:
@@ -74,10 +82,13 @@ class OpponentActions {
      * @return true if can place randomly, false if not
      */
     boolean runBoardRandomly(int dice) {
-        int column = r.nextInt(game.columnMaxSize)
+        log.info('running board randomly')
+        final column = r.nextInt(game.columnMaxSize)
 
         if (opponent.addNumber(column, dice)) {
             player.deleteNumber(column, dice)
+
+            log.info('dice random placement 1 successful')
             return true
         }
 
@@ -85,8 +96,13 @@ class OpponentActions {
         return opponent.board.withIndex().any {col, index ->
             if (opponent.addNumber(index as int, dice)) {
                 player.deleteNumber(index as int, dice)
+
+                log.info('dice random placement 2 successful')
                 true
-            } else false
+            } else {
+                log.info('dice placement failed')
+                false
+            }
         }
     }
 
@@ -100,6 +116,7 @@ class OpponentActions {
      * @return true if attack, false if not
      */
     boolean attackBoard(int dice) {
+        log.info('attempting attack')
         //target player columns to attack containing dice
         ArrayList playerIndexes = findIndexes(player.board as ArrayList<ArrayList>, dice)
 
@@ -110,8 +127,13 @@ class OpponentActions {
         if (!playerIndexes.isEmpty()) {
             int ran = r.nextInt(playerIndexes.size())
             player.deleteNumber(playerIndexes[ran] as int, dice)
+
+            log.info('dice placed successfully')
             return opponent.addNumber(playerIndexes[ran] as int, dice)
-        } else false
+        } else {
+            log.info('dice placement failed')
+            false
+        }
     }
 
 
@@ -134,8 +156,13 @@ class OpponentActions {
         if (!opponentIndexes.isEmpty()) {
             int ran = r.nextInt(opponentIndexes.size())
             player.deleteNumber(opponentIndexes[ran] as int, dice)
+
+            log.info('dice stacked successfully')
             return opponent.addNumber(opponentIndexes[ran] as int, dice)
-        } else false
+        } else {
+            log.info('dice placement failed')
+            false
+        }
     }
 
 
@@ -145,6 +172,7 @@ class OpponentActions {
      * @return arrayList of columns containing dice, may be empty
      */
     static ArrayList findIndexes(ArrayList<ArrayList> board, int dice) {
+        log.info('finding matches')
         board.findIndexValues {it.contains(dice)}
     }
 
@@ -157,6 +185,7 @@ class OpponentActions {
      * @return indexes - minus any indexes of full columns
      */
     ArrayList mutateIndexes(ArrayList<ArrayList> board, ArrayList indexes) {
+        log.info('removing match choices where column is full')
         board.eachWithIndex {column, index ->
             if (column.size() == game.columnMaxSize) indexes -= index
         }

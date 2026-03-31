@@ -11,7 +11,7 @@ import groovybones.Opponent
  * Instantiates player and opponent session variables for gameplay
  */
 class GameSetupController {
-    final String key = grailsApplication.config.apiKey.secretkey
+    final String key = grailsApplication.config.getProperty('apiKey.secretkey', String)
     final String opponentAPI = 'http://localhost:8080/opponent'
 
 
@@ -21,7 +21,7 @@ class GameSetupController {
      * @return render gameSetup
      */
     def gameSetup() {
-        println 'GameSetup gameSetup()'
+        log.info('GameSetup gameSetup()')
 
         OpponentRetriever opRet = new OpponentRetriever(key, opponentAPI, false)
         ArrayList<Opponent> opponents = opRet.opponent
@@ -37,7 +37,7 @@ class GameSetupController {
      * @return GameController gameOrchestrator() -> game
      */
     def gameInitialization() {
-        println 'GameSetup gameInitialization()'
+        log.info('GameSetup gameInitialization()')
 
         //grab opponent from form params
         Opponent op = new Opponent(
@@ -48,13 +48,19 @@ class GameSetupController {
                 totalScore: params.totalscore
         )
 
+        log.info("Opponent: ${params.username}, " +
+                "difficulty: ${params.difficulty}, " +
+                "wins: ${params.wins}, " +
+                "losses: ${params.losses}, " +
+                "totalScore: ${params.totalScore} selected")
+
+
         //instantiate GameBoards to session
         session['playerBoard'] = new GameBoard()
         session['opponentBoard'] = new GameBoard()
 
         //instantiate opponent to session
         session['opponent'] = op
-
 
         //instantiate OpponentActions to session
         session['opponentActions'] = new OpponentActions(
