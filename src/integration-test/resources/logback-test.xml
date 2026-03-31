@@ -11,7 +11,7 @@
         <withJansi>false</withJansi>
         <encoder>
             <charset>UTF-8</charset>
-            <pattern>%clr(%d{yyyy-MM-dd HH:mm:ss}){faint} %clr(%5p) %clr(---){faint} %clr([%15.15t]){faint} %clr(%-40.40logger{39}){cyan} %clr(:){faint} %m%n%wex</pattern>
+            <pattern>%clr(%d{MM-dd HH:mm}){faint} %clr(%5p) %clr(---){faint} %clr([%15.15t]){faint} %clr(%-40.40logger{39}){cyan} %clr(:){faint} %m%n%wex</pattern>
         </encoder>
     </appender>
 
@@ -20,17 +20,17 @@
             <level>INFO</level>
         </filter>
 
-        <file>logs/groovybones-integration-test.log</file>
+        <file>logs/test/groovybones-integration-test.log</file>
 
         <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
             <!-- rolls according to the smallest time unit present -->
-            <fileNamePattern>logs/test/groovybones-%d{yyyy-MM-dd_HH}.log</fileNamePattern>
+            <fileNamePattern>logs/test/groovybones-%d{MM-dd_HH:mm}.log</fileNamePattern>
 
             <maxHistory>1</maxHistory>
         </rollingPolicy>
 
         <encoder>
-            <pattern>%d{yyyy-MM-dd HH:mm:ss} %-5level %logger - %msg%n</pattern>
+            <pattern>%d{MM-dd HH:mm:ss} %-5level %logger - %msg%n</pattern>
         </encoder>
     </appender>
 
