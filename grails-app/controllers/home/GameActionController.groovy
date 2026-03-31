@@ -38,7 +38,7 @@ class GameActionController {
             log.info("dice: $dice added to column: $columnIndex")
 
             //redirect to gameOver if board is full after placing, else redirect to game:gameOrchestrator
-            if (playerBoard.detectFullBoard()) redirect(controller: 'gameOver', action: 'gameOver')
+            if (playerBoard.detectFullBoard()) redirect(controller: 'gameOver', action: 'gameOverAction')
             else redirect(controller: 'game', action: 'gameOrchestrator')
 
         //redirect to game with hint if column already full
@@ -73,12 +73,12 @@ class GameActionController {
             log.info("opponent placed dice: $dice")
 
             //if the opponent board is full after adding, redirect to gameOver
-            if (opponentBoard.detectFullBoard()) redirect(controller: 'gameOver', action: 'gameOver')
+            if (opponentBoard.detectFullBoard()) redirect(controller: 'gameOver', action: 'gameOverAction')
 
             //if the opponent's board is not full, redirect back to game for player's turn
             else redirect(controller: 'game', action: 'gameOrchestrator')
 
             //if no dice can be added, redirect to gameOver page ("shouldn't" happen, but is a failsafe)
-        } else {redirect(controller: 'gameOver', action: 'gameOver')}
+        } else {redirect(controller: 'gameOver', action: 'gameOverAction')}
     }
 }

@@ -25,7 +25,7 @@ class OpponentService {
         existing.totalScore = opponent.totalScore
 
         log.info("Wins: ${existing.wins}\nLosses: ${opponent.losses}\nTotalScore: ${opponent.totalScore}")
-        existing.save(failOnError: true)
+        existing.save(flush: true, failOnError: true)
         existing
     }
 }
