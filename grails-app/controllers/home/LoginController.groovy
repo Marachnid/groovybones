@@ -9,16 +9,16 @@ import groovybones.user.CognitoOAuthService
  * Responsible for managing login routing, callback processes, and logout
  */
 class LoginController {
-
-
     CognitoOAuthService cognitoOAuthService
 
     /**
      * grabs login URL from AWS properties and redirects to AWS login
      * @return redirect users to login page
      */
-//    def login() { redirect(url: "${grailsApplication.config.aws.cognito.loginUI}") }
-    def login() { redirect(url: "${grailsApplication.config.getProperty('aws.cognito.loginUI')}") }
+    def login() {
+        log.info('LoginController login()')
+        redirect(url: "${grailsApplication.config.getProperty('aws.cognito.loginUI')}")
+    }
 
 
     /**
@@ -27,8 +27,8 @@ class LoginController {
      * @return logout redirect, redirects to home after Cognito signout
      */
     def logout() {
+        log.info('LoginController logout()')
         session.invalidate()
-//        redirect(url: "${grailsApplication.config.aws.cognito.logoutUI}")
         redirect(url: "${grailsApplication.config.getProperty('aws.cognito.logoutUI', String)}")
     }
 
@@ -38,6 +38,7 @@ class LoginController {
      * @return redirect user to home for successful login, otherwise render authorization error
      */
     def callback() {
+        log.info('LoginController callback()')
         String code = params['code']
 
         //in case of any issue with retrieving a code
@@ -55,7 +56,7 @@ class LoginController {
         def parsedPayload = new JsonSlurper().parseText(decodedPayload)
 
 
-        //TODO: need to add a method in UserService for this
+        //TODO: probably should add a method in UserService for this
         UserService service = new UserService()
         User player = new User(
                 service
@@ -66,6 +67,7 @@ class LoginController {
 
         //if player is found via sub token, auto-update username and set session
         if (player != null) {
+            log.info('existing User found and authenticated')
             player.username = parsedPayload['cognito:username']
             service.updateUser(player)
             player.cognitoSub = null
@@ -73,13 +75,12 @@ class LoginController {
 
         //else create a new User entity linked to sub token
         } else {
+            log.info('existing User not found, creating a new User')
             player = service.createUser(
                     parsedPayload['sub'] as String,
                     parsedPayload['cognito:username'] as String
             )
 
-            //TODO would need a UserService method to return newly created user by cognitoSub here
-            player.cognitoSub = null
             session['player'] = player
         }
 

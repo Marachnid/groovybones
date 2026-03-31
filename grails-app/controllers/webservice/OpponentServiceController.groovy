@@ -33,6 +33,7 @@ class OpponentServiceController {
      */
     def get() {
         requestKey = request.getHeader('X-API-KEY')
+        log.info('Opponent getAll API')
         if (!validateAuthKey(requestKey)) respond(forbiddenError, status: 403)
         else respond Opponent.list(), status: 200
     }
@@ -44,6 +45,7 @@ class OpponentServiceController {
      * @return found opponent
      */
     def getById(Long id) {
+        log.info('Opponent getById API')
         requestKey = request.getHeader('X-API-KEY')
         if (!validateAuthKey(requestKey)) respond(forbiddenError, status: 403)
 
@@ -63,6 +65,7 @@ class OpponentServiceController {
      */
     @Transactional
     def post() {
+        log.info('Opponent post/update API')
         requestKey = request.getHeader('X-API-KEY')
         if (!validateAuthKey(requestKey)) {
             respond(forbiddenError, status: 403)

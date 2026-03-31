@@ -2,12 +2,12 @@ package home
 
 
 /**
- * profile router
+ * Responsible for rendering Profile page
  */
 class ProfileController {
 
     /**
-     * single-line method to print a test message and render index
+     * default method to return profile page
      * @return render profile.gsp
      */
     def profile() {

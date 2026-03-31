@@ -12,16 +12,19 @@ class GameController {
      * default method to render game.gsp
      * @return render game
      */
-    def game() { println 'GameController game()' }
+    def game() { log.info('GameController game()') }
 
     /**
      * separates number generation from default game rendering to prevent new numbers each browser refresh
      * @return render game
      */
     def gameOrchestrator() {
-        println 'gameAction gameOrchestrator()'
+        log.info('GameController gameOrchestrator()')
         session['dice'] = new GameBoard().generateRandomDice()
         session['turn'] = (session['turn'] as int) + 1
+
+        log.info("dice: ${session['dice']}")
+        log.info("turn: ${session['turn']}")
 
         //redirect prevents gameOrchestrator from being reinstantiated and dice regenerating on browser refresh
         redirect(controller: 'game', action: 'game')
