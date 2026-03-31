@@ -57,11 +57,11 @@ class UserService {
         existing.losses = user.losses
         existing.totalScore = user.totalScore
 
-        log.info("New User values:" +
-                "\nusername: ${user.username}" +
-                "\nwins: ${user.wins}" +
-                "\nlosses: ${user.losses}" +
-                "\ntotalScore: ${user.totalScore}"
+        log.info("New User values: " +
+                "username: ${user.username}, " +
+                "wins: ${user.wins}, " +
+                "losses: ${user.losses}, " +
+                "totalScore: ${user.totalScore}"
         )
 
         if (existing.validate() && existing.save(flush: true, failOnError: true)) {
