@@ -39,38 +39,32 @@ class LoginController {
      */
     def callback() {
         log.info('LoginController callback()')
-        String code = params['code']
+        final String code = params['code']
 
         //in case of any issue with retrieving a code
         if (!code) {render "Missing authorization code"}
 
         //send code to auth request to authenticate user
-        def tokens = cognitoOAuthService.callAuth(code)
+        final def tokens = cognitoOAuthService.callAuth(code)
 
         //grab JWT id_token
-        def idToken = tokens['id_token']
+        final def idToken = tokens['id_token']
 
         //grab id_token's payload, decode, parse
-        def payload = idToken.split('\\.')
-        def decodedPayload = new String(payload[1].decodeBase64())
-        def parsedPayload = new JsonSlurper().parseText(decodedPayload)
+        final def payload = idToken.split('\\.')
+        final def decodedPayload = new String(payload[1].decodeBase64())
+        final def parsedPayload = new JsonSlurper().parseText(decodedPayload)
 
 
-        //TODO: probably should add a method in UserService for this
         UserService service = new UserService()
-        User player = new User(
-                service
-                    .getUserById(User.findByCognitoSub(parsedPayload['sub'] as String).id)
-                    .returnAsMap()
-        )
+        User player = service.getUserByCognitoSub(parsedPayload['sub'] as String)
 
 
         //if player is found via sub token, auto-update username and set session
-        if (player != null) {
+        if (player) {
             log.info('existing User found and authenticated')
             player.username = parsedPayload['cognito:username']
             service.updateUser(player)
-            player.cognitoSub = null
             session['player'] = player
 
         //else create a new User entity linked to sub token

@@ -23,21 +23,31 @@ class UserService {
      */
     User getUserById(long id) {
         User existing = User.get(id)
-        User user
+        User user = null
 
         if (existing) {
-            user = new User(existing.returnAsMap())     //ignores pulling cognitoSub from persistence
-            user.id = id
+            user = new User(existing.returnAsMap()).tap {it.id = id}
             log.info("User ID: $id found")
 
             //detach savedGames from persistence layer (will cause type problems in addSavedGame() if not)
             user.savedGames = existing.savedGames.collect { SavedGame record ->
                 new SavedGame(record.properties).tap {it.id = record.id}
             }
-            return user
-        } else
-            log.info("User ID : $id not found")
-            null
+        } else log.info("User ID : $id not found")
+
+        user
+    }
+
+    /**
+     * retrieves existing users by cognito sub on login
+     * passes off error handling to getUserById()
+     * @param sub user token received
+     * @return result of getUserById (null if not found)
+     */
+    User getUserByCognitoSub(String sub) {
+        log.info("getUserByCognitoSub()")
+        User existing = User.findByCognitoSub(sub)
+        getUserById(existing.id)
     }
 
 
