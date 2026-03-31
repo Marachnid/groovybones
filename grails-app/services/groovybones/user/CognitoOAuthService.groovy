@@ -13,10 +13,11 @@ class CognitoOAuthService {
      * @return Json response payload
      */
     def callAuth(String code) {
+        log.info('Login attempt')
 
         //pull secrets from application.yml (secrets are imported)
         def cfg = grailsApplication.config.getProperty('aws.cognito', String)
-        def url = "${cfg.domain}/oauth2/token"
+        def url = "${cfg.getProperty('domain', String)}/oauth2/token"
 
         //set App Client ID and secret
         String clientId = cfg.clientId
@@ -44,8 +45,10 @@ class CognitoOAuthService {
         conn.setRequestProperty('Content-Type', 'application/x-www-form-urlencoded')
         conn.outputStream.withWriter { it << body }
 
+
         //execute request
         def response = conn.inputStream.text
+        log.info("Auth request status: ${conn.responseCode}")
 
         //return response
         return new JsonSlurper().parseText(response)
