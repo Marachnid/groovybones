@@ -16,20 +16,18 @@ class CognitoOAuthService {
         log.info('Login attempt')
 
         //pull secrets from application.yml (secrets are imported)
-        def cfg = grailsApplication.config.getProperty('aws.cognito', String)
-        def url = "${cfg.getProperty('domain', String)}/oauth2/token"
-
-        //set App Client ID and secret
-        String clientId = cfg.clientId
-        String clientSecret = cfg.clientSecret
+        final config = grailsApplication.config
+        final String domain = config.getProperty('aws.cognito.domain', String) + '/oauth2/token'
+        final String clientId = config.getProperty('aws.cognito.clientId', String)
+        final String clientSecret = config.getProperty('aws.cognito.clientSecret', String)
 
         //encode credentials separately from POST body
         String credentials = "${clientId}:${clientSecret}".bytes.encodeBase64().toString()
 
         //build and encode auth request body
-        def body = [
+        final def body = [
                 grant_type: 'authorization_code',
-                client_id: cfg.clientId,
+                client_id: clientId,
                 code: code,
                 redirect_uri: 'http://localhost:8080/login/callback'
         ]
@@ -38,7 +36,7 @@ class CognitoOAuthService {
 
 
         //build auth POST request
-        HttpURLConnection conn = (HttpURLConnection) new URL(url).openConnection()
+        HttpURLConnection conn = (HttpURLConnection) new URL(domain).openConnection()
         conn.setRequestProperty('Authorization', "Basic ${credentials}")
         conn.setRequestMethod('POST')
         conn.doOutput = true
@@ -47,7 +45,7 @@ class CognitoOAuthService {
 
 
         //execute request
-        def response = conn.inputStream.text
+        final def response = conn.inputStream.text
         log.info("Auth request status: ${conn.responseCode}")
 
         //return response
