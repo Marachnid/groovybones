@@ -11,7 +11,7 @@ import org.slf4j.LoggerFactory
  * Execute requests on class instantiation via concrete constructors
  */
 class OpponentRetriever {
-    private static final Logger log = LoggerFactory.getLogger(OpponentRetrieverIntegrationSpec)
+    private static final Logger log = LoggerFactory.getLogger(OpponentRetriever)
 
     //request defaults
     RequestCaller request
@@ -47,6 +47,11 @@ class OpponentRetriever {
         response = request.callGET()
         responseCode = response.responseCode
         responseBody = response.get('body') as Map
+
+        log.info("Response: ${response.toString()}")
+        log.info("GET Request response code: $responseCode")
+        log.info("Body: ${responseBody.toString()}")
+
         (singleOp) ? (opponent = returnOpponent()) : (opponent = returnOpponents())
     }
 
