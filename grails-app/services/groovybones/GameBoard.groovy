@@ -1,12 +1,16 @@
 package groovybones
 
+import org.slf4j.Logger
+import org.slf4j.LoggerFactory
+
 /**
  * Class defines the gameboard used to play GroovyBones
  * Defines a board object and all related gameplay operations against board for both player and game-ai opponent
  * Defines and orchestrates opponent difficulty, actions, and priorities
  */
 class GameBoard {
-//    final enum Difficulty {easy, medium, hard}
+    private static final Logger log = LoggerFactory.getLogger(GameBoard)
+
     final Random r = new Random()
     final int columnMaxSize = 3
     final int range = 6
@@ -20,8 +24,15 @@ class GameBoard {
      * @return boolean true if append, false if not
      */
     boolean addNumber(int index, int number) {
-        if (board[index].size() + 1 <= columnMaxSize) board[index] << number
-        else false
+
+        if (board[index].size() + 1 <= columnMaxSize) {
+            log.info("number added: $number to column: $index")
+            board[index] << number
+        }
+        else {
+            log.info("number not added: $number to column: $index")
+            false
+        }
     }
 
     /**
@@ -31,8 +42,14 @@ class GameBoard {
      * @return boolean true if deleted, false if not
      */
     boolean deleteNumber(int index, int number) {
-        if (board[index].contains(number)) board[index].removeAll {it == number}
-        else false
+        if (board[index].contains(number)) {
+            log.info("all $number's deleted from column: $index")
+            board[index].removeAll {it == number}
+        }
+        else {
+            log.info("number: $number not found in column: $index")
+            false
+        }
     }
 
     /**
@@ -69,7 +86,10 @@ class GameBoard {
      * used to prevent a game loop from overrunning
      * @return true if a board is full for game end
      */
-    boolean detectFullBoard() { board.every {it.size() == columnMaxSize} }
+    boolean detectFullBoard() {
+        log.info('checking if board is full')
+        board.every {it.size() == columnMaxSize}
+    }
 
 
     /**
