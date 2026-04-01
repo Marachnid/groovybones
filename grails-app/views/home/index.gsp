@@ -12,6 +12,7 @@
         <ul class="menu-list">
             <li><g:link controller="GameSetup" action="gameSetup">Play</g:link></li>
             <li><g:link controller="Profile" action="profile">Profile</g:link></li>
+            <li><g:link controller="GameOver" action="gameOverAction">GameOver Test</g:link></li>
         </ul>
     </g:if>
     <g:else>
