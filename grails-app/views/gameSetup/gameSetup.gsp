@@ -13,6 +13,8 @@
             <input type="hidden" name="wins" />
             <input type="hidden" name="losses" />
             <input type="hidden" name="totalscore" />
+            <input type="hidden" name="selectedOpponent" id="selectedOpponent" required />
+
 
             <!-- Character selection -->
             <div class="character-grid">
@@ -59,6 +61,8 @@
     <script>
         document.addEventListener("DOMContentLoaded", () => {
             const cards = document.querySelectorAll(".character-card");
+            const form = document.querySelector("form");
+            const selectedOpponent = document.getElementById("selectedOpponent");
 
             cards.forEach(card => {
                 card.addEventListener("click", () => {
@@ -66,14 +70,27 @@
                     cards.forEach(c => c.classList.remove("selected"));
                     card.classList.add("selected");
 
+                    //set hidden field values
                     document.querySelector("input[name='username']").value = card.dataset.username;
                     document.querySelector("input[name='difficulty']").value = card.dataset.difficulty;
                     document.querySelector("input[name='wins']").value = card.dataset.wins;
                     document.querySelector("input[name='losses']").value = card.dataset.losses;
                     document.querySelector("input[name='totalscore']").value = card.dataset.totalscore;
+
+                    //used to send alert if no opponent selected
+                    selectedOpponent.value = card.dataset.username;
                 });
+            });
+
+            //send alert if opponent not selected when clicking play
+            form.addEventListener("submit", (e) => {
+                if (!selectedOpponent.value) {
+                    e.preventDefault();
+                    alert("Please select an opponent before starting the game.");
+                }
             });
         });
     </script>
+
 
 </main>
