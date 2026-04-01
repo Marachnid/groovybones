@@ -1,156 +1,195 @@
-/* Transitions */
-.scale-transition {
-    transition: transform 0.25s ease, box-shadow 0.25s ease;
-    transform-origin: center;
-}
-
 /* ============================
-   Layout Containers
+   PAGE STRUCTURE
    ============================ */
 
-.content-container {
+.menu-box {
+    flex-direction: column;
+    align-items: center;
+}
+
+
+.page-section {
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: flex-start;
     gap: 30px;
-}
-
-/* Opponent row */
-#opponents {
-    display: flex;
-    flex-direction: row;
-    justify-content: center;
-    align-items: flex-start;
-    gap: 20px;
     width: 100%;
 }
 
 /* ============================
-   Opponent Cards
+   CHARACTER GRID
    ============================ */
 
-.opponent-container {
-    width: 200px;
-    height: 300px;
-    overflow: hidden;
-    border: 2px solid #333;
-    border-radius: 8px;
+.character-grid {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: flex-start;
+    gap: 30px;
+    width: 100%;
+}
+
+/* ============================
+   CHARACTER CARD (STRUCTURE)
+   ============================ */
+
+.character-card {
+    width: 16rem;
+    height: 24rem;
     display: flex;
     flex-direction: column;
-}
-
-/* Top 70% card area */
-.opponent-card {
-    flex: 0 0 70%;
-    background: #ddd;
-    border-bottom: 2px solid #333;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    transition: transform 0.25s ease, box-shadow 0.25s ease;
-}
-
-/* Hover effect on whole card */
-.opponent-container:hover .opponent-card {
-    transform: scale(1.08);
-    box-shadow: 0 8px 18px rgba(0, 0, 0, 0.25);
-}
-
-/* Bottom label */
-.opponent-container h3 {
-    flex: 0 0 30%;
-    margin: 0;
-    background: #eee;
-    font-size: 1.2rem;
-    font-weight: bold;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
-
-/* ============================
-   Play Button
-   ============================ */
-
-#playContainer {
-    display: flex;
-    justify-content: center;
-}
-
-#playButton {
-    width: 200px;
-    height: 80px;
-    background: #ddd;
-    font-size: 1.5rem;
-    font-weight: bold;
+    border-radius: var(--radius);
+    overflow: hidden;
     cursor: pointer;
-    border: 2px solid #333;
-    border-radius: 8px;
+
+    background: var(--bg-panel);
+    border: 2px solid var(--neon-primary-glow);
+
+    transition:
+            transform var(--transition-fast),
+            box-shadow var(--transition-fast),
+            border-color var(--transition-fast);
+}
+
+/* Hover glow */
+.character-card:hover {
+    transform: scale(1.05);
+    border-color: var(--neon-primary);
+    box-shadow:
+            0 0 10px var(--neon-primary-glow),
+            0 0 20px var(--neon-primary-glow);
+}
+
+/* Selected state */
+.character-card.selected {
+    transform: scale(1.08);
+    border-color: var(--neon-primary);
+    box-shadow:
+            0 0 12px var(--neon-primary-glow),
+            0 0 25px var(--neon-primary-glow);
+}
+
+/* ============================
+   CHARACTER PORTRAIT (70%)
+   ============================ */
+
+.character-portrait {
+    flex: 0 0 70%;
     display: flex;
     justify-content: center;
     align-items: center;
-    transition: transform 0.25s ease, box-shadow 0.25s ease;
+
+    background: var(--highlight-soft);
+    border-bottom: 2px solid var(--border-soft);
+}
+
+/* ============================
+   CHARACTER LABEL (30%)
+   ============================ */
+
+.character-label {
+    flex: 0 0 30%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    font-family: var(--body-font), serif;
+    font-size: 1.75rem;
+    color: var(--text-main);
+    text-align: center;
+}
+
+/* ============================
+   START BUTTON
+   ============================ */
+
+.play-button-container {
+    display: flex;
+    justify-content: center;
+    margin-top: 25px;
+}
+
+.menu-action {
+    padding: 15px 40px;
+    font-size: 2rem;
+    font-weight: bold;
+    border-radius: var(--radius);
+    border: 2px solid var(--border-soft);
+
+    background: var(--text-main);
+    color: var(--bg-deep);
+
+    cursor: pointer;
+    transition:
+            transform var(--transition-fast),
+            box-shadow var(--transition-fast),
+            border-color var(--transition-fast),
+            color var(--transition-fast);
 }
 
 
+.menu-action:hover {
+    background: var(--bg-deep);
+    color: var(--neon-primary);
+    border-color: var(--neon-primary);
+
+    transform: scale(1.12);
+    box-shadow:
+            0 0 12px var(--neon-primary-glow),
+            0 0 25px var(--neon-primary-glow);
+}
+
 /* ============================
-   Load Game Section
+   SAVED GAMES SECTION
    ============================ */
 
-#loadGame {
-    margin-top: 30px;
-    padding: 20px;
-    background: #f7f7f7;
-    gap: 20px;
-    box-sizing: border-box;
+.saved-games-box * {
+    font-size: 1.5rem;
+
+}
+.saved-games-box {
+    margin-top: 40px;
+    padding: 15px;
+    background: var(--bg-panel);
+    border: 2px solid var(--neon-primary-glow);
+    border-radius: var(--radius);
 
     display: flex;
     flex-direction: row;
-    justify-content: center;
-    align-items: center;
-
-    border: 2px solid #333;
-    border-radius: 8px;
+    gap: 15px;
 }
 
-/* Select menu */
-#loadGame select {
-    padding: 8px 12px;
-    font-size: 1rem;
-    border: 2px solid #333;
-    border-radius: 6px;
-    background: white;
+.saved-games-box label {
+    align-content: center;
+    font-size: 2.5rem;
+    font-family: var(--nav-font), serif;
+    text-shadow: 0 0 8px var(--neon-primary-glow);
+    color: var(--neon-primary);
 }
 
-/* Buttons */
-#loadGame button {
-    padding: 10px 16px;
-    font-size: 1rem;
-    font-weight: bold;
-    border: 2px solid #333;
-    border-radius: 6px;
-    cursor: pointer;
-    background: #e0e0e0;
-    transition: background 0.2s ease, transform 0.2s ease;
+.saved-games-box select {
+    padding: 10px;
+    font-size: 1.2rem;
+    border-radius: var(--radius);
+    border: 2px solid var(--border-soft);
+    background: var(--bg-deep);
+    color: var(--text-main);
 }
 
+.saved-games-box button {
+    align-self: flex-start;
+}
 
 /* ============================
-   Misc
+   PAGE TITLE
    ============================ */
-#loadGame button:hover, #playContainer button:hover {
-    background: #d0d0d0;
-    transform: scale(1.05);
-}
 
-label {
-    font-weight: bold;
-    font-size: 1.5rem;
-}
-
-#title {
+.page-title {
+    font-family: var(--nav-font), serif;
     font-size: 2.5rem;
-    margin: 0;
-    padding: 0;
+    letter-spacing: 0.1em;
+    color: var(--neon-primary);
+    text-shadow: 0 0 8px var(--neon-primary-glow);
+    text-align: center;
+    margin-bottom: 25px;
 }

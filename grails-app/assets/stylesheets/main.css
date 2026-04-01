@@ -142,7 +142,7 @@ h1 {
 
     display: flex;
     flex-direction: column;
-    min-width: 15rem;               /* might have to adjust individually on some pages */
+    /*min-width: 15rem;               !* might have to adjust individually on some pages *!*/
     gap: 25px;
 }
 
