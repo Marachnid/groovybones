@@ -176,3 +176,41 @@ h1 {
             0 0 12px var(--neon-primary-glow),
             0 0 25px var(--neon-primary-glow);
 }
+
+
+
+
+.util-navbar .nav-title h1 {
+    animation: arcaneFlash 6s infinite;
+}
+
+@keyframes arcaneFlash {
+    /* Beats 1–4: calm */
+    0%, 12.5%, 25%, 37.5%, 62.5% {
+        text-shadow:
+                0 0 12px var(--neon-primary-glow);
+    }
+
+    /* Beat 5 */
+    50% {
+        text-shadow: 1 -1 0 var(--neon-primary-glow);
+        transform: scale(1.01)
+    }
+
+    /* Beat 7 */
+    75% {
+        text-shadow: 1 -1 0 var(--neon-primary-glow);
+        transform: scale(1.01)
+    }
+
+    /* Beat 8 */
+    87.5% {
+        text-shadow: 1 -1 0 var(--neon-primary-glow);
+        transform: scale(1.01)
+    }
+
+    /* Reset */
+    100% {
+        text-shadow: 0 0 12px var(--neon-primary-glow);
+    }
+}
