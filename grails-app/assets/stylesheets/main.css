@@ -1,139 +1,178 @@
 /* ============================
-   Utility Classes
+   THEME VARIABLES
    ============================ */
+:root {
+    --nav-font: 'IM Fell English';
+    --body-font: 'Cinzel';
 
-/* Flex helpers */
-.flex-center {
-    display: flex;
-    justify-content: center;
-    align-items: center;
+    --bg-deep: #050203;
+    --bg-panel: #0b0607;
+
+    --neon-primary: #ff1a2d;
+    --neon-primary-glow: rgba(255, 26, 45, 0.65);
+
+    --neon-secondary: #3a0508;
+    --neon-secondary-glow: rgba(58, 5, 8, 0.45);
+
+    --highlight-soft: rgba(255, 200, 200, 0.15);
+
+    --text-main: rgba(250, 245, 245, 0.85);
+    --text-dim: #b8b8b8;
+
+    --border-soft: #240406;
+    --border-strong: #3a0508;
+
+    --radius: 10px;
+    --transition-fast: 0.21s ease;
 }
 
-.flex-col {
-    display: flex;
-    flex-direction: column;
-}
-
-.flex-row {
-    display: flex;
-    flex-direction: row;
-}
-
-/* Borders & boxes */
-.border-dark {
-    border: 2px solid #333;
-    border-radius: 8px;
-}
-
-
-h1 {
-    font-size: 7rem;
-    margin: 0 0 1rem 0;
-    line-height: 1;
-
-    letter-spacing: 0.1em;
-    transform: scaleX(1.5);
-    transform-origin: left;
-}
-
-.navbar {
-    /*background-color: #f2f2f2;*/
-    padding: 1px;
-    margin-bottom: 5px;
-}
-
-.navbar ul {
-    list-style: none;
+/* ============================
+   GLOBAL THEME
+   ============================ */
+.util-body {
     margin: 0;
     padding: 0;
-    display: flex;
-    gap: 20px;
-}
-
-.navbar a {
-    text-decoration: underline;
-    color: #333;
-    font-weight: bold;
-    font-size: 2rem;
-
-}
-
-.navbar li {display: flex;}
-.navbar a:hover {color: #007bff;}
-
-
-html {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
-
-body {
-    width: 90%;
-    border: 3px solid black;
-    padding: 20px;
-    box-sizing: border-box;
+    background: var(--bg-deep);
+    color: var(--text-main);
 
     display: flex;
     flex-direction: column;
-    gap: 20px;
+    height: 100vh;
 }
 
-.content-container {
+/* ============================
+   HEADER
+   ============================ */
+h1 {
+    font-size: 3.5rem;
+    letter-spacing: 0.15em;
+    display: block;
+    text-align: center;
+    margin: -1rem;
+
+    color: var(--neon-primary);
+    text-shadow: 0 0 12px var(--neon-primary-glow);
+
+}
+
+/* ============================
+   NAVBAR
+   ============================ */
+.util-navbar {
+    width: 100%;
+    padding: 15px 30px;
+    box-sizing: border-box;
+    font-family: var(--nav-font), serif;
+
+
+    background: var(--bg-panel);
+    border-bottom: 2px solid var(--border-strong);
+
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    box-shadow: 0 0 15px var(--neon-secondary-glow);
+}
+
+.nav-links {
+    list-style: none;
+    display: flex;
+    gap: 25px;
+    margin: 0;
+    padding: 0;
+}
+
+.nav-links a {
+    color: var(--text-main);
+    text-decoration: none;
+    font-size: 2rem;
+    font-weight: bold;
+    transition: color var(--transition-fast), text-shadow var(--transition-fast);
+}
+
+.nav-links a:hover {
+    color: var(--neon-primary);
+    text-shadow: 0 0 8px var(--neon-primary-glow);
+}
+
+/* ============================
+   MAIN CONTENT
+   ============================ */
+.util-main {
     flex: 1;
     display: flex;
     justify-content: center;
     align-items: center;
-    box-sizing: border-box;
+    font-family: var(--body-font), serif;
+
+    background:
+            radial-gradient(
+                    ellipse 40% 200% at center,
+                    rgba(255, 240, 240, 0.90) 0%,
+                    rgba(255, 240, 240, 0.70) 15%,
+                    rgba(255, 26, 45, 0.30) 35%,
+                    rgba(255, 26, 45, 0.20) 50%,
+                    rgba(255, 26, 45, 0.10) 65%,
+                    rgba(255, 26, 45, 0.05) 75%,
+                    var(--bg-deep) 100%
+            );
 }
 
+/* ============================
+   CONTENT BOX
+   ============================ */
+.menu-box {
+    background: var(--bg-panel);
+    padding: 40px 60px;
+    border-radius: var(--radius);
+    border: 2px solid var(--bg-deep);
 
-.menu-list {
+    display: flex;
+    justify-content: center;
+}
+
+/* ============================
+   MENU BUTTONS
+   ============================ */
+.menu-buttons {
     list-style: none;
     padding: 0;
     margin: 0;
+
     display: flex;
     flex-direction: column;
-    gap: 2rem;
-
+    min-width: 15rem;               /* might have to adjust individually on some pages */
+    gap: 25px;
 }
 
-.menu-list li {
-    text-decoration: none;
-    /*font-size: 5.2rem;*/
-    color: #333;
+.menu-buttons li a {
+    display: block;
+    padding: 20px 40px;
+    font-size: 3rem;
     font-weight: bold;
+    text-decoration: none;
+    text-align: center;
+    color: var(--bg-deep);
 
-    /*letter-spacing: 0.1em;*/
-    transform: scaleX(1.5);
-    transform-origin: left;
+    background: var(--text-main);
+    border: 2px solid var(--border-soft);
+    border-radius: var(--radius);
+
+    transition:
+            transform var(--transition-fast),
+            box-shadow var(--transition-fast),
+            border-color var(--transition-fast),
+            color var(--transition-fast);
 }
 
-.menu-list li a {color: black;}
-.menu-list li a:hover {color: #007bff;}
+.menu-buttons li a:hover {
+    background: var(--bg-deep);
+    transform: scale(1.125);
+    border-color: var(--neon-primary);
+    color: var(--neon-primary);
 
-
-/* ============================
-   Opponent Cards
-   ============================ */
-
-.opponent-container {
-    width: 200px;
-    height: 300px;
-    overflow: hidden;
-    border: 2px solid #333;
-    border-radius: 8px;
-    display: flex;
-    flex-direction: column;
-}
-
-/* Top 70% card area */
-.opponent-card {
-    flex: 0 0 70%;
-    background: #ddd;
-    border-bottom: 2px solid #333;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    transition: transform 0.25s ease, box-shadow 0.25s ease;
+    box-shadow:
+            0 0 12px var(--neon-primary-glow),
+            0 0 25px var(--neon-primary-glow);
 }
