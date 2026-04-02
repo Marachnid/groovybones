@@ -13,13 +13,15 @@
 </g:if>
 
 <main class="util-main">
+  <h1 hidden>Game</h1>
   <div class="menu-box">
-    <!--the overall game area containing player boards and info as 2 rows 3 wide-->
+
+    <!--the overall game area containing player boards and info as 3x3 grid-->
     <div id="game-area">
 
       <!--opponent row - opponent board and lefthand/righthand containers-->
       <div class="game-row opponent-row">
-        <!--left-hand info-card for score display-->
+
         <div id="placeholder" class="game-col left">
           <div class="info-card">
             <h3>TEMP</h3>
@@ -55,7 +57,7 @@
       </div>
 
     <!--middle row - player score, turn, opponent score-->
-    <div class="game-row middle-row">
+    <div class="game-row score-row">
 
       <!--player score-->
       <div class="game-col left">

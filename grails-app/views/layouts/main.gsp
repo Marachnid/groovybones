@@ -15,9 +15,7 @@
 
 <body class="util-body">
 <nav class="util-navbar">
-    <div class="nav-title">
-        <h1>GROOVYBONES</h1>
-    </div>
+    <div class="nav-title"><g:link controller="home" action="index">GROOVYBONES</g:link></div>
 
     <ul class="nav-links">
         <li><g:link controller="home" action="index">Home</g:link></li>

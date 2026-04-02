@@ -4,7 +4,7 @@
 
 <main class="util-main">
     <div class="menu-box">
-        <h2 class="page-title">Game Setup</h2>
+        <h1 class="page-title">Game Setup</h1>
 
         <g:form controller="GameSetup" action="gameInitialization" method="POST">
 
@@ -38,22 +38,19 @@
             </div>
 
             <!-- Start button -->
-            <div class="play-button-container">
-                <button class="menu-action" type="submit">Start</button>
+            <div class="menu-buttons">
+                <button class="btn btn-medium" type="submit">Start</button>
             </div>
         </g:form>
 
     <!-- Saved games -->
         <div class="saved-games-box">
-
             <label for="savedGamesSelect">Saved Games</label>
-
             <select id="savedGamesSelect">
                 <option value="">-- Select Saved Game --</option>
             </select>
-
-            <button class="menu-action" id="deleteSave">Delete</button>
-            <button class="menu-action" id="loadSave">Load</button>
+            <button class="btn btn-small" id="deleteSave">Delete</button>
+            <button class="btn btn-small" id="loadSave">Load</button>
 
         </div>
     </div>
