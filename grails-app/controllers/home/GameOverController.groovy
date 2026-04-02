@@ -38,6 +38,7 @@ class GameOverController {
             opGB = new GameBoard()
             playerGB.board = [[2,1],[1,1],[3,4]]
             opGB.board = [[2,2],[3,5],[2,1,1]]
+            session['opponent'] = opponent
             session['playerBoard'] = playerGB
             session['opponentBoard'] = opGB
 
@@ -49,6 +50,11 @@ class GameOverController {
 
         final int playerScore = playerGB.calculateScore()
         final int opScore = opGB.calculateScore()
+
+        session['playerScore'] = playerScore
+        session['opponentScore'] = opScore
+
+        session['playerWon'] = (playerScore > opScore)
 
         user.totalScore += playerScore
         opponent.totalScore += opScore
