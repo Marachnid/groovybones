@@ -132,7 +132,7 @@
           <div class="character-portrait dice-display">
             <div class="dice-value">${session['dice']}</div>
           </div>
-          <div class="character-label dice-label">Dice</div>
+          <div class="character-label">Dice</div>
         </div>
 
         </div>
