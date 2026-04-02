@@ -22,7 +22,7 @@
       <!--opponent row - opponent board and lefthand/righthand containers-->
       <div class="game-row opponent-row">
 
-        <div id="placeholder" class="game-col left">
+        <div class="game-col left placeholder">
           <div class="info-card">
             <h3>TEMP</h3>
           </div>
@@ -56,31 +56,22 @@
 
       </div>
 
-    <!--middle row - player score, turn, opponent score-->
-    <div class="game-row score-row">
 
-      <!--player score-->
-      <div class="game-col left">
-        <div class="info-card">
-          <h3>${session['player'].username}:</h3>
-          <h3>${session['playerBoard'].calculateScore()}</h3>
-        </div>
+<!--middle row - player score, turn, opponent score-->
+    <div class="score-row">
+
+      <div class="score-left">
+        <span class="glyph">⟴</span>
+        <span class="card-value">${session['playerBoard'].calculateScore()}</span>
       </div>
 
-      <!--turn number-->
-      <div class="game-col center">
-        <div class="info-card">
-          <h3>Turn: </h3>
-          <h3>${session['turn']}</h3>
-        </div>
+      <div class="score-center">
+        <span class="card-value">${session['dice']}</span>
       </div>
 
-      <!--opponent score-->
-      <div class="game-col right">
-        <div class="info-card">
-          <h3>${session['opponent'].username}:</h3>
-          <h3>${session['opponentBoard'].calculateScore()}</h3>
-        </div>
+      <div class="score-right">
+        <span class="card-value">${session['opponentBoard'].calculateScore()}</span>
+        <span class="glyph">⟴</span>
       </div>
 
     </div>
@@ -127,13 +118,12 @@
           </table>
         </div>
 
-        <!--right-hand card for random dice value-->
-        <div class="character-card dice-card">
-          <div class="character-portrait dice-display">
-            <div class="dice-value">${session['dice']}</div>
+
+          <div class="game-col right placeholder">
+            <div class="info-card">
+              <h3>TEMP</h3>
+            </div>
           </div>
-          <div class="character-label dice-label">Dice</div>
-        </div>
 
         </div>
       </div>

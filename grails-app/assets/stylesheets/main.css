@@ -140,7 +140,10 @@
     color: var(--neon-primary);
     text-shadow: 0 0 8px var(--neon-primary-glow);
     text-align: center;
-    margin-bottom: 25px;
+    margin-top: 0;
+
+    /* FLICKER EFFECT - animation at bottom of page */
+    animation: secondaryFlicker 7s infinite;
 }
 
 .nav-title {
@@ -154,7 +157,7 @@
     text-shadow: 0 0 12px var(--neon-primary-glow);
 
     /* FLICKER EFFECT - animation at bottom of page */
-    animation: arcaneFlash 6s infinite;
+    animation: primaryFlicker 6s infinite;
 }
 
 .nav-title a:link, .nav-title a:visited {
@@ -264,39 +267,56 @@ button.btn-small, button.btn-medium {
 
     transform: scale(1.1);
     box-shadow:
-            0 0 15px var(--neon-primary-glow),
-            0 0 25px var(--neon-primary-glow);
+            0 0 20px var(--neon-primary-glow),
+            0 0 30px var(--neon-primary-glow);
 }
 
 
-/* FLICKER used by .nav-title*/
-@keyframes arcaneFlash {
-    /* Beats 1–4: calm */
+/* FLICKER used by .nav-title and winner card*/
+@keyframes primaryFlicker {
     0%, 12.5%, 25%, 37.5%, 62.5% {
-        text-shadow:
-                0 0 12px var(--neon-primary-glow);
-    }
-
-    /* Beat 5 */
-    50% {
-        text-shadow: 1 -1 0 var(--neon-primary-glow);
-        transform: scale(1.01)
-    }
-
-    /* Beat 7 */
-    75% {
-        text-shadow: 1 -1 0 var(--neon-primary-glow);
-        transform: scale(1.01)
-    }
-
-    /* Beat 8 */
-    87.5% {
-        text-shadow: 1 -1 0 var(--neon-primary-glow);
-        transform: scale(1.01)
-    }
-
-    /* Reset */
-    100% {
         text-shadow: 0 0 12px var(--neon-primary-glow);
     }
+    50% {
+        text-shadow: 1 -1 0 var(--neon-primary-glow);
+        /*transform: scale(1.01);*/
+        transform: scale(1.025);
+    }
+    75% {
+        text-shadow: 1 -1 0 var(--neon-primary-glow);
+        /*transform: scale(1.01);*/
+        transform: scale(1.034);
+    }
+    87.5% {
+        text-shadow: 1 -1 0 var(--neon-primary-glow);
+        /*transform: scale(1.01);*/
+        transform: scale(1.01);
+    }
+    100% {
+        text-shadow: 0 0 12px var(--neon-primary-glow);
+        transform: scale(1);
+    }
+}
+
+/* FLICKER used by .nav-title*/
+@keyframes secondaryFlicker {
+    0%, 12.5%, 25%, 37.5%, 62.5% {text-shadow: 0 0 12px var(--neon-primary-glow)}
+    50% {text-shadow: 1 -1 0 var(--neon-primary-glow)}
+    75% {text-shadow: 0 0 10 var(--neon-primary-glow)}
+    85% {text-shadow: 1 -1 6 var(--neon-primary-glow)}
+    90% {text-shadow: 1 -1 4 var(--neon-primary-glow)}
+    100% {text-shadow: 0 0 10px var(--neon-primary-glow)}
+}
+
+/* FLICKER used by .nav-title*/
+@keyframes containerFlicker {
+    0%, 62.5% {text-shadow: 0 0 12px var(--neon-primary-glow)}
+    12.5% {box-shadow: 1 -1 6 var(--neon-primary-glow)}
+    25% {box-shadow: 1 -1 4 var(--neon-primary-glow)}
+    37.5% {box-shadow: 0 0 10px var(--neon-primary-glow)}
+    50% {box-shadow: 1 -1 0 var(--neon-primary-glow)}
+    75% {box-shadow: 1 -1 10 var(--neon-primary-glow)}
+    85% {box-shadow: 1 -1 6 var(--neon-primary-glow)}
+    90% {box-shadow: 1 -1 4 var(--neon-primary-glow)}
+    100% {box-shadow: 0 0 10px var(--neon-primary-glow)}
 }

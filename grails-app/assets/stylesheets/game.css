@@ -1,15 +1,44 @@
-:root {
-    --module-height: 30vmin; /* or any starting value */
-    --module-width: 30vmin; /* or any starting value */
-}
+/*__________  general   __________*/
 
+.nav-title {
+    animation: none;
+}
 .game-board {
     height: 30vmin;
     width: 30vmin;
 }
 
-.highlightTurn {
-    /*transform: scale(1.08);*/
+.character-card {
+    height: 30vmin;
+    width: 20vmin;
+    font-weight: bold;
+    border: 2px solid var(--border-soft);
+}
+.character-card .character-label {
+    white-space: normal;
+    word-break: break-word;
+    text-align: center;
+
+    font-size: clamp(0.6rem, 1.5vw, 2.5rem);
+    flex: 0 1 30%;
+    padding: 0.25rem 0.5rem;
+}
+
+.placeholder > * {
+    display: none;
+    border: none;
+}
+
+.opponent-column td, .character-card {cursor: default}
+
+.character-card:hover {
+    transform: none;
+    box-shadow: none;
+    border-color: var(--border-soft);
+}
+
+.character-card.highlightTurn:hover, .highlightTurn {
+    transform: scale(1.08);
     border-color: var(--neon-primary);
     box-shadow:
             0 0 12px var(--neon-primary-glow),
@@ -17,94 +46,53 @@
 }
 
 
-.character-card {
-    height: 30vmin;
-    width: 20vmin;
-    font-weight: bold;
-}
-
-.dice-card {
-    height: 30vmin;
-    width: 20vmin;
-}
-
-#placeholder > * {
-    display: none;
-}
-/* ============================
-   GAME AREA LAYOUT
-   ============================ */
-
+/*__________  game area   __________*/
 #game-area {
     display: flex;
     flex-direction: column;
-    gap: 3rem;
     width: 100%;
     align-items: center;
 }
 
-/* 3-column grid per row */
 .game-row {
     display: grid;
     grid-template-columns: 1fr auto 1fr;
     align-items: center;
     width: 100%;
     gap: 2rem;
-    padding: 1rem 0;
 }
 
-/* Columns */
 .game-col {
     display: flex;
     justify-content: center;
     align-items: center;
 }
 
-/* ============================
-   INFO CARDS (V2)
-   ============================ */
 
-.info-card {
-    background: var(--bg-panel);
-    border: 2px solid var(--border-soft);
-    border-radius: var(--radius);
-    padding: 1rem 1.25rem;
-    min-width: 180px;
 
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 0.35rem;
+/*__________  gameboards   __________*/
+/* mirror gameboards */
+#opponent-board,
+#player-board,
+#opponent-board td,
+#player-board td {transform-origin: center}
+#player-board {transform: rotate(90deg) scaleY(-1)}
+#opponent-board {transform: rotate(-90deg)}
+#opponent-board td {transform: rotate(90deg)}
+#player-board td {transform: rotate(90deg) scaleY(-1)}
 
-    color: var(--text-main);
-    font-family: var(--body-font), serif;
-
-    box-shadow:
-            0 0 8px var(--neon-secondary-glow),
-            inset 0 0 6px var(--neon-secondary-glow);
+.player-column:hover td {
+    background: var(--highlight-soft);
+    box-shadow: inset 0 0 10px var(--neon-primary-glow);
+    cursor: pointer;
 }
-
-.info-card h3 {
-    margin: 0.25rem 0;
-}
-
-.info-card .thinking {
-    font-style: italic;
-    font-size: 1rem;
-    color: var(--neon-primary);
-    text-shadow: 0 0 6px var(--neon-primary-glow);
-}
-
-/* ============================
-   GAME BOARDS (V2)
-   ============================ */
 
 .game-board {
     background: var(--bg-panel);
     border-radius: var(--radius);
     overflow: hidden;
-    border-collapse: separate !important;
-    border-spacing: 6px !important; /* space between all cells */
+    border-collapse: separate;
+    border-spacing: 6px;
     border: none;
 }
 
@@ -117,7 +105,7 @@
     text-align: center;
     vertical-align: middle;
 
-    font-size: 4.5vmin;
+    font-size: 5vmin;
     font-weight: bold;
 
     transition:
@@ -128,185 +116,72 @@
     background:
             radial-gradient(
                     closest-side,
-                    rgba(0,0,0,0) 0%,          /* fully transparent center */
-                    rgba(0,0,0,0.02) 55%,      /* extremely subtle fade */
-                    rgba(0,0,0,0.04) 75%,      /* slightly stronger near edges */
-                    rgba(0,0,0,0.08) 100%      /* soft shadow at the edges */
+                    rgba(0,0,0,0) 0%,
+                    rgba(0,0,0,0.02) 55%,
+                    rgba(0,0,0,0.04) 75%,
+                    rgba(0,0,0,0.08) 100%
             ),
             var(--text-main); /* base white tile */
 
-    border: none;
     border-radius: var(--radius);
     color: var(--bg-deep);
-
-
-}
-
-/* Hover effect for player columns */
-.player-column:hover td {
-    background: var(--highlight-soft);
-    box-shadow: inset 0 0 10px var(--neon-primary-glow);
-}
-
-/* Opponent board hover disabled */
-.opponent-column td {
-    cursor: default;
-}
-
-/* ============================
-   CHARACTER CARDS
-   ============================ */
-
-.character-card {
-    display: flex;
-    flex-direction: column;
-    border-radius: var(--radius);
-    overflow: hidden;
-
-    background: var(--bg-panel);
-    border: 2px solid var(--border-soft);
-
-    transition:
-            transform var(--transition-fast),
-            box-shadow var(--transition-fast),
-            border-color var(--transition-fast);
 }
 
 
-.character-portrait {
-    flex: 0 0 70%;
-    background: var(--highlight-soft);
-    border-bottom: 2px solid var(--border-soft);
-
-    display: flex;
-    justify-content: center;
+/*__________  score row   __________*/
+.score-row {
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+    width: 100%;
     align-items: center;
-}
-
-.character-label {
-    flex: 0 0 30%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-
+    color: var(--text-main);
     font-family: var(--body-font), serif;
-    font-size: 2rem;
-    color: var(--text-main);
-    text-shadow: 0 0 1px var(--neon-primary-glow);
+    font-size: clamp(1rem, 2vw, 2rem);
 }
 
-/* ============================
-   TEMP OVERRIDE — MIDDLE ROW INFO-CARDS
-   ============================ */
-
-.middle-row .info-card {
-    flex-direction: row !important;
-    justify-content: center;
-    padding: 0.75rem 1rem;
-    border: none;
-    background: var(--text-main);
-    color: var(--bg-deep);
-    font-size: 1.25rem;
+.glyph {
+    font-size: 3.5rem;
+    color: var(--neon-primary-glow);
 }
 
-.middle-row .info-card h3:last-of-type {
-    color: var(--neon-primary)
-}
-
-.middle-row {
-    padding: 0;
-    gap: 0;
-}
-
-.middle-row .info-card h3 {
-    margin: 0;
-    white-space: nowrap;
-}
+.score-right .glyph {transform: scaleX(-1)}
 
 
-/* ============================
-   DICE CARD — VARIANT OF CHARACTER CARD
-   ============================ */
-
-.dice-card {
-    border: none;
-}
-
-/* Remove background + border from the top portion */
-.dice-card .character-portrait {
-    flex: 0 0 80%; /* top takes most of the card */
-    background: none;
-    border: none;
-
+.score-left {
+    text-align: left;
     display: flex;
-    justify-content: center;
+    gap: 0.5rem;
     align-items: center;
+    padding-left: 3.5rem;
 }
 
-/* Dice number styling */
-.dice-card .character-portrait h1 {
-    font-size: 4rem;
-    font-weight: bold;
-    color: var(--text-main);
-    text-shadow: 0 0 4px var(--neon-primary-glow);
-    margin: 0;
-    line-height: 1;
+/* Center column — centered */
+.score-center {
+    text-align: center;
 }
 
-/* Bottom label bar compressed */
-.dice-card .character-label {
-    flex: 0 0 20%; /* bottom takes 20% */
-    background: var(--bg-panel);
-    font-size: 3rem;
-    text-shadow: 0 0 4px var(--neon-primary-glow);
-    font-weight: bolder;
-    color: var(--text-main);
-}
-
-/* ============================
-   DICE CARD — NUMBER POSITIONING
-   ============================ */
-
-.dice-card .dice-display {
-    flex: 0 0 80%;
+/* Right column — right aligned */
+.score-right {
+    text-align: right;
     display: flex;
-    justify-content: center;
-    align-items: flex-end; /* push number to the bottom */
-    padding-bottom: 0.75rem;
+    gap: 0.5rem;
+    justify-content: flex-end;
+    align-items: center;
+    padding-right: 3.5rem;
 }
 
-/* Dice number styling */
-.dice-card .dice-value {
-    font-size: 15rem;          /* tall */
-    font-weight: 700;         /* bold */
-    line-height: 0.9;         /* slightly compressed vertically */
-    letter-spacing: -0.05em;  /* slightly wider look */
-    color: var(--neon-primary);
-    text-shadow: 0 0 4px var(--neon-primary-glow);
-    margin: 0;
-    padding: 0;
+.score-center .card-value {
+    font-size: clamp(2.5rem, 6vw, 6rem);
+    text-shadow: 0 0 10px var(--neon-primary-glow);
+    display: inline-block;
+    transform: translateY(-0.15em);
 }
 
-/* Mirroring logic */
-#opponent-board,
-#player-board,
-#opponent-board td,
-#player-board td {
-    transform-origin: center;
-}
-
-#player-board {
-    transform: rotate(90deg) scaleY(-1);
-}
-
-#opponent-board {
-    transform: rotate(-90deg);
-}
-
-#opponent-board td {
-    transform: rotate(90deg);
-}
-
-#player-board td {
-    transform: rotate(90deg) scaleY(-1);
+.score-left .card-value,
+.score-right .card-value {
+    font-size: clamp(1.5rem, 3vw, 3.5rem);
+    font-family: var(--body-font), serif;
+    color: var(--text-main);
+    text-shadow: 0 0 10px var(--neon-primary-glow);
+    font-weight: bold;
 }
