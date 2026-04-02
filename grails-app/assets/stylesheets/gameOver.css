@@ -1,0 +1,200 @@
+/* ============================
+   PAGE STRUCTURE
+   ============================ */
+
+.menu-box {
+    flex-direction: column;
+    align-items: center;
+}
+
+/* ============================
+   CHARACTER ROW (3‑column layout)
+   ============================ */
+
+.character-row {
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    gap: 40px;
+    width: 100%;
+    margin-bottom: 40px;
+}
+
+/* ============================
+   CHARACTER CARD (STRUCTURE)
+   ============================ */
+
+/* Bottom section of the character card */
+.character-bottom {
+    flex: 0 0 30%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+
+
+/* ============================
+   PLACEHOLDER CARD
+   ============================ */
+
+.placeholder-card {
+    pointer-events: none;
+    opacity: 0.9;
+}
+
+/* ============================
+   CHARACTER PORTRAIT (70%)
+   ============================ */
+
+.character-portrait {
+    flex: 0 0 70%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    background: var(--highlight-soft);
+    border-bottom: 2px solid var(--border-soft);
+}
+
+/* ============================
+   CHARACTER LABEL (30%)
+   ============================ */
+
+.character-label {
+    flex: 0 0 30%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    font-family: var(--body-font), serif;
+    font-size: 1.75rem;
+    color: var(--text-main);
+    text-align: center;
+}
+
+/* ============================
+   BUTTONS
+   ============================ */
+
+.play-button-container {
+    display: flex;
+    justify-content: center;
+    margin-top: 10px;
+}
+
+.menu-action {
+    padding: 15px 40px;
+    font-size: 2rem;
+    font-weight: bold;
+    border-radius: var(--radius);
+    border: 2px solid var(--border-soft);
+    text-decoration: none;
+
+    background: var(--text-main);
+    color: var(--bg-deep);
+
+    cursor: pointer;
+    transition:
+            transform var(--transition-fast),
+            box-shadow var(--transition-fast),
+            border-color var(--transition-fast),
+            color var(--transition-fast);
+}
+
+.menu-action:hover {
+    background: var(--bg-deep);
+    color: var(--neon-primary);
+    border-color: var(--neon-primary);
+
+    transform: scale(1.12);
+    box-shadow:
+            0 0 12px var(--neon-primary-glow),
+            0 0 25px var(--neon-primary-glow);
+}
+
+/* ============================
+   PAGE TITLE
+   ============================ */
+
+.page-title {
+    font-family: var(--nav-font), serif;
+    font-size: 3rem;
+    letter-spacing: 0.1em;
+    color: var(--neon-primary);
+    text-shadow: 0 0 8px var(--neon-primary-glow);
+    text-align: center;
+    margin-bottom: 25px;
+}
+
+/* ============================
+   STATS CONTENT (middle card)
+   ============================ */
+
+#stats {
+    display: flex;
+    flex-direction: column;
+    justify-content: stretch;
+    align-items: center;
+    border: none;
+}
+
+.stats-content {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;   /* <-- spreads rows vertically */
+    align-items: center;
+    height: 100%;                    /* <-- fills entire card */
+    width: 100%;
+    /*padding: 20px;*/
+    text-align: center;
+}
+
+.stats-row {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.stats-label {
+    font-size: 2.5rem;
+    color: var(--text-dim);
+    font-family: var(--body-font), serif;
+}
+
+.stats-value {
+    font-size: 3rem;
+    color: var(--neon-primary);
+    text-shadow: 0 0 6px var(--neon-primary-glow);
+    font-family: var(--nav-font), serif;
+}
+
+
+/* Score label inside character cards */
+.character-score {
+    font-size: 2.5rem;
+    color: var(--neon-primary);
+    text-shadow: 0 0 6px var(--neon-primary-glow);
+    font-family: var(--nav-font), serif;
+    text-align: center;
+    padding-top: 5px;
+}
+
+
+/* Disable hover effects on character cards for Game Over page */
+.loser-card:hover {
+    transform: none;
+    border-color: var(--neon-primary-glow);
+    box-shadow: none;
+    /*cursor: ;*/
+}
+
+/* Winner highlight */
+.winner-card {
+    border-color: var(--neon-primary);
+    box-shadow:
+            0 0 12px var(--neon-primary-glow),
+            0 0 25px var(--neon-primary-glow);
+    transform: scale(1.05);
+}
+

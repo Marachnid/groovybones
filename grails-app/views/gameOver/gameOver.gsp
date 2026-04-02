@@ -1,6 +1,6 @@
 <%@ page contentType="text/html;charset=UTF-8" %>
 <meta name="layout" content="main"/>
-<asset:stylesheet src="game.css"/>
+<asset:stylesheet src="gameOver.css"/>
 
 <main class="util-main">
   <div class="menu-box">
@@ -29,7 +29,7 @@
 
       <div class="stats-content">
         <div class="stats-row">
-          <span class="stats-label">Winner:</span>
+          <span class="stats-label">Winner</span>
           <span class="stats-value">${(session['playerWon']) ? session['player'].username : session['opponent'].username}</span>
         </div>
 
@@ -60,6 +60,11 @@
     <!-- profile -->
     <div class="play-button-container">
       <g:link controller="Profile" action="profile" class="menu-action">Profile</g:link>
+    </div>
+
+    <!-- home -->
+    <div class="play-button-container">
+      <g:link controller="home" action="index" class="menu-action">Home</g:link>
     </div>
 
   </div>

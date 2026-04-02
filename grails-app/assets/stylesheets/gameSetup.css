@@ -33,23 +33,6 @@
    CHARACTER CARD (STRUCTURE)
    ============================ */
 
-.character-card {
-    width: 16rem;
-    height: 24rem;
-    display: flex;
-    flex-direction: column;
-    border-radius: var(--radius);
-    overflow: hidden;
-    cursor: pointer;
-
-    background: var(--bg-panel);
-    border: 2px solid var(--neon-primary-glow);
-
-    transition:
-            transform var(--transition-fast),
-            box-shadow var(--transition-fast),
-            border-color var(--transition-fast);
-}
 
 /* Hover glow */
 .character-card:hover {
@@ -186,7 +169,7 @@
 
 .page-title {
     font-family: var(--nav-font), serif;
-    font-size: 2.5rem;
+    font-size: 3rem;
     letter-spacing: 0.1em;
     color: var(--neon-primary);
     text-shadow: 0 0 8px var(--neon-primary-glow);

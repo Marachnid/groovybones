@@ -4,7 +4,6 @@ import groovybones.GameBoard
 import groovybones.Opponent
 import groovybones.User
 import groovybones.opponent.OpponentRetriever
-import groovybones.opponent.OpponentService
 import groovybones.user.UserService
 
 /**

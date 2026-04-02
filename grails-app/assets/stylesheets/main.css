@@ -41,6 +41,28 @@
 }
 
 /* ============================
+   CHARACTER CARD
+   ============================ */
+.character-card {
+    width: 16rem;
+    height: 24rem;
+    display: flex;
+    flex-direction: column;
+    border-radius: var(--radius);
+    overflow: hidden;
+    cursor: pointer;
+
+    background: var(--bg-panel);
+    border: 2px solid var(--neon-primary-glow);
+
+    transition:
+            transform var(--transition-fast),
+            box-shadow var(--transition-fast),
+            border-color var(--transition-fast);
+}
+
+
+/* ============================
    HEADER
    ============================ */
 h1 {
