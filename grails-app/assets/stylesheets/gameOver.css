@@ -1,3 +1,6 @@
+.nav-title {
+    animation: none;
+}
 
 .menu-box {
     flex-direction: column;
