@@ -1,13 +1,17 @@
 /*__________  general   __________*/
+.util-navbar {display: none}
+.nav-title {animation: none}
 
-.nav-title {
-    animation: none;
-}
+/* main game item sizes */
 .game-board {
     height: 30vmin;
     width: 30vmin;
 }
-
+.game-col.left,
+.game-col.right {
+    max-width: 30vmin;
+    width: 100%;
+}
 .character-card {
     height: 30vmin;
     width: 20vmin;
@@ -22,11 +26,6 @@
     font-size: clamp(0.6rem, 1.5vw, 2.5rem);
     flex: 0 1 30%;
     padding: 0.25rem 0.5rem;
-}
-
-.placeholder > * {
-    display: none;
-    border: none;
 }
 
 .opponent-column td, .character-card {cursor: default}
@@ -68,10 +67,13 @@
     align-items: center;
 }
 
+.menu-box {
+    padding-top: 0;
+}
 
 
 /*__________  gameboards   __________*/
-/* mirror gameboards */
+/* mirror logic for gameboards */
 #opponent-board,
 #player-board,
 #opponent-board td,
@@ -101,6 +103,8 @@
     height: 9vmin;
     max-width: 90px;
     max-height: 90px;
+    /*something else might be nice for board numbers - maybe selectors for styling types??*/
+    /*font-family: var(--nav-font), serif;*/
 
     text-align: center;
     vertical-align: middle;
@@ -121,7 +125,7 @@
                     rgba(0,0,0,0.04) 75%,
                     rgba(0,0,0,0.08) 100%
             ),
-            var(--text-main); /* base white tile */
+            var(--text-main);
 
     border-radius: var(--radius);
     color: var(--bg-deep);
@@ -145,29 +149,28 @@
 }
 
 .score-right .glyph {transform: scaleX(-1)}
+.score-left, .score-right {
 
-
+}
 .score-left {
     text-align: left;
     display: flex;
     gap: 0.5rem;
     align-items: center;
-    padding-left: 3.5rem;
+    padding-left: 6rem;
 }
 
-/* Center column — centered */
 .score-center {
     text-align: center;
 }
 
-/* Right column — right aligned */
 .score-right {
     text-align: right;
     display: flex;
     gap: 0.5rem;
     justify-content: flex-end;
     align-items: center;
-    padding-right: 3.5rem;
+    padding-right: 6rem;
 }
 
 .score-center .card-value {
@@ -175,6 +178,7 @@
     text-shadow: 0 0 10px var(--neon-primary-glow);
     display: inline-block;
     transform: translateY(-0.15em);
+    animation: primaryFlicker 5s infinite;
 }
 
 .score-left .card-value,
@@ -184,4 +188,143 @@
     color: var(--text-main);
     text-shadow: 0 0 10px var(--neon-primary-glow);
     font-weight: bold;
+}
+
+
+
+/*__________  info-panel   __________*/
+.info-panel {
+    display: none;
+    opacity: 0;
+    max-height: 0;
+    overflow: hidden;
+    pointer-events: none;
+    transition: opacity 0.3s ease, max-height 0.3s ease;
+
+    width: 20vmin;
+}
+
+.info-panel.active {
+    display: flex;
+    flex-direction: column;
+    background: var(--bg-panel);
+
+    opacity: 1;
+    max-height: 500px;
+    pointer-events: auto;
+}
+
+.info-panel ul {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    max-width: 100%;
+}
+
+.info-panel li {
+    font-size: 1.5rem;
+    color: var(--text-main);
+    font-family: var(--nav-font), serif;
+    overflow-wrap: break-word;
+    word-break: break-word;
+    cursor: default;
+
+    animation: primaryFlicker 10s infinite;
+}
+
+@media (max-width: 1000px) {
+    .info-panel li {
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        max-width: 100%;
+        display: block;
+        font-size: 0.5rem;
+    }
+}
+
+
+/*__________  panel bar   __________*/
+.panel-toggle-bar {
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+    align-items: center;
+    width: 100%;
+}
+
+.panel-col {
+    display: flex;
+    align-items: center;
+}
+
+.panel-col.left {justify-content: flex-start}
+.panel-col.right {justify-content: flex-end}
+.panel-col.center {justify-content: center}
+
+.panel-col.left ul,
+.panel-col.right ul {
+    display: flex;
+    gap: 5rem;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+.panel-col.left li,
+.panel-col.right li {
+    color: var(--text-main);
+    font-family: var(--nav-font), serif;
+    cursor: pointer;
+    font-size: 1.75rem;
+    text-decoration: none;
+
+    transition:
+            transform var(--transition-fast),
+            text-shadow var(--transition-fast),
+            color var(--transition-fast);
+}
+
+.panel-col.left li:hover,
+.panel-col.right li:hover {
+    transform: scale(1.35);
+    color: var(--neon-primary);
+    text-shadow:
+            0 0 15px var(--text-main)
+            0 0 20px var(--neon-primary-glow),
+            0 0 30px var(--neon-primary-glow);
+}
+
+.panel-col.left li a,
+.panel-col.right li a {
+    text-decoration: none;
+    color: inherit;
+    text-shadow: inherit;
+}
+
+#panel-symbol {
+    font-size: 5rem;
+    cursor: pointer;
+    color: var(--neon-primary);
+    transition:
+            transform var(--transition-fast),
+            text-shadow var(--transition-fast);
+}
+
+#panel-symbol:hover {
+    transform: scale(1.25);
+    text-shadow:
+            0 0 20px var(--neon-primary-glow),
+            0 0 30px var(--neon-primary-glow);
+}
+
+.panel-toggle-bar.collapsed .panel-col.left,
+.panel-toggle-bar.collapsed .panel-col.right {visibility: hidden}
+
+.panel-toggle-bar.collapsed #panel-symbol {transform: rotate(180deg)}
+
+
+.panel-toggle.active {
+    color: var(--neon-primary);
+    transform: scale(1.35);
+    text-shadow: 0 0 8px var(--neon-primary);
 }
