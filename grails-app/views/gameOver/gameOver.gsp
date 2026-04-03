@@ -1,10 +1,12 @@
 <%@ page contentType="text/html;charset=UTF-8" %>
 <meta name="layout" content="main"/>
 <asset:stylesheet src="gameOver.css"/>
+<title>Game Over</title>
 
 <main class="util-main">
   <div class="menu-box">
     <h1 class="page-title">Game Over</h1>
+
 
     <!-- character card row -->
     <div class="character-grid">

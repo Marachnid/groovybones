@@ -2,7 +2,7 @@
 <html lang="en" class="no-js">
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
-    <title><g:layoutTitle default="Grails"/></title>
+    <title><g:layoutTitle default="GroovyBones"/></title>
     <meta name="viewport" content="width=device-width, initial-scale=1"/>
     %{-- can ignore this error --}%
     <asset:stylesheet src="main.css"/>

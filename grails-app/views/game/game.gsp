@@ -1,7 +1,7 @@
 <%@ page contentType="text/html;charset=UTF-8" %>
 <meta name="layout" content="main"/>
 <asset:stylesheet src="game.css"/>
-
+<title>Game</title>
 
 <!--delay opponent from executing turn immediately-->
 <g:if test="${!session['playerTurn']}">

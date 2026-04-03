@@ -1,6 +1,7 @@
 <%@ page contentType="text/html;charset=UTF-8" %>
 <meta name="layout" content="main"/>
 <asset:stylesheet src="gameSetup.css"/>
+<title>Game Setup</title>
 
 <main class="util-main">
     <div class="menu-box">
