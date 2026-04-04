@@ -50,7 +50,7 @@
             <select id="savedGamesSelect">
                 <option value="">-- Select Saved Game --</option>
 
-                <g:each in="${session['player'].savedGames}" var="sg">
+                <g:each in="${session['user'].savedGames}" var="sg">
 
                     <%
                         def opponent = session['opponentsList'].find {it.id == sg.opponentId}

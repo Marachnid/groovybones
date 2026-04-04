@@ -106,7 +106,7 @@
         <!-- player score -->
         <div class="score-left">
           <span class="glyph">⟴</span>
-          <span class="card-value">${session['playerBoard'].calculateScore()}</span>
+          <span class="card-value">${session['userBoard'].calculateScore()}</span>
         </div>
 
         <!-- dice number -->
@@ -131,13 +131,13 @@
             <g:if test="${session['playerTurn']}">
               <div class="character-card highlightTurn">
                 <div class="character-portrait">IMG</div>
-                <div class="character-label">${session['player'].username}</div>
+                <div class="character-label">${session['user'].username}</div>
               </div>
             </g:if>
             <g:else>
               <div class="character-card">
                 <div class="character-portrait">IMG</div>
-                <div class="character-label">${session['player'].username}</div>
+                <div class="character-label">${session['user'].username}</div>
               </div>
             </g:else>
           </div>
@@ -145,7 +145,7 @@
           <!-- CENTER player board -->
           <div class="game-col center">
             <table id="player-board" class="game-board">
-              <g:each in="${session['playerBoard'].board}" var="column" status="colIndex">
+              <g:each in="${session['userBoard'].board}" var="column" status="colIndex">
 
                 <g:if test="${session['playerTurn'] == true}">
                   <tr class="player-column"
@@ -154,14 +154,14 @@
                         action:'runPlayerBoard',
                         params:[col: colIndex])}'">
 
-                    <g:each in="${0..(session['playerBoard'].columnMaxSize-1)}" var="i">
+                    <g:each in="${0..(session['userBoard'].columnMaxSize-1)}" var="i">
                       <td>${column[i] == null ? ' ' : column[i]}</td>
                     </g:each>
                   </tr>
                 </g:if>
                 <g:else>
                   <tr>
-                    <g:each in="${0..(session['playerBoard'].columnMaxSize-1)}" var="i">
+                    <g:each in="${0..(session['userBoard'].columnMaxSize-1)}" var="i">
                       <td>${column[i] == null ? ' ' : column[i]}</td>
                     </g:each>
                   </tr>
@@ -185,10 +185,10 @@
             <!-- stats panel -->
             <div class="info-panel panel-stats">
               <ul>
-                <li>${session['player'].username}</li>
-                <li>Accumulative Score: ${session['player'].totalScore}</li>
-                <li>Wins: ${session['player'].wins}</li>
-                <li>Losses: ${session['player'].losses}</li>
+                <li>${session['user'].username}</li>
+                <li>Accumulative Score: ${session['user'].totalScore}</li>
+                <li>Wins: ${session['user'].wins}</li>
+                <li>Losses: ${session['user'].losses}</li>
               </ul>
             </div>
 
