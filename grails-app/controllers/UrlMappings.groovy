@@ -12,9 +12,11 @@ class UrlMappings {
     static mappings = {
         "/"(controller: "home", action: "index")
 
+//        "/savedGame/load/$id"(controller: "savedGame", action: "loadGame")
+//        "/savedGame/delete/$id"(controller: "savedGame", action: "deleteGame")
+
         //webservice routes
         "/opponent"(controller: "opponentService") {action = [GET: "get", POST: "post"]}
-
         "/opponent/$id"(controller: "opponentService") {action = [GET: 'getById']}
 
 

@@ -44,9 +44,9 @@ class SQLRunner {
         //opponent
         sql.execute("""
             INSERT INTO opponent (username, difficulty, wins, losses, total_score) VALUES
-                ('Chug Chug', 1, 5, 5, 5),
-                ('Big Slight', 2, 6, 6, 6),
-                ('Vindictive One', 3, 7, 7, 7);
+                ('Chug Chug', 1, 0, 0, 0),
+                ('Big Slight', 2, 0, 0, 0),
+                ('Vindictive One', 3, 0, 0, 0);
         """)
 
 //        //user

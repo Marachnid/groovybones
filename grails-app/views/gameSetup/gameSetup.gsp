@@ -49,6 +49,17 @@
             <label for="savedGamesSelect">Saved Games</label>
             <select id="savedGamesSelect">
                 <option value="">-- Select Saved Game --</option>
+
+                <g:each in="${session['player'].savedGames}" var="sg">
+
+                    <%
+                        def opponent = session['opponentsList'].find {it.id == sg.opponentId}
+                    %>
+
+                    <option value="${sg.id}">${opponent.username} : turn ${sg.turn}</option>
+
+                </g:each>
+
             </select>
             <button class="btn btn-small" id="deleteSave">Delete</button>
             <button class="btn btn-small" id="loadSave">Load</button>
@@ -87,6 +98,21 @@
                     alert("Please select an opponent before starting the game.");
                 }
             });
+        });
+
+
+        document.getElementById("deleteSave").addEventListener("click", function () {
+            const id = document.getElementById("savedGamesSelect").value;
+            if (!id) return alert("Please select a saved game first.");
+
+            window.location.href = "/savedGame/delete/" + id;
+        });
+
+        document.getElementById("loadSave").addEventListener("click", function () {
+            const id = document.getElementById("savedGamesSelect").value;
+            if (!id) return alert("Please select a saved game first.");
+
+            window.location.href = "/savedGame/load/" + id;
         });
     </script>
 

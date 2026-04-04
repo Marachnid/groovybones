@@ -47,7 +47,9 @@ class UserService {
     User getUserByCognitoSub(String sub) {
         log.info("getUserByCognitoSub()")
         User existing = User.findByCognitoSub(sub)
-        getUserById(existing.id)
+
+        if (existing) getUserById(existing.id)
+        else return null
     }
 
 

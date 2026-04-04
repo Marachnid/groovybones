@@ -2,6 +2,8 @@ package home
 
 import groovybones.GameBoard
 import groovybones.OpponentActions
+import groovybones.SavedGame
+import groovybones.User
 import groovybones.opponent.OpponentRetriever
 import groovybones.Opponent
 
