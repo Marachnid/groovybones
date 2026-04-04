@@ -55,7 +55,7 @@ class GameOverController {
         session['opponent'] = null
         session['turn'] = null
         session['dice'] = null
-        session['playerTurn'] = null
+        session['userTurn'] = null
 
 
         //determine win/loss persistence

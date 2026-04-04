@@ -67,7 +67,7 @@ class GameSetupController {
 
 
         session['turn'] = 0                                            //initialize turn counter (visual only)
-        session['playerTurn'] = new Random().nextInt(2) == 1    //randomly pick first turn
+        session['userTurn'] = new Random().nextInt(2) == 1      //randomly pick first turn
         session['timeout'] = 3000                                     //timeout to delay instant opponent turn
         redirect(controller: 'Game', action: "turnManager")
     }

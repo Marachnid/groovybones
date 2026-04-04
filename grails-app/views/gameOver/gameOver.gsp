@@ -34,7 +34,7 @@
       </div>
 
         <!-- opponent card -->
-      <g:if test="${session['playerWon']}">
+      <g:if test="${session['userWon']}">
         <div class="character-card opponent-card loser-card">
       </g:if>
       <g:else>

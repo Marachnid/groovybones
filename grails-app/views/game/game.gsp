@@ -4,7 +4,7 @@
 <title>Game</title>
 
 <!--delay opponent from executing turn immediately-->
-<g:if test="${!session['playerTurn']}">
+<g:if test="${!session['userTurn']}">
   <script>
     setTimeout(() => {
       window.location.href = "${createLink(controller:'gameAction', action:'runOpponentBoard')}";
@@ -84,7 +84,7 @@
 
         <!-- RIGHT opponent card col -->
         <div class="game-col right">
-          <g:if test="${session['playerTurn']}">
+          <g:if test="${session['userTurn']}">
             <div class="character-card">
               <div class="character-portrait">IMG</div>
               <div class="character-label">${session['opponent'].username}</div>
@@ -128,7 +128,7 @@
 
           <!-- LEFT player card -->
           <div class="game-col left">
-            <g:if test="${session['playerTurn']}">
+            <g:if test="${session['userTurn']}">
               <div class="character-card highlightTurn">
                 <div class="character-portrait">IMG</div>
                 <div class="character-label">${session['user'].username}</div>
@@ -147,7 +147,7 @@
             <table id="player-board" class="game-board">
               <g:each in="${session['userBoard'].board}" var="column" status="colIndex">
 
-                <g:if test="${session['playerTurn'] == true}">
+                <g:if test="${session['userTurn'] == true}">
                   <tr class="player-column"
                       onclick="window.location='${createLink(
                         controller:'gameAction',

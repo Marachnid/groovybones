@@ -59,7 +59,7 @@ class GameActionController {
         log.info('GameActionController runOpponentBoard()')
 
         //allows player to execute their turn after opponent's
-        session['playerTurn'] = true
+        session['userTurn'] = true
 
         final OpponentActions opponentActions = session['opponentActions'] as OpponentActions
         final GameBoard opponentBoard = session['opponentBoard'] as GameBoard
