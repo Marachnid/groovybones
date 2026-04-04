@@ -1,4 +1,4 @@
-package home
+package user
 
 import groovybones.user.UserService
 import groovybones.User
@@ -54,28 +54,26 @@ class LoginController {
         final def payload = idToken.split('\\.')
         final def decodedPayload = new String(payload[1].decodeBase64())
         final def parsedPayload = new JsonSlurper().parseText(decodedPayload)
+        final UserService service = new UserService()
+        User user = service.getUserByCognitoSub(parsedPayload['sub'] as String)
 
 
-        UserService service = new UserService()
-        User player = service.getUserByCognitoSub(parsedPayload['sub'] as String)
-
-
-        //if player is found via sub token, auto-update username and set session
-        if (player) {
+        //if user is found via sub token, auto-update username and set session
+        if (user) {
             log.info('existing User found and authenticated')
-            player.username = parsedPayload['cognito:username']
-            service.updateUser(player)
-            session['player'] = player
+            user.username = parsedPayload['cognito:username']
+            service.updateUser(user)
+            session['user'] = user
 
         //else create a new User entity linked to sub token
         } else {
             log.info('existing User not found, creating a new User')
-            player = service.createUser(
+            user = service.createUser(
                     parsedPayload['sub'] as String,
                     parsedPayload['cognito:username'] as String
             )
 
-            session['player'] = player
+            session['user'] = user
         }
 
         //redirect to home after successful login

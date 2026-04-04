@@ -5,7 +5,7 @@
     <h1 hidden>Home</h1>
 
     <div class="menu-box">
-        <g:if test="${session['player']}">
+        <g:if test="${session['user']}">
             <ul class="menu-buttons menu-list">
                 <li><g:link class="btn btn-large" controller="GameSetup" action="gameSetup">Play</g:link></li>
                 <li><g:link class="btn btn-large" controller="Profile" action="profile">Profile</g:link></li>
