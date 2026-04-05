@@ -59,10 +59,10 @@
           <!-- stats panel -->
           <div class="info-panel panel-stats">
             <ul>
-              <li>${session['opponent'].username}</li>
-              <li>Total Score: ${session['opponent'].totalScore}</li>
-              <li>Wins: ${session['opponent'].wins}</li>
-              <li>Losses: ${session['opponent'].losses}</li>
+              <li>${session['opponentUsername']}</li>
+              <li>Total Score: ${session['opponentStats'].totalScore}</li>
+              <li>Wins: ${session['opponentStats'].wins}</li>
+              <li>Losses: ${session['opponentStats'].losses}</li>
             </ul>
           </div>
 
@@ -87,13 +87,13 @@
           <g:if test="${session['userTurn']}">
             <div class="character-card">
               <div class="character-portrait">IMG</div>
-              <div class="character-label">${session['opponent'].username}</div>
+              <div class="character-label">${session['opponentUsername']}</div>
             </div>
           </g:if>
           <g:else>
             <div class="character-card highlightTurn">
               <div class="character-portrait">IMG</div>
-              <div class="character-label">${session['opponent'].username}</div>
+              <div class="character-label">${session['opponentUsername']}</div>
             </div>
           </g:else>
         </div>
@@ -131,13 +131,13 @@
             <g:if test="${session['userTurn']}">
               <div class="character-card highlightTurn">
                 <div class="character-portrait">IMG</div>
-                <div class="character-label">${session['user'].username}</div>
+                <div class="character-label">${session['username']}</div>
               </div>
             </g:if>
             <g:else>
               <div class="character-card">
                 <div class="character-portrait">IMG</div>
-                <div class="character-label">${session['user'].username}</div>
+                <div class="character-label">${session['username']}</div>
               </div>
             </g:else>
           </div>
@@ -185,10 +185,10 @@
             <!-- stats panel -->
             <div class="info-panel panel-stats">
               <ul>
-                <li>${session['user'].username}</li>
-                <li>Accumulative Score: ${session['user'].totalScore}</li>
-                <li>Wins: ${session['user'].wins}</li>
-                <li>Losses: ${session['user'].losses}</li>
+                <li>${session['username']}</li>
+                <li>Accumulative Score: ${session['userStats'].totalScore}</li>
+                <li>Wins: ${session['userStats'].wins}</li>
+                <li>Losses: ${session['userStats'].losses}</li>
               </ul>
             </div>
 

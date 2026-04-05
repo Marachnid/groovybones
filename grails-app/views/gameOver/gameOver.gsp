@@ -20,7 +20,7 @@
       </g:else>
         <div class="character-portrait"></div>
         <div class="character-bottom">
-          <div class="character-label">${session['user'].username}</div>
+          <div class="character-label">${session['username']}</div>
           <div class="card-value">${session['userScore']}</div>
         </div>
       </div>
@@ -29,7 +29,7 @@
       <div class="character-card stats-card">
           <div class="stats-column">
             <span class="stats-label">Winner</span>
-            <span class="card-value">${(session['userWon']) ? session['user'].username : session['opponentName']}</span>
+            <span class="card-value">${(session['userWon']) ? session['username'] : session['opponentUsername']}</span>
           </div>
       </div>
 
@@ -42,7 +42,7 @@
       </g:else>
         <div class="character-portrait"></div>
         <div class="character-bottom">
-          <div class="character-label">${session['opponentName']}</div>
+          <div class="character-label">${session['opponentUsername']}</div>
           <div class="card-value">${session['opponentScore']}</div>
         </div>
       </div>

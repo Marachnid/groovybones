@@ -22,7 +22,7 @@
         <li><g:link controller="Tutorial" action="tutorial">Tutorial</g:link></li>
         <li><g:link controller="About" action="about">About</g:link></li>
 
-        <g:if test="${session['user']}">
+        <g:if test="${session['userId']}">
             <li><g:link controller="Login" action="logout">Logout</g:link></li>
         </g:if>
     </ul>

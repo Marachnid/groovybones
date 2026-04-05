@@ -41,3 +41,11 @@
     border-color: var(--neon-primary-glow); /* remove extra glow from normal hover*/
     box-shadow: none;
 }
+
+.character-label {
+    display: block;
+    max-width: 100%;
+    white-space: nowrap;
+    overflow: hidden;
+    font-size: clamp(0.6rem, 2.2vw, 1.75rem);
+}
