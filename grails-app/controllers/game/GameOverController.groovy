@@ -1,8 +1,6 @@
 package game
 
 import groovybones.game.GameBoard
-import groovybones.Opponent
-import groovybones.User
 import groovybones.opponent.OpponentRetriever
 import groovybones.user.UserService
 
@@ -10,9 +8,7 @@ import groovybones.user.UserService
  * Responsible for handling post-game operations
  */
 class GameOverController {
-
     final String key = grailsApplication.config.getProperty('apiKey.secretkey', String)
-    final String opponentAPI = 'http://localhost:8080/opponent'
 
     /**
      * default method to render gameOver page
@@ -29,56 +25,50 @@ class GameOverController {
     def gameOverAction() {
         log.info('GameOver gameOverAction()')
 
-        final User user = session['user'] as User
         final GameBoard userBoard = session['userBoard'] as GameBoard
-        final int userScore = userBoard.calculateScore()
-
-        final Opponent opponent = session['opponent'] as Opponent
         final GameBoard opponentBoard = session['opponentBoard'] as GameBoard
+        final int userScore = userBoard.calculateScore()
         final int opScore = opponentBoard.calculateScore()
+
+        final Map userStats = session['userStats'] as Map
+        final Map opStats = session['opponentStats'] as Map
         final boolean userWon = (userScore >= opScore)        //ties go to the user
 
-        user.totalScore += userScore
-        opponent.totalScore += opScore
-        log.info("userScore-totalScore: ${user.totalScore}, opponent-totalScore: ${opponent.totalScore}")
-
         session['userWon'] = userWon
-        session['opponentName'] = opponent.username
         session['userScore'] = userScore
         session['opponentScore'] = opScore
 
+        userStats.totalScore += userScore
+        opStats.totalScore += opScore
+
+        if (userWon) {
+            log.info("User won ($userScore), Opponent lost ($opScore")
+            userStats.wins ++
+            opStats.losses ++
+
+        } else {
+            log.info("Opponent won ($opScore), User lost ($userScore")
+            opStats.wins ++
+            userStats.losses ++
+        }
 
         //clean up old game session variables
+        session['playerStats'] = null
+        session['opponentStats'] = null
         session['opponentActions'] = null
         session['userBoard'] = null
         session['opponentBoard'] = null
-        session['opponent'] = null
         session['turn'] = null
         session['dice'] = null
         session['userTurn'] = null
 
 
-        //determine win/loss persistence
-        if (userWon) {
-            log.info("User won ($userScore), Opponent lost ($opScore")
-            user.wins ++
-            opponent.losses ++
+        log.info("User stats: ${userStats.toString()}")
+        log.info("Opponent stats: ${opStats.toString()}")
 
-        } else {
-            log.info("Opponent won ($opScore), User lost ($userScore")
-            opponent.wins ++
-            user.losses ++
-        }
-
-
-        //update user - log responses
-        if (new UserService().updateUser(user)) log.info("Update for User ID: ${user.id} successful")
-        else log.info("Update for User ID: ${user.id} failed")
-
-        //update opponent - log responses
-        if (new OpponentRetriever(key, opponentAPI, opponent).responseCode == 201) log.info("Update for Opponent ID: ${opponent.id} successful")
-        else log.info("Update for Opponent ID: ${opponent.id} failed")
-
+        //update user and opponent
+        new UserService().updateUser(session['userId'] as Long, userStats)
+        new OpponentRetriever().postUpdate(key, session['opponentId'] as Long, opStats)
 
         redirect(controller: 'GameOver', action: 'gameOver')
     }

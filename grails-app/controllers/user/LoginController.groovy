@@ -55,28 +55,18 @@ class LoginController {
         final def decodedPayload = new String(payload[1].decodeBase64())
         final def parsedPayload = new JsonSlurper().parseText(decodedPayload)
         final UserService service = new UserService()
-        User user = service.getUserByCognitoSub(parsedPayload['sub'] as String)
+
+        //only returns id and username
+        Map user = service.getUserByCognitoSub(
+                parsedPayload['sub'] as String,
+                parsedPayload['cognito:username'] as String
+        )
+
+        session['userId'] = user.id
+        session['username'] = user.username
 
 
-        //if user is found via sub token, auto-update username and set session
-        if (user) {
-            log.info('existing User found and authenticated')
-            user.username = parsedPayload['cognito:username']
-            service.updateUser(user)
-            session['user'] = user
-
-        //else create a new User entity linked to sub token
-        } else {
-            log.info('existing User not found, creating a new User')
-            user = service.createUser(
-                    parsedPayload['sub'] as String,
-                    parsedPayload['cognito:username'] as String
-            )
-
-            session['user'] = user
-        }
-
-        //redirect to home after successful login
+        //redirect to home after login
         redirect(controller: "home", action: "index")
     }
 }

@@ -4,6 +4,7 @@ import groovybones.game.GameBoard
 import groovybones.game.OpponentActions
 import groovybones.opponent.OpponentRetriever
 import groovybones.Opponent
+import groovybones.user.UserService
 
 /**
  * Responsible for initializing and instantiating a new game
@@ -12,7 +13,6 @@ import groovybones.Opponent
  */
 class GameSetupController {
     final String key = grailsApplication.config.getProperty('apiKey.secretkey', String)
-    final String opponentAPI = 'http://localhost:8080/opponent'
 
 
     /**
@@ -23,8 +23,8 @@ class GameSetupController {
     def gameSetup() {
         log.info('GameSetup gameSetup()')
 
-        final OpponentRetriever opRet = new OpponentRetriever(key, opponentAPI, false)
-        session['opponentsList'] = opRet.opponent
+        session['opponentsList'] = new OpponentRetriever().retrieveList(key)
+        session['savedGames'] = new UserService().getUserSavedGames(session['userId'] as Long)
 
         render(view: 'gameSetup')
     }
@@ -38,29 +38,19 @@ class GameSetupController {
     def gameInitialization() {
         log.info('GameSetup gameInitialization()')
 
-        //grab opponent from form params
-        final Opponent opponent = new Opponent(
-                username: params.username,
-                difficulty: params.difficulty,
-                wins: params.wins,
-                losse: params.losses,
-                totalScore: params.totalscore
-        )
 
-        log.info("Opponent: ${params.username}, difficulty: ${params.difficulty}, wins: ${params.wins}, " +
-                "losses: ${params.losses}, totalScore: ${params.totalScore} selected")
-
-
-        //instantiate GameBoards to session
-        session['userBoard'] = new GameBoard()
+        session['opponentId'] = params.id
+        session['opponentUsername'] = params.username
         session['opponentBoard'] = new GameBoard()
+        session['opponentStats'] = new OpponentRetriever().retrieveOpponentStats(key, params.id as Long)
 
-        //instantiate opponent to session
-        session['opponent'] = opponent
+        session['userStats'] = new UserService().getUserStats(session['userId'] as Long)
+        session['userBoard'] = new GameBoard()
 
-        //instantiate OpponentActions to session
+
+        //configure Game Instance for orchestrating opponent actions
         session['opponentActions'] = new OpponentActions(
-                opponent.difficulty,
+                params.difficulty as int,
                 session['opponentBoard'] as GameBoard,
                 session['userBoard'] as GameBoard
         )
