@@ -12,20 +12,27 @@ import groovybones.Opponent
 class OpponentService {
 
     /**
-     * handles updating an existing opponent's wins, losses, and totalScore
-     * username and difficulty are ignored
-     * @return updated opponent
+     * updates Opponent properties
+     * @param id opponent id
+     * @param newValues updated opponent values
      */
-    Opponent updateOpponent(Opponent opponent) {
-        Opponent existing = Opponent.get(opponent.id)
-        log.info("Updating Opponent ID: ${opponent.id}")
+    boolean updateOpponent(Long id, Map newValues) {
+        log.info('OpponentService updateOpponent()')
 
-        existing.wins = opponent.wins
-        existing.losses = opponent.losses
-        existing.totalScore = opponent.totalScore
+        Opponent opponent = Opponent.get(id)
+        if (!opponent) return false
 
-        log.info("Wins: ${existing.wins}\nLosses: ${opponent.losses}\nTotalScore: ${opponent.totalScore}")
-        existing.save(flush: true, failOnError: true)
-        existing
+        log.info("Oser ID: ${opponent.id} found, new values: ${newValues.toString()}")
+        opponent.properties = newValues
+
+
+        if (!opponent.validate()) {
+            log.info('Invalid data')
+            return false
+        }
+
+        opponent.save(flush: true)
+        log.info("Update successful")
+        true
     }
 }

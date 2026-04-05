@@ -32,10 +32,13 @@ class OpponentServiceController {
      * @return list of opponent entities
      */
     def get() {
+        ArrayList<Map> opponents = []
         requestKey = request.getHeader('X-API-KEY')
         log.info('Opponent getAll API')
         if (!validateAuthKey(requestKey)) respond(forbiddenError, status: 403)
-        else respond Opponent.list(), status: 200
+
+        Opponent.list().each {opponents << [id: it.id, username: it.username, difficulty: it.difficulty]}
+        respond opponents, status: 200
     }
 
     /**
@@ -66,8 +69,10 @@ class OpponentServiceController {
     @Transactional
     def post() {
         log.info('Opponent post/update API')
+
         requestKey = request.getHeader('X-API-KEY')
         if (!validateAuthKey(requestKey)) {
+            log.info('Unauthorized key')
             respond(forbiddenError, status: 403)
             return
         }
@@ -76,24 +81,20 @@ class OpponentServiceController {
 
         //if missing a JSON body, respond with 400, else assign opponent to JSON body
         if (!json) {
+            log.info('Bad request - missing JSON')
             respond([errorText: 'Bad Request'], status: 400)
             return
-        } else opponent = Opponent.get(json.id)
+        }
 
-        //validate ID is found
-        if(!opponent) {
-            respond([errorText: "ID ${json.id} not found"], status: 404)
-            return
-        } else opponent.properties = json
-
-
-        //if invalid entry, respond with 500
-        if (!opponent.validate()) {
+        //return 500 if failing to find/update user
+        OpponentService opService = new OpponentService()
+        if (!opService.updateOpponent(json.id as Long, json as Map)) {
+            log.info("Updated failed for ID: ${json.id}, values: ${json.toString()}")
             respond([errorText: opponent.errors], status: 500)
             return
-        } else
-            opService = new OpponentService()
-            opponent = opService.updateOpponent(opponent)
-            respond opponent, status: 201
+        }
+
+        //successful update
+        respond status: 201
     }
 }
