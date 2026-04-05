@@ -2,7 +2,7 @@ package groovybones
 /**
  * Represents an Opponent DB entity in MySQL table, 'opponent'
  * Implicitly maps Opponent class to 'opponent' table
- * GORM domain classes have persistence built-in, no DAO needed
+ * One-to-Many relationship with SavedGame
  */
 class Opponent {
     String username
@@ -11,9 +11,6 @@ class Opponent {
     int losses
     int totalScore
 
-
-    //foreign key - one to many relationship
-    static hasMany = [savedGames: SavedGame]
 
     //enforce DB constraints
     static constraints = {
@@ -27,16 +24,7 @@ class Opponent {
     //define datatype mappings
     static mapping = {
         username updateable: false
-        difficulty updateable: false
+        difficulty sqlType: 'TINYINT UNSIGNED', updateable: false
         version false
-        difficulty sqlType: 'TINYINT UNSIGNED'
-    }
-
-    /**
-     * utility method for returning opponent as a map of values
-     * @return opponent as map
-     */
-    Map returnAsMap() {
-        [id: id, username: username, difficulty: difficulty, wins: wins, losses: losses, totalScore: totalScore]
     }
 }
