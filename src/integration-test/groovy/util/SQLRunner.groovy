@@ -1,5 +1,7 @@
 package util
 
+import groovy.json.JsonOutput
+import groovy.json.JsonSlurper
 import groovy.sql.Sql
 import javax.sql.DataSource
 
@@ -49,17 +51,20 @@ class SQLRunner {
                 ('Vindictive One', 3, 0, 0, 0);
         """)
 
-//        //user
-//        sql.execute("""
-//            INSERT INTO user (cognito_sub, username, wins, losses, total_score) VALUES
-//            ('123', 'testUser', 1, 1, 1),
-//            ('234', 'otherTestUser', 0, 0, 0);
-//        """)
+        //user
+        sql.execute("""
+            INSERT INTO user (cognito_sub, username, wins, losses, total_score) VALUES
+            ('123', 'default-user', 1, 1, 1)
+        """)
+
+
+//        def gameBoard1 = JsonOutput.toJson([[1,2,3],[2,2],[1]])
+//        def gameBoard2 = JsonOutput.toJson([[5],[6,6],[]])
 //
 //        //saved_game
 //        sql.execute("""
 //            INSERT INTO saved_game (user_board, opponent_board, turn, user_id, opponent_id) VALUES
-//            ('user-board', 'opponent-board', 3, 1, 1);
+//            ('$gameBoard1', '$gameBoard2', 3, 1, 1);
 //        """)
 //
 //        //saved_game
