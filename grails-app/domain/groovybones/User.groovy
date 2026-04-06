@@ -2,7 +2,7 @@ package groovybones
 /**
  * Represents a User DB entity in MySQL table, 'user'
  * Implicitly maps User class to 'user' table
- * One-to-Many relationship with SavedGame
+ * Flat one-to-Many relationship with SavedGame
  */
 class User {
     String cognitoSub
@@ -12,12 +12,13 @@ class User {
     int totalScore
 
 
-    //validates fields beforehand - cognitoSub is removed from in-memory retrievals and can't be validated
+    //validates fields beforehand
     static constraints = {
+        cognitoSub nullable: false, blank: false, unique: true, updatable: false
         username nullable: false, blank: false, maxSize: 25         //assuming that cognito handles duplicate usernames
-        wins nullable: false, min: 0
-        losses nullable: false, min: 0
-        totalScore nullable: false, min: 0
+        wins min: 0
+        losses min: 0
+        totalScore min: 0
     }
 
     //DB datatype mappings
