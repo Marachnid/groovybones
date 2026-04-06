@@ -24,76 +24,35 @@ class OpponentServiceIntegrationSpec extends Specification {
     DataSource dataSource
 
     Opponent opponent
-    OpponentService opService
+    OpponentService opponentService
+    Map newValues
 
 
     /** basic setup method to instantiate objects and refresh test schema*/
     void setup() {
         log.info('Running Integration Tests')
         new SQLRunner(dataSource).refreshDB()
-
-        opService = new OpponentService()
-        opponent = Opponent.get(1)
-        log.info("Opponent Properties: ${opponent.properties} - OpponentID: ${opponent.id}")
-    }
-
-    /** tests that opponent difficulty update is ignored */
-    void "updateOpponent() ignores updates to difficulty"() {
-        when: 'opponent difficulty is changed'
-        opponent.difficulty = 2
-
-        and: 'the opponent is updated'
-        opponent = opService.updateOpponent(opponent)
-
-        then: 'opponent difficulty remains unchanged'
-        opponent.difficulty == 1
     }
 
     /** tests an invalid id fails to find existing user */
-    void "updateOpponent() fails to find id to update"() {
-        when: 'opponent id is invalid'
-        opponent.id = 100
-
-        and: 'opponent tries to update'
-        opponent = opService.updateOpponent(opponent)
-
-        then: 'updateOpponent() throws null exception'
-        thrown(NullPointerException)
+    void "updateOpponent() returns false for unfound opponent"() {
+        expect: 'opponent tries to update'
+        !opponentService.updateOpponent([id: -1, wins: 10])
     }
 
     /** tests successfully updating opponent wins, losses, totalScore */
     void "updateOpponent() successfully updates opponent"() {
         when: 'opponent wins, losses, totalScore is updated'
-        opponent.wins = 1
-        opponent.losses = 1
-        opponent.totalScore = 1
+        newValues = [id: 1, wins: 2, losses: 2, totalScore: 101]
 
         and: 'opponent is updated and reassigned to a temp object'
-        Opponent newOp = opService.updateOpponent(opponent)
+        final boolean updated = opponentService.updateOpponent(newValues)
+        opponent = Opponent.get(1)
 
         then: 'temp opponent should match wins, losses, totalScore'
-        newOp.id == opponent.id
-        newOp.wins == opponent.wins
-        newOp.losses == opponent.losses
-        newOp.totalScore == opponent.totalScore
-    }
-
-    /** tests overall successful update that results in difficulty ignored */
-    void "updateOpponent() updates wins, losses, totalScore and ignores difficulty"() {
-        when: 'opponent wins, losses, totalScore, and difficulty is updated'
-        opponent.wins = 1
-        opponent.losses = 1
-        opponent.totalScore = 1
-        opponent.difficulty = 2
-
-        and: 'opponent is updated and reassigned to a temp object'
-        Opponent newOp = opService.updateOpponent(opponent)
-
-        then: 'temp opponent should match wins, losses, totalScore, but not difficulty'
-        newOp.id == opponent.id
-        newOp.wins == opponent.wins
-        newOp.losses == opponent.losses
-        newOp.totalScore == opponent.totalScore
-        newOp.difficulty != opponent.difficulty
+        updated
+        opponent.wins == newValues.wins
+        opponent.losses == newValues.losses
+        opponent.totalScore == newValues.totalScore
     }
 }

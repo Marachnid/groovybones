@@ -13,7 +13,7 @@ class OpponentServiceController {
     static final responseFormats = ['json']
     final String key = grailsApplication.config.getProperty('apiKey.secretkey', String)
     final Map forbiddenError = [errorText: 'Forbidden']
-    OpponentService opService
+    OpponentService opponentService
     String requestKey
     Opponent opponent
 
@@ -78,6 +78,7 @@ class OpponentServiceController {
         }
 
         final json = request.JSON
+        log.info("JSON body received: ${json.toString()}")
 
         //if missing a JSON body, respond with 400, else assign opponent to JSON body
         if (!json) {
@@ -87,14 +88,13 @@ class OpponentServiceController {
         }
 
         //return 500 if failing to find/update user
-        OpponentService opService = new OpponentService()
-        if (!opService.updateOpponent(json.id as Long, json as Map)) {
+        if (!opponentService.updateOpponent(json as Map)) {
             log.info("Updated failed for ID: ${json.id}, values: ${json.toString()}")
-            respond([errorText: opponent.errors], status: 500)
+            respond([errorText: 'Internal Error'], status: 500)
             return
         }
 
         //successful update
-        respond status: 201
+        respond([message: 'Update successful'], status: 201)
     }
 }

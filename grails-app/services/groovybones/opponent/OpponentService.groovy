@@ -16,23 +16,26 @@ class OpponentService {
      * @param id opponent id
      * @param newValues updated opponent values
      */
-    boolean updateOpponent(Long id, Map newValues) {
-        log.info('OpponentService updateOpponent()')
+    boolean updateOpponent(Map newValues) {
+        log.info("OpponentService updateOpponent() for ID: ${newValues.id}")
 
-        Opponent opponent = Opponent.get(id)
-        if (!opponent) return false
-
-        log.info("Oser ID: ${opponent.id} found, new values: ${newValues.toString()}")
-        opponent.properties = newValues
-
-
-        if (!opponent.validate()) {
-            log.info('Invalid data')
+        Opponent opponent = Opponent.get(newValues.id)
+        if (!opponent) {
+            log.info('Opponent not found')
             return false
         }
 
-        opponent.save(flush: true)
-        log.info("Update successful")
-        true
+        opponent.properties = newValues
+        log.info("New Opponent properties: ${opponent.properties.toString()}")
+
+        try {
+            opponent.save(flush: true, failOnError: true)
+            log.info('Update successful')
+            true
+
+        } catch (e) {
+            log.info("Update failed: $e")
+            false
+        }
     }
 }

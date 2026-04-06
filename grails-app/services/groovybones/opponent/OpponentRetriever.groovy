@@ -11,7 +11,7 @@ import org.slf4j.LoggerFactory
  */
 class OpponentRetriever {
     private static final Logger log = LoggerFactory.getLogger(OpponentRetriever)
-    private final String path = 'http://localhost:8080/opponent'
+    String path = 'http://localhost:8080/opponent'
 
     int responseCode
 
@@ -29,7 +29,8 @@ class OpponentRetriever {
         RequestCaller requestCaller = new RequestCaller(apiAuthKey: authKey, path: newPath)
 
         Map response = requestCaller.callGET()
-        log.info("Response code: ${response.responseCode}")
+        responseCode = response.responseCode
+        log.info("Response code: $responseCode")
 
         if (response.responseCode != 200) return null
         Map body = response.body as Map
@@ -48,8 +49,11 @@ class OpponentRetriever {
 
         RequestCaller requestCaller = new RequestCaller(apiAuthKey: authKey, path: path)
 
+        log.info('Making Request')
+
         Map response = requestCaller.callGET()
-        log.info("Response code: ${response.responseCode}")
+        responseCode = response.responseCode
+        log.info("Response code: $responseCode")
 
         if (response.responseCode != 200) return null
         ArrayList<Map> body = response.body as ArrayList<Map>
@@ -73,7 +77,8 @@ class OpponentRetriever {
 
         RequestCaller requestCaller = new RequestCaller(apiAuthKey: authKey, path: path, body: newValues)
         Map response = requestCaller.callPOST()
-        log.info("Response code: ${response.responseCode}")
+        responseCode = response.responseCode
+        log.info("Response code: $responseCode")
 
         if (response.responseCode != 201) log.info("Update failed for ID: $id")
         else log.info('Update successful')

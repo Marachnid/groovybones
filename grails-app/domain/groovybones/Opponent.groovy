@@ -2,7 +2,7 @@ package groovybones
 /**
  * Represents an Opponent DB entity in MySQL table, 'opponent'
  * Implicitly maps Opponent class to 'opponent' table
- * One-to-Many relationship with SavedGame
+ * Flat one-to-Many relationship with SavedGame
  */
 class Opponent {
     String username
@@ -14,11 +14,11 @@ class Opponent {
 
     //enforce DB constraints
     static constraints = {
-        username nullable: false, blank: false, maxSize: 25, updatable: false, unique: true
-        difficulty nullable: false, inList: [1,2,3], updatable: false
-        wins nullable: false, min: 0
-        losses nullable: false, min: 0
-        totalScore nullable: false, min: 0
+        username blank: false, maxSize: 25, updatable: false, unique: true
+        difficulty inList: [1,2,3], updatable: false
+        wins min: 0
+        losses min: 0
+        totalScore min: 0
     }
 
     //define datatype mappings
