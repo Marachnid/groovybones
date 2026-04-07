@@ -2,24 +2,20 @@ package user
 
 import grails.gorm.transactions.Rollback
 import grails.testing.mixin.integration.Integration
-import groovybones.Opponent
 import groovybones.SavedGame
 import groovybones.User
+import groovybones.savedGame.SavedGameService
 import groovybones.user.UserService
-import opponent.OpponentRetrieverIntegrationSpec
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
-import spock.lang.Shared
 import spock.lang.Specification
 import spock.lang.Stepwise
 import util.SQLRunner
 import javax.sql.DataSource
 
 /**
- * Performs integration tests for user domain persistence operations
+ * Performs integration tests for User domain persistence operations
  * Each test transaction rolled back after execution
- * Instantiations kept within test methods to make in-memory detachment from persistence layer clear
- * Users are detached from persistence layer to prevent cognitoSub ever making it to front end
  */
 @Integration
 @Rollback
@@ -27,250 +23,227 @@ import javax.sql.DataSource
 class UserServiceIntegrationSpec extends Specification {
     private static final Logger log = LoggerFactory.getLogger(UserServiceIntegrationSpec)
 
-    @Shared
     DataSource dataSource   //secrets file
-    UserService userService = new UserService()
+    UserService userService
+    SavedGameService savedGameService
+    User user
+    User existing
+    ArrayList<User> users
 
 
     /**
-     * default setup method to refresh DB before tests run
+     * refresh DB before tests run
      * entities generated in setup aren't rolled back - persist post-test
-     * arbitrary opponents added in SQLRunner
+     * generate default records
      */
     void setup() {
-        log.info('Running Integration Tests')
+        log.info('Running Integration Test Setup')
         new SQLRunner(dataSource).refreshDB()
-
-        //user
-        userService.createUser('123', 'TEST-USER')
-        log.info(User.findByCognitoSub('123').properties.toString())
-
-        //savedGame
-        User user = userService.getUserById(1)
-        Opponent opponent = Opponent.get(1)
-        SavedGame savedGame = new SavedGame(user: user, opponent: opponent, userBoard: 'user-board', opponentBoard: 'opponent-board', turn: 1)
-        userService.addSavedGame(user, savedGame)
-
-        log.info(user.properties.toString())
-        log.info(opponent.properties.toString())
-        log.info(savedGame.properties.toString())
     }
 
 
-    /*
-       ======================= getUserById() =======================
-     */
-    /** tests successfully returning a user by ID with null in-memory cognitoSub */
-    void "getUserById() returns User by ID with null cognitoSub"() {
-        when: 'a user is retrieved'
-        final def id = 1
-        User user = userService.getUserById(id)
+/*
+  ======================= createUser(String cognitoSub, Long id) =======================
+*/
+    /** successfully create a new user and return user header */
+    void "createUser() creates and returns new user ID and username"() {
+        when: 'a new user is ready to be created'
+        final String username = 'TEST-USER'
+        final String cognitoSub = 'test123'
 
-        then: 'the user is not null and cognitoSub is nullified'
-        user
-        !user.cognitoSub
-        user.id == id
+        and: 'the user is created, and an ID and Username are returned'
+        final Map userHeader = userService.createUser(cognitoSub, username)
+        existing = User.get(userHeader?.id)
+
+        then: 'user headers match DB data'
+        userHeader.id
+        userHeader.username == username
+        existing.id == userHeader.id
+        existing.cognitoSub == cognitoSub
     }
 
-    /** tests successfully returning a null user if ID not found*/
-    void "getById() returns null user if ID not found"() {
-        expect: 'user queried with unfound ID returns null'
-        !userService.getUserById(10)
+    /** successfully create a new user with default values */
+    void "createUser() creates user and sets default values"() {
+        when: 'a new user is ready to be created'
+        final String username = 'TEST-USER'
+        final String cognitoSub = 'test123'
+
+        and: 'the user is created'
+        final Long id = userService.createUser(cognitoSub, username).id
+        existing = User.get(id)
+
+        then: 'default values for wins, losses, totalScore are created'
+        existing.wins == 0
+        existing.losses == 0
+        existing.totalScore == 0
     }
 
-
-    /*
-      ======================= updateUser() =======================
-    */
-    /** tests successfully updating user without instantiating cognitoSub */
-    void "updateUser() returns true on successful update"() {
-        when: 'user is found for update'
-        User user = userService.getUserById(1)
-
-        then: 'update returns true and cognitoSub is null'
-        userService.updateUser(user)
-        user.cognitoSub == null
-    }
-
-    /** tests successfully returning false if fails to find user */
-    void "updateUser() returns false for not ID found"() {
-        when: 'an unknown user ID attempts to update'
-        User user = userService.getUserById(1)
-        user.id = 100
-
-        then: 'update returns false'
-        !userService.updateUser(user)
-    }
-
-    /** tests successfully returning false if update fails to validate */
-    void "updateUser() returns false for validation failure"() {
-        when: 'a user has an invalid property'
-        User user = userService.getUserById(1)
-        user.wins = -10
-
-        then: 'update returns false'
-        !userService.updateUser(user)
-    }
-
-    /** tests successfully ignoring update to cognitoSub */
-    void "updateUser() ignores updates to cognitoSub"() {
-        when: 'a user cognitoSub changes'
-        String cognitoSub = User.get(1).cognitoSub
-        User user = userService.getUserById(1)
-        user.cognitoSub = 'BAD-KEY'
-
-        and: 'we update the user'
-        userService.updateUser(user)
-
-        then: 'the cognitoSub remains unchanged'
-        User.get(1).cognitoSub == cognitoSub
-    }
-
-    /** tests successfully updating user wins, losses, totalScore */
-    void "updateUser() DB updates match in-memory updates"() {
-        when: 'user values are changed'
-        User user = userService.getUserById(1)
-
-        def newValues = [wins: 5, losses: 10, totalScore: 100]
-        user.wins = newValues.wins
-        user.losses = newValues.losses
-        user.totalScore = newValues.totalScore
-
-        and: 'the user is updated'
-        userService.updateUser(user)
-
-        and: 'we grab the user from the DB to verify'
-        user = userService.getUserById(user.id)
-
-        then: 'db record reflects the changes'
-        user.wins == newValues.wins
-        user.losses == newValues.losses
-        user.totalScore == newValues.totalScore
-    }
-
-
-    /*
-      ======================= createUser() =======================
-    */
-    /** tests successfully creating a new user with default values */
-    void "createUser() creates and returns new user with default values"() {
-        when: 'a new user is created'
-        String username = 'TEST-USER-2'
-        User user = userService.createUser('test-sub', username)
-
-        then: 'new user is initialized with default values and nullified in-memory cognitoSub'
-        user.id
-        user.username == username
-        user.wins == 0
-        user.losses == 0
-        user.totalScore == 0
-        !user.cognitoSub
-    }
-
-    /** tests successfully returning null user on failed validation */
-    void "createUser() returns null for invalid user"() {
+    /** successfully return null on failed validation */
+    void "createUser() fails to validate and returns null for invalid user"() {
         expect: 'null when adding blank cognitoSub or username'
         !userService.createUser('', 'test-new')
         !userService.createUser('1234567', '')
     }
 
-
-    /*
-      ======================= deleteUser() =======================
-    */
-    /** tests successfully deleting an existing user */
-    void "deleteUser() returns true and removes user record"() {
-        when: 'a user is ready to be deleted'
-        long id = User.findAll()[0].id
-
-        then: 'deletion returns true, null record in db'
-        userService.deleteUser(id)
-        !User.get(id)
+    /** successfully return null for duplicate cognitoSubs */
+    void "createUser() fails to validate"() {
+        expect: 'a user with a duplicate cognitoSub fails to be created'
+        userService.createUser('duplicateSub', 'test-user1')
+        !userService.createUser('duplicateSub', 'test-user2')
     }
 
-    /** tests successfully returning false if user not found */
+
+/*
+  ======================= updateUser(Long id, Map newValues) =======================
+*/
+    /** successfully update updatable user values */
+    void "updateUser() updates user"() {
+        when: 'a user attempts to update updatable values'
+        user = User.getAll()[0]
+        final Map newValues = [username: 'newUser', wins: 3, losses: 5, totalScore: 200]
+
+        and: 'the user is updated'
+        final boolean updated = userService.updateUser(user.id, newValues)
+        existing = User.get(user.id)
+
+        then: 'true is returned and DB data matches new values'
+        updated
+        existing.username == newValues.username
+        existing.wins == newValues.wins
+        existing.losses == newValues.losses
+        existing.totalScore == newValues.totalScore
+    }
+
+    /** successfully ignore update to cognitoSub */
+    void "updateUser() fails to validate cognitoSub"() {
+        when: 'a user has their cognitoSub changed'
+        user = User.getAll()[0]
+        final Map newValues = [cognitoSub: 'newSub']
+
+        then: 'the update to cognitoSub is ignored'
+        userService.updateUser(user.id, newValues)
+        !User.findByCognitoSub(newValues.cognitoSub)
+    }
+
+
+/*
+  ======================= getUserStats(Long id) =======================
+*/
+    /** successfully return user stats */
+    void "getUserStats() returns wins, losses, and totalScore"() {
+        when: 'a user retrieves their stats'
+        user = User.getAll()[0]
+        final Map stats = userService.getUserStats(user.id)
+
+        then: 'stats equal DB data'
+        stats.wins == user.wins
+        stats.losses == user.losses
+        stats.totalScore == user.totalScore
+    }
+
+    /** successfully return null stats for unfound user */
+    void "getUserStats() returns null for unfound user"() {
+        expect: 'an unfound id returns null'
+        !userService.getUserStats(-1)
+    }
+
+
+/*
+  ======================= getUserByCognitoSub(String sub, String username) =======================
+*/
+    /** successfully return user ID and username when found by cognitoSub */
+    void "getUserByCognitoSub() finds user and returns ID and username"() {
+        when: 'a user is found by cognitoSub'
+        existing = User.getAll()[0]
+        final String cognitoSub = existing.cognitoSub
+        final Map userHeader = userService.getUserByCognitoSub(cognitoSub, null)
+
+        then: 'existing cognitoSub is unchanged '
+        existing.cognitoSub == User.get(existing.id).cognitoSub
+        userHeader.id == existing.id
+        userHeader.username == existing.username
+    }
+
+    /** successfully found user does not create new user */
+    void "getUserByCognitoSub() does not create new user for found user"() {
+        when: 'a user is found by cognitoSub'
+        users = User.getAll()
+        user = users[0]
+        final int size = users.size()
+        final String cognitoSub = user.cognitoSub
+
+        userService.getUserByCognitoSub(cognitoSub, null)
+
+        then: 'new user is not created'
+        User.findAllByCognitoSub(cognitoSub).size() == size
+    }
+
+    /** failing to find user creates new user */
+    void "getUserByCognitoSub() creates new user when user unfound"() {
+        when: 'a user is ready to be queried by cognitoSub'
+        final Map userValues = [cognitoSub: 'new-Sub', username: 'NEW-USER']
+        final int size = User.getAll().size()
+
+        and: 'the existing cognitoSub returns null'
+        assert(!User.findByCognitoSub(userValues.cognitoSub))
+
+        and: 'the cognitoSub is queried'
+        Map userHeaders = userService.getUserByCognitoSub(userValues.cognitoSub, userValues.username)
+        existing = User.get(userHeaders.id)
+
+        then: 'a new user is created'
+        User.getAll().size() == size + 1
+        existing.id == userHeaders.id
+        existing.username == userHeaders.username
+        existing.cognitoSub == userValues.cognitoSub
+        existing.username == userValues.username
+    }
+
+    /** successfully return null for invalid parameters */
+    void "getUserByCognitoSub() returns null for invalid parameters"() {
+        expect: 'null for invalid parameters'
+        !userService.getUserByCognitoSub('', 'test-user')
+        !userService.getUserByCognitoSub('xxxxxxx', '')
+    }
+
+
+/*
+  ======================= deleteUser(Long id) =======================
+*/
+    /** successfully return true for deleting user */
+    void "deleteUser() returns true for deleting a user"() {
+        when: 'a user is found to be deleted'
+        users = User.getAll()
+        final int size = users.size()
+        user = users[0]
+
+        and: 'the user is deleted'
+        final boolean deleted = userService.deleteUser(user.id)
+
+        then: 'true is returned and the user is absent from DB records'
+        deleted
+        User.getAll().size() == size - 1
+        !User.get(user.id)
+    }
+
+    /** successfully delete all saved games of user upon deleting user */
+    void "deleteUser() deletes all user saved games"() {
+        when: 'a user with a saved game is deleted'
+        user = User.getAll()[0]
+        final ArrayList userBoard = [[1,1],[2,3],[6]]
+        final ArrayList opBoard = [[],[4,5],[3]]
+        final Map sg = [userBoard: userBoard, opponentBoard: opBoard, userId: user.id, opponentId: 1, turn: 1]
+        savedGameService.addSavedGame(sg)
+
+
+        then: 'the user is deleted and no saved games exist for user'
+        userService.deleteUser(user.id)
+        SavedGame.findAllByUserId(user.id).size() == 0
+    }
+
+    /** successfully return false for user not found */
     void "deleteUser() returns false for user not found"() {
-        expect: 'an unfound user to return false'
-        !userService.deleteUser(100)
-    }
-
-    /** tests successfully removing savedGame db children */
-    void "deleteUser() deletes child savedGames"() {
-        when: 'a user is deleted'
-        long id = 1
-        userService.deleteUser(id)
-
-        then: 'no SavedGame entities with userId exist in db'
-        !SavedGame.findAll(userId: id)
-    }
-
-
-    /*
-      ======================= addSavedGame() =======================
-     */
-    /** tests successfully adding a new saved game */
-    void "addSavedGame() adds a new SavedGame to user"() {
-        when: 'a saved game body is built'
-        User user = userService.getUserById(1)
-        Opponent opponent = Opponent.get(1)
-        Map sg = [user: user, opponent: opponent, userBoard: 'user-board', opponentBoard: 'opponent-board', turn: 7]
-
-        and: 'the saved game is added and returned'
-        int oldSize = user.savedGames.size()
-        SavedGame savedGame = userService.addSavedGame(user, new SavedGame(sg))
-
-        then: 'an ID is attached and created values match original values'
-        savedGame.id
-        User.get(1).savedGames.size() == oldSize + 1
-        savedGame.userId == sg.user.id
-        savedGame.opponentId == sg.opponent.id
-        savedGame.userBoard == sg.userBoard
-        savedGame.opponentBoard == sg.opponentBoard
-        savedGame.turn == sg.turn
-    }
-
-    /** tests successfully returning null for failed savedGame add */
-    void "addSavedGame() returns null on adding bad values"() {
-        when: 'a saved game attempts to be added'
-        User user = userService.getUserById(1)
-        Opponent opponent = Opponent.get(1)
-        Map sg = [user: user, opponent: opponent, userBoard: 'user-board', opponentBoard: 'opponent-board', turn: 7]
-
-        then: 'return null for failed adds'
-        !userService.addSavedGame(user, new SavedGame(sg).tap { it.opponent.id = null })
-        !userService.addSavedGame(user, new SavedGame(sg).tap { it.user.id = null })
-        !userService.addSavedGame(user, new SavedGame(sg).tap { it.user.totalScore = -100 })
-        !userService.addSavedGame(user, new SavedGame(sg).tap { it.opponentBoard = null })
-        !userService.addSavedGame(user, new SavedGame(sg).tap { it.userBoard = null })
-    }
-
-
-    /*
-      ======================= deleteSavedGame() =======================
-    */
-    /** tests successfully deleting a saved game */
-    void "deleteSavedGame() deletes a savedGame"() {
-        when: 'a user finds a savedGame to delete'
-        User user = userService.getUserById(1)
-        SavedGame savedGame = user.savedGames[0]
-
-        and: 'and they delete it'
-        savedGame = userService.deleteSavedGame(user, savedGame)
-
-        then: 'deleted savedGame ID not found in-memory or in db'
-        !user.savedGames.find {it.id == savedGame.id}
-        !SavedGame.get(savedGame.id)
-    }
-
-    /** tests successfully retuning null for failed deletions */
-    void "deleteSavedGame() returns null if fail to delete"() {
-        when: 'a user finds a savedGame to delete'
-        User user = userService.getUserById(1)
-        SavedGame savedGame = User.get(1).savedGames[0]
-
-        then: 'return null for failed delete attempts'
-        !userService.deleteSavedGame(user.tap{it.id = 100}, savedGame)
-        !userService.deleteSavedGame(user.tap{it.totalScore = -10}, savedGame)
-        !userService.deleteSavedGame(user, savedGame.tap {it.id = 100})
+        expect: 'unfound IDs to return false'
+        !userService.deleteUser(-1)
     }
 }

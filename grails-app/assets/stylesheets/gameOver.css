@@ -1,0 +1,51 @@
+.nav-title {
+    animation: none;
+}
+
+.menu-box {
+    flex-direction: column;
+    align-items: center;
+}
+
+.stats-card {
+    border: none;
+    pointer-events: none;
+    opacity: 0.9;
+}
+
+.stats-column {
+    display: flex;
+    flex: auto;
+    flex-direction: column;
+    justify-content: center;
+    text-align: center;
+}
+
+.stats-label {
+    font-size: 3.25rem;
+    color: var(--text-dim);
+    font-family: var(--nav-font), serif;
+}
+
+.stats-column .card-value {
+    text-decoration: underline var(--neon-primary-glow) 2px;
+    text-shadow: 0 0 10px var(--neon-primary-glow);
+    animation: primaryFlicker 1.5s infinite;
+}
+
+
+.winner-card, .loser-card {cursor: default}
+.winner-card .card-value {text-decoration: underline 2px}
+.loser-card:hover {
+    transform: none;
+    border-color: var(--neon-primary-glow); /* remove extra glow from normal hover*/
+    box-shadow: none;
+}
+
+.character-label {
+    display: block;
+    max-width: 100%;
+    white-space: nowrap;
+    overflow: hidden;
+    font-size: clamp(0.6rem, 2.2vw, 1.75rem);
+}

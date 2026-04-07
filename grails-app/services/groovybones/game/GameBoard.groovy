@@ -1,11 +1,11 @@
-package groovybones
+package groovybones.game
 
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 
 /**
  * Class defines the gameboard used to play GroovyBones
- * Defines a board object and all related gameplay operations against board for both player and game-ai opponent
+ * Defines a board object and all related gameplay operations against board for both user and game-ai opponent
  * Defines and orchestrates opponent difficulty, actions, and priorities
  */
 class GameBoard {
@@ -20,7 +20,7 @@ class GameBoard {
     /**
      * Appends a new value to a board's column if expected column.size <= max
      * @param i index position of column adding to
-     * @param number number to add to board column - playerBoard[i]
+     * @param number number to add to board column - userBoard[i]
      * @return boolean true if append, false if not
      */
     boolean addNumber(int index, int number) {

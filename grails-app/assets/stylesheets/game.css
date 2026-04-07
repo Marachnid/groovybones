@@ -1,202 +1,330 @@
-/* ============================
-   Layout
-   ============================ */
+/*__________  general   __________*/
+.util-navbar {display: none}
+.nav-title {animation: none}
 
-.content-container {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 2rem;
+/* main game item sizes */
+.game-board {
+    height: 30vmin;
+    width: 30vmin;
+}
+.game-col.left,
+.game-col.right {
+    max-width: 30vmin;
+    width: 100%;
+}
+.character-card {
+    height: 30vmin;
+    width: 20vmin;
+    font-weight: bold;
+    border: 2px solid var(--border-soft);
+}
+.character-card .character-label {
+    white-space: normal;
+    word-break: break-word;
+    text-align: center;
+
+    font-size: clamp(0.6rem, 1.5vw, 2.5rem);
+    flex: 0 1 30%;
+    padding: 0.25rem 0.5rem;
 }
 
+.opponent-column td, .character-card {cursor: default}
+
+.character-card:hover {
+    transform: none;
+    box-shadow: none;
+    border-color: var(--border-soft);
+}
+
+.character-card.highlightTurn:hover, .highlightTurn {
+    transform: scale(1.08);
+    border-color: var(--neon-primary);
+    box-shadow:
+            0 0 12px var(--neon-primary-glow),
+            0 0 25px var(--neon-primary-glow);
+}
+
+
+/*__________  game area   __________*/
 #game-area {
     display: flex;
     flex-direction: column;
-    gap: 2rem;
-    align-items: center;
-}
-
-/* Each row (opponent / player) */
-.game-container {
-    display: flex;
-    flex-direction: row;
-    justify-content: center;
-    align-items: center;
-    gap: 2rem;
     width: 100%;
+    align-items: center;
 }
 
-/*!* Row shifts for character *!*/
-/*.opponent-row {*/
-/*    transform: translateX(45px);*/
-/*}*/
+.game-row {
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+    align-items: center;
+    width: 100%;
+    gap: 2rem;
+}
 
-/*.player-row {*/
-/*    transform: translateX(-45px);*/
-/*}*/
-
-/* ============================
-   Info Slots
-   ============================ */
-
-.info-left,
-.info-right {
-    flex: 1 1 0;
+.game-col {
     display: flex;
     justify-content: center;
     align-items: center;
 }
 
-/* Card styling */
-.info-card {
-    background: #f7f7f7;
-    border: 2px solid #333;
-    border-radius: 8px;
-    padding: 1rem 1.25rem;
-    min-width: 160px;
-    box-shadow: 0 4px 10px rgba(0,0,0,0.15);
-
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 0.25rem;
+.menu-box {
+    padding-top: 0;
 }
 
-.info-card h3 {
-    margin: 0.25rem 0;
-}
 
-.info-card .thinking {
-    font-style: italic;
-    font-size: 0.9rem;
-    margin-top: 0.5rem;
-}
-
-/* ============================
-   Boards
-   ============================ */
-
-.game-board {
-    flex: 0 0 auto;
-    border-collapse: collapse;
-}
-
-.game-board td {
-    width: 10vmin;
-    height: 10vmin;
-    max-width: 100px;
-    max-height: 100px;
-
-    outline: 2px solid black;
-    outline-offset: -2px;
-
-    text-align: center;
-    vertical-align: middle;
-    font-size: 5vmin;
-    font-weight: bold;
-    transition: background-color 0.2s ease;
-}
-
-.game-board tr:hover td {
-    background-color: #f0f0f0;
-}
-
-/* Interaction cues */
-.player-column {
-    cursor: pointer;
-}
-
-.opponent-column {
-    cursor: default;
-}
-
-/* Mirroring logic */
+/*__________  gameboards   __________*/
+/* mirror logic for gameboards */
 #opponent-board,
 #player-board,
 #opponent-board td,
-#player-board td {
-    transform-origin: center;
-}
+#player-board td {transform-origin: center}
+#player-board {transform: rotate(90deg) scaleY(-1)}
+#opponent-board {transform: rotate(-90deg)}
+#opponent-board td {transform: rotate(90deg)}
+#player-board td {transform: rotate(90deg) scaleY(-1)}
 
-#player-board {
-    transform: rotate(90deg) scaleY(-1);
-}
-
-#opponent-board {
-    transform: rotate(-90deg);
-}
-
-#opponent-board td {
-    background-color: #fafafa;
-    transform: rotate(90deg);
-}
-
-#player-board td {
-    background-color: #fff;
-    transform: rotate(90deg) scaleY(-1);
-}
-
-/* ============================
-   Navbar
-   ============================ */
-
-.dropdown-navbar {
-    background-color: #222;
-    color: #fff;
-    font-family: Arial, sans-serif;
-}
-
-.navbar-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 12px 16px;
+.player-column:hover td {
+    background: var(--highlight-soft);
+    box-shadow: inset 0 0 10px var(--neon-primary-glow);
     cursor: pointer;
-    user-select: none;
-    font-size: 20px;
+}
+
+.game-board {
+    background: var(--bg-panel);
+    border-radius: var(--radius);
+    overflow: hidden;
+    border-collapse: separate;
+    border-spacing: 6px;
+    border: none;
+}
+
+.game-board td {
+    width: 9vmin;
+    height: 9vmin;
+    max-width: 90px;
+    max-height: 90px;
+    /*something else might be nice for board numbers - maybe selectors for styling types??*/
+    /*font-family: var(--nav-font), serif;*/
+
+    text-align: center;
+    vertical-align: middle;
+
+    font-size: 5vmin;
+    font-weight: bold;
+
+    transition:
+            background var(--transition-fast),
+            color var(--transition-fast),
+            box-shadow var(--transition-fast);
+
+    background:
+            radial-gradient(
+                    closest-side,
+                    rgba(0,0,0,0) 0%,
+                    rgba(0,0,0,0.02) 55%,
+                    rgba(0,0,0,0.04) 75%,
+                    rgba(0,0,0,0.08) 100%
+            ),
+            var(--text-main);
+
+    border-radius: var(--radius);
+    color: var(--bg-deep);
+}
+
+
+/*__________  score row   __________*/
+.score-row {
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+    width: 100%;
+    align-items: center;
+    color: var(--text-main);
+    font-family: var(--body-font), serif;
+    font-size: clamp(1rem, 2vw, 2rem);
+}
+
+.glyph {
+    font-size: 3.5rem;
+    color: var(--neon-primary-glow);
+}
+
+.score-right .glyph {transform: scaleX(-1)}
+.score-left, .score-right {
+
+}
+.score-left {
+    text-align: left;
+    display: flex;
+    gap: 0.5rem;
+    align-items: center;
+    padding-left: 6rem;
+}
+
+.score-center {
+    text-align: center;
+}
+
+.score-right {
+    text-align: right;
+    display: flex;
+    gap: 0.5rem;
+    justify-content: flex-end;
+    align-items: center;
+    padding-right: 6rem;
+}
+
+.score-center .card-value {
+    font-size: clamp(2.5rem, 6vw, 6rem);
+    text-shadow: 0 0 10px var(--neon-primary-glow);
+    display: inline-block;
+    transform: translateY(-0.15em);
+    animation: primaryFlicker 5s infinite;
+}
+
+.score-left .card-value,
+.score-right .card-value {
+    font-size: clamp(1.5rem, 3vw, 3.5rem);
+    font-family: var(--body-font), serif;
+    color: var(--text-main);
+    text-shadow: 0 0 10px var(--neon-primary-glow);
     font-weight: bold;
 }
 
-.arrow::after {
-    content: ">";
-    margin-left: 8px;
-    transition: transform 0.2s ease;
-}
 
-.menu-toggle:checked + .navbar-header .arrow::after {
-    content: "v";
-}
 
-.menu-toggle {
+/*__________  info-panel   __________*/
+.info-panel {
     display: none;
+    opacity: 0;
+    max-height: 0;
+    overflow: hidden;
+    pointer-events: none;
+    transition: opacity 0.3s ease, max-height 0.3s ease;
+
+    width: 20vmin;
 }
 
-.navbar-menu {
-    display: none;
-    background-color: #333;
+.info-panel.active {
+    display: flex;
+    flex-direction: column;
+    background: var(--bg-panel);
+
+    opacity: 1;
+    max-height: 500px;
+    pointer-events: auto;
 }
 
-.menu-toggle:checked ~ .navbar-menu {
-    display: block;
+.info-panel ul {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    max-width: 100%;
 }
 
-.navbar-menu ul {
+.info-panel li {
+    font-size: 1.5rem;
+    color: var(--text-main);
+    font-family: var(--nav-font), serif;
+    overflow-wrap: break-word;
+    word-break: break-word;
+    cursor: default;
+
+    animation: primaryFlicker 10s infinite;
+}
+
+@media (max-width: 1000px) {
+    .info-panel li {
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        max-width: 100%;
+        display: block;
+        font-size: 0.5rem;
+    }
+}
+
+
+/*__________  panel bar   __________*/
+.panel-toggle-bar {
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+    align-items: center;
+    width: 100%;
+}
+
+.panel-col {
+    display: flex;
+    align-items: center;
+}
+
+.panel-col.left {justify-content: flex-start}
+.panel-col.right {justify-content: flex-end}
+.panel-col.center {justify-content: center}
+
+.panel-col.left ul,
+.panel-col.right ul {
+    display: flex;
+    gap: 5rem;
     list-style: none;
     margin: 0;
     padding: 0;
 }
 
-.navbar-menu li {
-    border-top: 1px solid #444;
-}
-
-.navbar-menu li a {
-    display: block;
-    padding: 10px 16px;
-    color: #fff;
+.panel-col.left li,
+.panel-col.right li {
+    color: var(--text-main);
+    font-family: var(--nav-font), serif;
+    cursor: pointer;
+    font-size: 1.75rem;
     text-decoration: none;
+
+    transition:
+            transform var(--transition-fast),
+            text-shadow var(--transition-fast),
+            color var(--transition-fast);
 }
 
-.navbar-menu li a:hover {
-    background-color: #444;
+.panel-col.left li:hover,
+.panel-col.right li:hover {
+    transform: scale(1.35);
+    color: var(--neon-primary);
+    text-shadow:
+            0 0 15px var(--text-main)
+            0 0 20px var(--neon-primary-glow),
+            0 0 30px var(--neon-primary-glow);
+}
+
+.panel-col.left li a,
+.panel-col.right li a {
+    text-decoration: none;
+    color: inherit;
+    text-shadow: inherit;
+}
+
+#panel-symbol {
+    font-size: 5rem;
+    cursor: pointer;
+    color: var(--neon-primary);
+    transition:
+            transform var(--transition-fast),
+            text-shadow var(--transition-fast);
+}
+
+#panel-symbol:hover {
+    transform: scale(1.25);
+    text-shadow:
+            0 0 20px var(--neon-primary-glow),
+            0 0 30px var(--neon-primary-glow);
+}
+
+.panel-toggle-bar.collapsed .panel-col.left,
+.panel-toggle-bar.collapsed .panel-col.right {visibility: hidden}
+
+.panel-toggle-bar.collapsed #panel-symbol {transform: rotate(180deg)}
+
+
+.panel-toggle.active {
+    color: var(--neon-primary);
+    transform: scale(1.35);
+    text-shadow: 0 0 8px var(--neon-primary);
 }

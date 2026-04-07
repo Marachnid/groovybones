@@ -1,31 +1,58 @@
 <%@ page contentType="text/html;charset=UTF-8" %>
-<!doctype html>
-<html>
-<head>
-  %{--  <meta name="layout" content="main"/>--}%
-  %{-- can ignore these errors --}%
-  <asset:stylesheet src="main.css"/>
-  <title>Game Over</title>
-</head>
-<body>
+<meta name="layout" content="main"/>
+<asset:stylesheet src="gameOver.css"/>
+<title>Game Over</title>
 
-  <h2>GAME OVER</h2>
-
-  <h3>Player: ${session['player'].username.toUpperCase()}</h3>
-  <ul>
-    <li>Score: ${session['playerBoard'].calculateScore()}</li>
-  </ul>
+<main class="util-main">
+  <div class="menu-box">
+    <h1 class="page-title">Game Over</h1>
 
 
-  <h3>Opponent: ${session['opponent'].username}</h3>
-  <ul>
-    <li>Score: ${session['opponentBoard'].calculateScore()}</li>
-  </ul>
+    <!-- character card row -->
+    <div class="character-grid">
 
-%{--TODO need to add logic for determining winner in GameOverController--}%
+      <!-- player card -->
+      <g:if test="${session['userWon']}">
+        <div class="character-card player-card winner-card">
+      </g:if>
+      <g:else>
+        <div class="character-card player-card loser-card">
+      </g:else>
+        <div class="character-portrait"></div>
+        <div class="character-bottom">
+          <div class="character-label">${session['username']}</div>
+          <div class="card-value">${session['userScore']}</div>
+        </div>
+      </div>
 
-<g:link controller="home" action="index">
-  <button type="button">RETURN HOME</button>
-</g:link>
+      <!-- stats card -->
+      <div class="character-card stats-card">
+          <div class="stats-column">
+            <span class="stats-label">Winner</span>
+            <span class="card-value">${(session['userWon']) ? session['username'] : session['opponentUsername']}</span>
+          </div>
+      </div>
 
-</body>
+        <!-- opponent card -->
+      <g:if test="${session['userWon']}">
+        <div class="character-card opponent-card loser-card">
+      </g:if>
+      <g:else>
+        <div class="character-card player-card winner-card">
+      </g:else>
+        <div class="character-portrait"></div>
+        <div class="character-bottom">
+          <div class="character-label">${session['opponentUsername']}</div>
+          <div class="card-value">${session['opponentScore']}</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- menu buttons -->
+    <ul class="menu-buttons">
+      <li><g:link class="btn" controller="GameSetup" action="gameSetup">Play Again</g:link></li>
+      <li><g:link class="btn" controller="Profile" action="profile">Profile</g:link></li>
+      <li><g:link class="btn" controller="home" action="index">Home</g:link></li>
+    </ul>
+  </div>
+</main>

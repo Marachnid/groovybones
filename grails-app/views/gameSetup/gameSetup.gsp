@@ -1,114 +1,139 @@
-<!doctype html>
-<html>
-<head>
-    <meta name="layout" content="main"/>
-    <asset:stylesheet src="gameSetup.css"/>
-    <title>Game Setup</title>
-</head>
-<body>
-    <div class="content-container flex-col">
+<%@ page contentType="text/html;charset=UTF-8" %>
+<meta name="layout" content="main"/>
+<asset:stylesheet src="gameSetup.css"/>
+<title>Game Setup</title>
 
-        <h2 id="title">Game Setup</h2>
-
+<main class="util-main">
+    <div class="menu-box">
+        <h1 class="page-title">Game Setup</h1>
 
         <g:form controller="GameSetup" action="gameInitialization" method="POST">
-
+            <input type="hidden" name="id" />
             <input type="hidden" name="username" />
             <input type="hidden" name="difficulty" />
-            <input type="hidden" name="wins" />
-            <input type="hidden" name="losses" />
-            <input type="hidden" name="totalscore" />
+            <input type="hidden" name="selectedOpponent" id="selectedOpponent" />
 
-            <div id="opponents" class="flex-row">
 
-            <!--iterate through opponents-->
-            <g:each in="${session['opponentsList']}" var="opponent">
-                    <div class="opponent-container flex-col border-dark"
+            <!-- Character selection -->
+            <div class="character-grid">
+
+                <g:each in="${session['opponentList']}" var="opponent">
+                    <div class="character-card"
+                         data-id="${opponent.id}"
                          data-username="${opponent.username}"
-                        data-difficulty="${opponent.difficulty}"
-                        data-wins="${opponent.wins}"
-                        data-losses="${opponent.losses}"
-                        data-totalscore="${opponent.totalScore}">
-                <div class="opponent-card flex-center"></div>
-                <h3>${opponent.username}</h3>
-                </div>
-            </g:each>
+                         data-difficulty="${opponent.difficulty}">
+
+                        <div class="character-portrait"></div>
+                        <div class="character-label">${opponent.username}</div>
+                    </div>
+                </g:each>
+
             </div>
 
-            <div id="playContainer" class="flex-center">
-                <button id="playButton" type="submit">Start</button>
+            <!-- Start button -->
+            <div class="menu-buttons">
+                <button class="btn btn-medium" type="submit">Start</button>
             </div>
         </g:form>
 
-        <script>
-            document.addEventListener("DOMContentLoaded", () => {
-                const cards = document.querySelectorAll(".opponent-container");
-
-                cards.forEach(card => {
-                    card.addEventListener("click", () => {
-
-                        cards.forEach(c => c.classList.remove("selected"));
-                        card.classList.add("selected");
-
-                        // Fill hidden fields using dataset
-                        document.querySelector("input[name='username']").value = card.dataset.username;
-                        document.querySelector("input[name='difficulty']").value = card.dataset.difficulty;
-                        document.querySelector("input[name='wins']").value = card.dataset.wins;
-                        document.querySelector("input[name='losses']").value = card.dataset.losses;
-                        document.querySelector("input[name='totalscore']").value = card.dataset.totalscore;
-                    });
-                });
-            });
-        </script>
-
-
-
-
-
-
-
-
-
-
-
-
-%{--            opponent container w/opponent cards--}%
-%{--        <div id="opponents" class="flex-row">--}%
-%{--            <div class="opponent-container flex-col border-dark">--}%
-%{--                <div class="opponent-card flex-center"></div>--}%
-%{--                <h3>${session['op1'].opponent.username}</h3>--}%
-%{--            </div>--}%
-
-%{--            <div class="opponent-container flex-col border-dark">--}%
-%{--                <div class="opponent-card flex-center"></div>--}%
-%{--                <h3>${session['op2'].opponent.username}</h3>--}%
-%{--            </div>--}%
-
-%{--            <div class="opponent-container flex-col border-dark">--}%
-%{--                <div class="opponent-card flex-center"></div>--}%
-%{--                <h3>${session['op3'].opponent.username}</h3>--}%
-%{--            </div>--}%
-%{--        </div>--}%
-
-%{--        play button--}%
-%{--        <div id="playContainer" class="flex-center">--}%
-%{--            <button id="playButton">--}%
-%{--                <g:link controller="GameSetup" action="gameInitialization">Start</g:link>--}%
-%{--            </button>--}%
-%{--        </div>--}%
-
-        %{--load game container--}%
-        <div id="loadGame" class="flex-row border-dark">
+    <!-- Saved games -->
+        <div class="saved-games-box">
             <label for="savedGamesSelect">Saved Games</label>
-
             <select id="savedGamesSelect">
                 <option value="">-- Select Saved Game --</option>
+
+                <g:each in="${session['savedGames']}" var="sg">
+
+                    <%
+                        def opponent = session['opponentList'].find {it.id == sg.opponentId}
+                    %>
+
+                    <option value="${sg.id}">${opponent.username} : turn ${sg.turn}</option>
+
+                </g:each>
+
             </select>
 
-            <button id="deleteSave">DELETE</button>
-            <button id="loadSave">LOAD</button>
-        </div>
+            <g:form controller="savedGame" action="deleteSave" method="POST">
+                <input type="hidden" name="id" id="deleteIdField" />
+                <button type="submit" class="btn btn-small">Delete</button>
+            </g:form>
 
+            <g:form controller="savedGame" action="loadSave" method="POST">
+                <input type="hidden" name="id" id="loadIdField" />
+                <button type="submit" class="btn btn-small">Load</button>
+            </g:form>
+
+        </div>
     </div>
-</body>
-</html>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            const cards = document.querySelectorAll(".character-card");
+            const form = document.querySelector("form");
+            const selectedOpponent = document.getElementById("selectedOpponent");
+
+            cards.forEach(card => {
+                card.addEventListener("click", () => {
+
+                    cards.forEach(c => c.classList.remove("selected"));
+                    card.classList.add("selected");
+
+                    //set hidden field values
+                    document.querySelector("input[name='id']").value = card.dataset.id;
+                    document.querySelector("input[name='username']").value = card.dataset.username;
+                    document.querySelector("input[name='difficulty']").value = card.dataset.difficulty;
+
+                    //used to send alert if no opponent selected
+                    selectedOpponent.value = card.dataset.username;
+                });
+            });
+
+            //send alert if opponent not selected when clicking play
+            form.addEventListener("submit", (e) => {
+                if (!selectedOpponent.value) {
+                    e.preventDefault();
+                    alert("Please select an opponent before starting the game.");
+                }
+            });
+        });
+
+    </script>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+
+            const savedGamesBox = document.querySelector('.saved-games-box');
+            const forms = savedGamesBox.querySelectorAll('form');
+
+            const deleteForm = forms[0];
+            const loadForm   = forms[1];
+
+            const select = document.querySelector('#savedGamesSelect');
+            const deleteIdField = document.querySelector('#deleteIdField');
+            const loadIdField   = document.querySelector('#loadIdField');
+
+            deleteForm.addEventListener('submit', (e) => {
+                const id = select.value;
+                if (!id) {
+                    e.preventDefault();
+                    alert("Select a saved game first.");
+                    return;
+                }
+                deleteIdField.value = id;
+            });
+
+            loadForm.addEventListener('submit', (e) => {
+                const id = select.value;
+                if (!id) {
+                    e.preventDefault();
+                    alert("Select a saved game first.");
+                    return;
+                }
+                loadIdField.value = id;
+            });
+        });
+    </script>
+
+
+</main>

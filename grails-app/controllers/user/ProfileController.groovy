@@ -1,4 +1,4 @@
-package home
+package user
 
 
 /**
@@ -13,7 +13,7 @@ class ProfileController {
     def profile() {
         println 'ProfileController Profile()'
 
-        if (session['player']) render(view: 'profile')
+        if (session['user']) render(view: 'profile')
         else redirect(controller: 'home', action: 'index')
     }
 }

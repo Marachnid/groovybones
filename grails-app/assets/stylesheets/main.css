@@ -1,139 +1,322 @@
-/* ============================
-   Utility Classes
-   ============================ */
+/*__________  GLOBAL CONSTANTS   __________*/
+:root {
+    --nav-font: 'IM Fell English';
+    --body-font: 'Cinzel';
 
-/* Flex helpers */
-.flex-center {
-    display: flex;
-    justify-content: center;
-    align-items: center;
+    --bg-deep: #050203;
+    --bg-panel: #0b0607;
+
+    --neon-primary: #ff1a2d;
+    --neon-primary-glow: rgba(255, 26, 45, 0.65);
+
+    --neon-secondary: #3a0508;
+    --neon-secondary-glow: rgba(58, 5, 8, 0.45);
+
+    --highlight-soft: rgba(255, 200, 200, 0.15);
+
+    --text-main: rgba(250, 245, 245, 0.8);
+    --text-dim: #b8b8b8;
+
+    --border-soft: #240406;
+    --border-strong: #3a0508;
+
+    --radius: 10px;
+    --transition-fast: 0.21s ease;
 }
 
-.flex-col {
-    display: flex;
-    flex-direction: column;
-}
-
-.flex-row {
-    display: flex;
-    flex-direction: row;
-}
-
-/* Borders & boxes */
-.border-dark {
-    border: 2px solid #333;
-    border-radius: 8px;
-}
-
-
-h1 {
-    font-size: 7rem;
-    margin: 0 0 1rem 0;
-    line-height: 1;
-
-    letter-spacing: 0.1em;
-    transform: scaleX(1.5);
-    transform-origin: left;
-}
-
-.navbar {
-    /*background-color: #f2f2f2;*/
-    padding: 1px;
-    margin-bottom: 5px;
-}
-
-.navbar ul {
-    list-style: none;
+/*__________  WRAPPER UTILS   __________*/
+.util-body {
     margin: 0;
     padding: 0;
-    display: flex;
-    gap: 20px;
-}
-
-.navbar a {
-    text-decoration: underline;
-    color: #333;
-    font-weight: bold;
-    font-size: 2rem;
-
-}
-
-.navbar li {display: flex;}
-.navbar a:hover {color: #007bff;}
-
-
-html {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
-
-body {
-    width: 90%;
-    border: 3px solid black;
-    padding: 20px;
-    box-sizing: border-box;
-
+    background: var(--bg-deep);
+    color: var(--text-main);
     display: flex;
     flex-direction: column;
-    gap: 20px;
+    height: 100vh;
 }
 
-.content-container {
+.util-main {
     flex: 1;
     display: flex;
     justify-content: center;
     align-items: center;
-    box-sizing: border-box;
+    font-family: var(--body-font), serif;
+
+    background:
+            radial-gradient(
+                    ellipse 40% 200% at center,
+                    rgba(255, 240, 240, 0.90) 0%,
+                    rgba(255, 240, 240, 0.70) 15%,
+                    rgba(255, 26, 45, 0.30) 35%,
+                    rgba(255, 26, 45, 0.20) 50%,
+                    rgba(255, 26, 45, 0.10) 65%,
+                    rgba(255, 26, 45, 0.05) 75%,
+                    var(--bg-deep) 100%
+            );
 }
 
+.menu-box {
+    background: var(--bg-panel);
+    padding: 40px 60px;
+    border-radius: var(--radius);
+    border: 2px solid var(--bg-deep);
 
-.menu-list {
-    list-style: none;
-    padding: 0;
-    margin: 0;
+    display: flex;
+    justify-content: center;
+}
+
+.character-grid {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: flex-start;
+    gap: 30px;
+    width: 100%;
+    margin-bottom: 40px;
+}
+
+/*__________  CHARACTER CARDS   __________*/
+.character-card {
+    width: 16rem;
+    height: 24rem;
     display: flex;
     flex-direction: column;
-    gap: 2rem;
-
-}
-
-.menu-list li {
-    text-decoration: none;
-    /*font-size: 5.2rem;*/
-    color: #333;
-    font-weight: bold;
-
-    /*letter-spacing: 0.1em;*/
-    transform: scaleX(1.5);
-    transform-origin: left;
-}
-
-.menu-list li a {color: black;}
-.menu-list li a:hover {color: #007bff;}
-
-
-/* ============================
-   Opponent Cards
-   ============================ */
-
-.opponent-container {
-    width: 200px;
-    height: 300px;
+    border-radius: var(--radius);
     overflow: hidden;
-    border: 2px solid #333;
-    border-radius: 8px;
-    display: flex;
-    flex-direction: column;
+    cursor: pointer;
+
+    background: var(--bg-panel);
+    border: 2px solid var(--neon-primary-glow);
+
+    transition:
+            transform var(--transition-fast),
+            box-shadow var(--transition-fast),
+            border-color var(--transition-fast);
 }
 
-/* Top 70% card area */
-.opponent-card {
+.character-portrait {
+    display: flex;
     flex: 0 0 70%;
-    background: #ddd;
-    border-bottom: 2px solid #333;
+    justify-content: center;
+    align-items: center;
+
+    background: var(--highlight-soft);
+    border-bottom: 2px solid var(--border-soft);
+}
+
+.character-label {
+    flex: 0 0 30%;
     display: flex;
     justify-content: center;
     align-items: center;
-    transition: transform 0.25s ease, box-shadow 0.25s ease;
+
+    font-family: var(--body-font), serif;
+    font-size: 2rem;
+    color: var(--text-main);
+    text-align: center;
+}
+
+.card-value {
+    font-size: 3rem;
+    color: var(--neon-primary);
+    font-family: var(--nav-font), serif;
+    text-align: center;
+}
+
+.character-card:hover, .character-card.selected, .winner-card {
+    transform: scale(1.075);
+    border-color: var(--neon-primary);
+    box-shadow:
+            0 0 15px var(--neon-primary-glow),
+            0 0 25px var(--neon-primary-glow);
+}
+
+
+/*__________  HEADERS AND NAV   __________*/
+.page-title {
+    font-family: var(--nav-font), serif;
+    font-size: 3rem;
+    letter-spacing: 0.1em;
+    color: var(--neon-primary);
+    text-shadow: 0 0 8px var(--neon-primary-glow);
+    text-align: center;
+    margin-top: 0;
+
+    /* FLICKER EFFECT - animation at bottom of page */
+    animation: secondaryFlicker 7s infinite;
+}
+
+.nav-title {
+    font-size: 3.5rem;
+    letter-spacing: 0.15em;
+    display: block;
+    text-align: center;
+
+    color: var(--neon-primary);
+    font-weight: bold;
+    text-shadow: 0 0 12px var(--neon-primary-glow);
+
+    /* FLICKER EFFECT - animation at bottom of page */
+    animation: primaryFlicker 6s infinite;
+}
+
+.nav-title a:link, .nav-title a:visited {
+    text-decoration: none;
+    color: inherit;
+    text-shadow: inherit;
+}
+
+.util-navbar {
+    width: 100%;
+    padding: 5px 20px;
+    box-sizing: border-box;
+    font-family: var(--nav-font), serif;
+
+    background: var(--bg-panel);
+    border-bottom: 2px solid var(--border-strong);
+    box-shadow: 0 0 15px var(--neon-secondary-glow);
+
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.nav-links {
+    list-style: none;
+    display: flex;
+    gap: 25px;
+    margin: 0;
+    padding: 0;
+}
+
+.nav-links a {
+    color: var(--text-main);
+    text-decoration: none;
+    font-size: 2rem;
+    font-weight: bold;
+    transition: color var(--transition-fast), text-shadow var(--transition-fast);
+}
+
+.nav-links a:hover {
+    color: var(--neon-primary);
+    text-shadow: 0 0 8px var(--neon-primary-glow);
+}
+
+
+/*__________  BUTTONS   __________*/
+.menu-buttons {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+
+    display: flex;
+    flex-direction: column;
+    gap: 25px;
+}
+
+.btn {
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    width:80%;
+
+    padding: 15px 40px;
+    font-size: 2.5rem;
+    font-weight: bold;
+    text-decoration: none;
+    text-align: center;
+
+    background: var(--text-main);
+    color: var(--bg-deep);
+    border: 2px solid var(--border-soft);
+    border-radius: var(--radius);
+
+    cursor: pointer;
+    transition:
+            transform var(--transition-fast),
+            box-shadow var(--transition-fast),
+            border-color var(--transition-fast),
+            color var(--transition-fast),
+            background var(--transition-fast);
+}
+
+.btn-large {
+    font-size: 3rem;
+    padding: 20px 40px;
+}
+
+.btn-medium {
+    font-size: 2.5rem;
+    padding: 15px 30px;
+}
+
+.btn-small {
+    font-size: 2.5rem;
+    padding: 15px 20px;
+}
+
+button.btn-small, button.btn-medium {
+    width: fit-content;
+    align-self: center;
+}
+
+.btn:hover {
+    background: var(--bg-deep);
+    color: var(--neon-primary);
+    border-color: var(--neon-primary);
+
+    transform: scale(1.1);
+    box-shadow:
+            0 0 20px var(--neon-primary-glow),
+            0 0 30px var(--neon-primary-glow);
+}
+
+
+/* FLICKER used by .nav-title and winner card*/
+@keyframes primaryFlicker {
+    0%, 12.5%, 25%, 37.5%, 62.5% {
+        text-shadow: 0 0 12px var(--neon-primary-glow);
+    }
+    50% {
+        text-shadow: 1 -1 0 var(--neon-primary-glow);
+        /*transform: scale(1.01);*/
+        transform: scale(1.025);
+    }
+    75% {
+        text-shadow: 1 -1 0 var(--neon-primary-glow);
+        /*transform: scale(1.01);*/
+        transform: scale(1.034);
+    }
+    87.5% {
+        text-shadow: 1 -1 0 var(--neon-primary-glow);
+        /*transform: scale(1.01);*/
+        transform: scale(1.01);
+    }
+    100% {
+        text-shadow: 0 0 12px var(--neon-primary-glow);
+        transform: scale(1);
+    }
+}
+
+/* FLICKER used by .nav-title*/
+@keyframes secondaryFlicker {
+    0%, 12.5%, 25%, 37.5%, 62.5% {text-shadow: 0 0 12px var(--neon-primary-glow)}
+    50% {text-shadow: 1 -1 0 var(--neon-primary-glow)}
+    75% {text-shadow: 0 0 10 var(--neon-primary-glow)}
+    85% {text-shadow: 1 -1 6 var(--neon-primary-glow)}
+    90% {text-shadow: 1 -1 4 var(--neon-primary-glow)}
+    100% {text-shadow: 0 0 10px var(--neon-primary-glow)}
+}
+
+/* FLICKER used by .nav-title*/
+@keyframes containerFlicker {
+    0%, 62.5% {text-shadow: 0 0 12px var(--neon-primary-glow)}
+    12.5% {box-shadow: 1 -1 6 var(--neon-primary-glow)}
+    25% {box-shadow: 1 -1 4 var(--neon-primary-glow)}
+    37.5% {box-shadow: 0 0 10px var(--neon-primary-glow)}
+    50% {box-shadow: 1 -1 0 var(--neon-primary-glow)}
+    75% {box-shadow: 1 -1 10 var(--neon-primary-glow)}
+    85% {box-shadow: 1 -1 6 var(--neon-primary-glow)}
+    90% {box-shadow: 1 -1 4 var(--neon-primary-glow)}
+    100% {box-shadow: 0 0 10px var(--neon-primary-glow)}
 }

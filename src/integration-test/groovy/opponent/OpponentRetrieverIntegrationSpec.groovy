@@ -30,8 +30,8 @@ class OpponentRetrieverIntegrationSpec extends Specification {
     int port
 
     GrailsApplication grailsApplication
-    OpponentRetriever opRet
     Opponent opponent
+    ArrayList<Map> opponentHeaders
     String key
     String basePath
 
@@ -48,89 +48,53 @@ class OpponentRetrieverIntegrationSpec extends Specification {
     }
 
 
-    /** tests retrieving and mapping an ArrayList<Opponent> of opponents */
-    void "return mapped list of opponents"() {
+    /** tests retrieving an ArrayList<Map> of opponent headers */
+    void "return mapped list of opponent headers"() {
         when: 'OpponentServiceController base GET path is called'
-        opRet =  new OpponentRetriever(key, basePath, false)
+        OpponentRetriever opponentRetriever = new OpponentRetriever(path: basePath)
+        opponentHeaders = opponentRetriever.retrieveList(key)
 
         then: 'response code is 200, list of returned opponents is neither null nor empty'
-        opRet.responseCode == 200
-        opRet.opponent != null
-        !opRet.opponent.isEmpty()
+        opponentRetriever.responseCode == 200
+        !opponentHeaders.isEmpty()
+        opponentHeaders[0].id
+        opponentHeaders[0].username
     }
 
-    /** tests retrieving and mapping a single opponent */
+    /** tests retrieving opponent stats */
     void "return mapped opponent"() {
         when: 'OpponentServiceController getById path is called'
-        String path = basePath + '/1/'
-        opRet = new OpponentRetriever(key, path, true)
+        OpponentRetriever opponentRetriever = new OpponentRetriever(path: basePath)
+        opponent = Opponent.get(1)
+        final Map stats = opponentRetriever.retrieveOpponentStats(key, opponent.id)
 
-        then: 'response code is 200, mapped opponent is not null'
-        opRet.responseCode == 200
-        opRet.opponent != null
-
-        //with how Groovy resolves 0 to null/false, check that min value is 0
-        opRet.opponent.difficulty >= 0
-        opRet.opponent.wins >= 0
-        opRet.opponent.losses >= 0
-        opRet.opponent.totalScore >= 0
+        then: 'response code is 200, stats match db stats'
+        opponentRetriever.responseCode == 200
+        opponent.wins == stats.wins
+        opponent.losses == stats.losses
+        opponent.totalScore == stats.totalScore
     }
 
     /** tests returning null opponent if ID not found */
     void "return null opponent if ID not found"() {
-        when: 'a non-existent ID is called'
-        opRet = new OpponentRetriever(key, basePath + '/10', true)
-
-        then: 'response code is 404, opponent is null'
-        opRet.responseCode == 404
-        opRet.opponent == null
+        expect: 'null for unfound ID'
+        !new OpponentRetriever(path: basePath).retrieveOpponentStats(key, -1)
     }
 
-    /** tests returning null opponent if incorrect path called */
-    void "return null opponent if incorrect path"() {
-        when: 'incorrect path is called'
-        opRet = new OpponentRetriever(key, basePath + '1', true)
-
-        then: 'response code is 404, opponent is null'
-        opRet.responseCode == 404
-        opRet.opponent == null
-    }
 
     /** tests returning null opponent if incorrect auth key */
     void "return null opponent if incorrect API key"() {
-        when: 'incorrect auth is used'
-        opRet = new OpponentRetriever('bad-key', basePath, true)
-
-        then: 'response code is 403, opponent is null'
-        opRet.responseCode == 403
-        opRet.opponent == null
+        expect: 'incorrect auth is used'
+        !new OpponentRetriever(path: basePath).retrieveList('badKey')
     }
 
     /** tests successfully returning an updated opponent */
     void "return opponent with updated values"() {
         when: 'opponent receives a new value'
-        opponent = Opponent.get(1)
-        opponent.totalScore = 100
-
-        and: 'we update the opponent'
-        opRet = new OpponentRetriever(key, basePath, opponent)
+        OpponentRetriever opponentRetriever = new OpponentRetriever(path: basePath)
+        opponentRetriever.postUpdate(key, 1, [totalScore: 201])
 
         then: 'response code is 201, totalScore is updated'
-        opRet.responseCode == 201
-        opRet.opponent.totalScore == 100
-    }
-
-    /** tests returning null opponent for failed update */
-    void "return null opponent if invalid"() {
-        when: 'an opponent is invalid'
-        opponent = Opponent.get(1)
-        opponent.id = null
-
-        and: 'we try to update'
-        opRet = new OpponentRetriever(key, basePath, opponent)
-
-        then: 'response code is 404, opponent is null'
-        opRet.responseCode == 404
-        opRet.opponent == null
+        opponentRetriever.responseCode == 201
     }
 }

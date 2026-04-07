@@ -1,100 +1,104 @@
 package groovybones.user
 
 import grails.gorm.transactions.Transactional
-import groovybones.Opponent
-import groovybones.SavedGame
 import groovybones.User
+import groovybones.savedGame.SavedGameService
 
 /**
  * Responsible for handling User persistence operations
- * Users are detached from persistence layer to prevent cognitoSub ever making it to front end
- * In-memory (session) users are shallow reference copies of DB/persistence entities (GORM/Hibernate persistence entities)
- * User-driven SavedGame operations included (will only ever be user-driven)
+ * Handles operations via id-to-update and maps of values to update
  */
 @Transactional
 class UserService {
 
     /**
-     * retrieves a user with cognitoSub nullified
-     * attaches found ID to returned user
-     * detaches user savedGames from persistence to keep behavior predictable
-     * @param id to query and attach to reference if found
-     * @return User or null if not found
+     * retrieve user stats
+     * @param id to find stats for
+     * @return user stats map, else null
      */
-    User getUserById(long id) {
-        User existing = User.get(id)
-        User user
+    Map getUserStats(Long id) {
+        log.info("UserService getUserStats for ID: $id")
 
-        if (existing) {
-            user = new User(existing.returnAsMap())     //ignores pulling cognitoSub from persistence
-            user.id = id
-            log.info("User ID: $id found")
+        User user = User.get(id)
+        if (!user) {
+            log.info('User not found')
+            return null
+        }
 
-            //detach savedGames from persistence layer (will cause type problems in addSavedGame() if not)
-            user.savedGames = existing.savedGames.collect { SavedGame record ->
-                new SavedGame(record.properties).tap {it.id = record.id}
-            }
-            return user
-        } else
-            log.info("User ID : $id not found")
-            null
+        [wins: user.wins, losses: user.losses, totalScore: user.totalScore]
     }
-
 
     /**
-     * updates only updatable fields of existing User entity
-     * returns false if user is null or fails to validate
-     * @param user entity to be updated
-     * @return true for updated, else false
+     * finds user by cognitoSub
+     * creates a new user if not
+     * @param sub cognitoSub token
+     * @return map of user ID and username, else null
      */
-    boolean updateUser(User user) {
-        User existing = User.get(user.id)
-        if (!existing) return false
+    Map getUserByCognitoSub(String sub, String username) {
+        log.info("UserService getUserByCognitoSub()")
 
-        log.info("User ID: ${user.id} found")
-        existing.username = user.username           //in event of username change in Cognito
-        existing.wins = user.wins
-        existing.losses = user.losses
-        existing.totalScore = user.totalScore
-
-        log.info("New User values: " +
-                "username: ${user.username}, " +
-                "wins: ${user.wins}, " +
-                "losses: ${user.losses}, " +
-                "totalScore: ${user.totalScore}"
-        )
-
-        if (existing.validate() && existing.save(flush: true, failOnError: true)) {
-            log.info("Update successful")
-            true
-        } else {
-            log.info("Update failed")
-            false
+        User user = User.findByCognitoSub(sub)
+        if (user) {
+            log.info("User: ${user.id}, found")
+            return [id: user.id, username: user.username]
+        }
+        else {
+            log.info("User not found")
+            return createUser(sub, username)
         }
     }
-
 
     /**
      * initializes and creates a new User entity with default wins/losses/totalScore
      * @param cognitoSub cognito profile token
      * @param username pulled from cognito Account ID
-     * @return new user with pre-initialized wins/losses/totalScore == 0
-     * @See CognitoOAuthService
+     * @return new userId and username as map
      */
-    User createUser(String cognitoSub, String username) {
+    Map createUser(String cognitoSub, String username) {
+        log.info('UserService createUser()')
+
         User user = new User(cognitoSub: cognitoSub, username: username,  wins: 0, losses: 0, totalScore: 0)
 
-        if (user.validate()){
+        try {
             user.save(flush: true, failOnError: true)
-            long id = user.id
+            log.info("New user created - ${user.id}, ${user.username}")
 
-            user = new User(user.returnAsMap())
-            user.id = id
-            log.info("New User created: ${user.id}, ${user.username}")
-            return user
-        } else null
+            [id: user.id, username: user.username]
+
+        } catch (e) {
+            log.info("New user couldn't be validated and/or saved: $e")
+            null
+        }
     }
 
+    /**
+     * updates user properties
+     * @param id user entity to be updated
+     * @param newValues map-based values to be updated
+     * @return true if updated, else false
+     */
+    boolean updateUser(Long id, Map newValues) {
+        log.info("UserService updateUser() for ID: $id")
+
+        User user = User.get(id)
+        if (!user) {
+            log.info('User not found')
+            return false
+        }
+
+        log.info("New values: ${newValues.toString()}")
+        user.properties = newValues
+
+        try {
+            user.save(flush: true, failOnError: true)
+            log.info("Update successful")
+            true
+
+        } catch (Exception e) {
+            log.info("Update failed: $e")
+            false
+        }
+    }
 
     /**
      * deletes an existing DB user if found
@@ -102,73 +106,25 @@ class UserService {
      * @param id of User entity to be deleted
      * @return true if user exists and deletion does not return error, else false
      */
-    boolean deleteUser(long id) {
+    boolean deleteUser(Long id) {
+        log.info("UserService deleteUser() for ID: $id")
+
         User user = User.get(id)
-        if (!user) return false
-        log.info("Deleting User ID: $id")
 
-        //if deletion does not return errors, delete savedGame db children
-        if (!user.delete(flush: true, failOnError: true)) {
-            SavedGame.where { id == user.id }.deleteAll()
-            log.info("Delete successful, savedGames deleted")
+        if (new SavedGameService().deleteAllSavedGames(id)) log.info("Saved games for user deleted")
+        else {
+            log.info("failed to delete saved games for user")
+            return false
+        }
+
+        try {
+            user.delete(flush: true, failOnError: true)
+            log.info("Delete successful")
             true
-        } else false
-    }
 
-
-    /**
-     * add new savedGame DB entity to User
-     * updates in-memory SavedGames with detached references
-     * returns detached SavedGame reference
-     * @param user to add and update new savedGame to
-     * @param savedGame to add to user
-     * @return savedGame record if successful, else null
-     */
-    SavedGame addSavedGame(User user, SavedGame savedGame) {
-        User existing = User.get(user.id)
-        if (!existing || !Opponent.get(savedGame.opponentId)) {
-            log.info("User ID: ${user.id} or Opponent ID: ${savedGame.opponentId} not found")
-            return null
+        } catch (e) {
+            log.info("Delete failed: $e")
+            false
         }
-
-        existing.addToSavedGames(savedGame)
-        if (!updateUser(existing)) {
-            log.info('Update to user failed')
-            return null
-        }
-
-        savedGame = new SavedGame(savedGame.properties).tap { it.id = savedGame.id }
-        user.savedGames.add(savedGame)
-        log.info("Game saved: ${savedGame.id}, ${savedGame.properties}")
-        savedGame
-    }
-
-    /**
-     * deletes a user's saved game and returns the savedGame deleted
-     * @param user User to delete savedGame from
-     * @param savedGame to be deleted
-     * @return savedGame removed else null (might change to true/false returns)
-     */
-    SavedGame deleteSavedGame(User user, SavedGame savedGame) {
-        SavedGame existing = SavedGame.get(savedGame.id)
-        User existingUser = User.get(user.id)
-
-        if (!existing || !existingUser) {
-            log.info("User ID ${user.id} not found")
-            return null
-        }
-
-        existingUser.removeFromSavedGames(existing)
-        existing.delete()   //persist the delete to saved_game
-
-        user.removeFromSavedGames(savedGame)
-
-        if (!updateUser(existingUser)) {
-            log.info('Update to user failed')
-            return null
-        }
-
-        log.info("Saved game ID: ${savedGame.id} deleted")
-        savedGame
     }
 }

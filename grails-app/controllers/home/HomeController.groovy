@@ -13,6 +13,15 @@ class HomeController {
      */
     def index() {
         log.info('HomeController index()')
+
+        //TODO need to add some global controller or method to handle clearing game session variables
+        //TODO need to handle unintended navigations to game/gameOver
+        session['opponent'] = null
+        session['userBoard'] = null
+        session['opponentBoard'] = null
+        session['userScore'] = null
+        session['opponentScore'] = null
+
         render(view: 'index')
     }
 }
