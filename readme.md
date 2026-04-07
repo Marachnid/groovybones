@@ -19,7 +19,7 @@ The desired outcome of GroovyBones is to allow a player to:
 > - If a player places multiple dice of the same value in the same column, the score awarded for each of those dice is multiplied by the number of dice of the same value in that column. e.g. if a column contains 4-1-4, then the score for that column is 4x2 + 1x1 + 4x2 = 17.
 > * **source:** https://cult-of-the-lamb.fandom.com/wiki/Knucklebones
 
-![Game page and gameboards](design-documents/designed-screens/game-board.png)
+![Game page and gameboards](design-documents/finished-screens/game-board.png)
 
 
 ### Constraints
