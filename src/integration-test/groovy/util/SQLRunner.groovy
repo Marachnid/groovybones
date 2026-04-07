@@ -1,12 +1,12 @@
 package util
 
-import groovy.json.JsonOutput
-import groovy.json.JsonSlurper
 import groovy.sql.Sql
 import javax.sql.DataSource
 
 
-
+/**
+ * Util class to refresh DB schema for testing
+ */
 class SQLRunner {
     DataSource dataSource
     Sql sql
@@ -56,28 +56,6 @@ class SQLRunner {
             INSERT INTO user (cognito_sub, username, wins, losses, total_score) VALUES
             ('123', 'default-user', 1, 1, 1)
         """)
-
-
-//        def gameBoard1 = JsonOutput.toJson([[1,2,3],[2,2],[1]])
-//        def gameBoard2 = JsonOutput.toJson([[5],[6,6],[]])
-//
-//        //saved_game
-//        sql.execute("""
-//            INSERT INTO saved_game (user_board, opponent_board, turn, user_id, opponent_id) VALUES
-//            ('$gameBoard1', '$gameBoard2', 3, 1, 1);
-//        """)
-//
-//        //saved_game
-//        sql.execute("""
-//            INSERT INTO saved_game (user_board, opponent_board, turn, user_id, opponent_id) VALUES
-//            ('user-board', 'opponent-board', 2, 1, 2);
-//        """)
-//
-//        //saved_game
-//        sql.execute("""
-//            INSERT INTO saved_game (user_board, opponent_board, turn, user_id, opponent_id) VALUES
-//            ('user-board', 'opponent-board', 1, 2, 1);
-//        """)
     }
 
 

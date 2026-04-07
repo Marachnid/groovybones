@@ -12,11 +12,15 @@ The desired outcome of GroovyBones is to allow a player to:
 - accumulate persistent player statistics to build their profile records
 
 ### How to Play
+
 > - The game consists of two 3x3 boards, each belonging to their respective player.
 > - The players take turns. On a player's turn, they roll a single 6-sided die, and must place it in a column on their board. A filled column does not accept any more dice.
 > - Each player has a score, which is the sum of all the dice values on their board. The score awarded by each column is also displayed.
 > - If a player places multiple dice of the same value in the same column, the score awarded for each of those dice is multiplied by the number of dice of the same value in that column. e.g. if a column contains 4-1-4, then the score for that column is 4x2 + 1x1 + 4x2 = 17.
 > * **source:** https://cult-of-the-lamb.fandom.com/wiki/Knucklebones
+
+![Game page and gameboards](design-documents/designed-screens/game-board.png)
+
 
 ### Constraints
 - Knucklebones as a browser game will be missing some of the throughlines that make it exciting within 'Cult of the Lamb'

@@ -186,7 +186,7 @@
             <div class="info-panel panel-stats">
               <ul>
                 <li>${session['username']}</li>
-                <li>Accumulative Score: ${session['userStats'].totalScore}</li>
+                <li>Total Score: ${session['userStats'].totalScore}</li>
                 <li>Wins: ${session['userStats'].wins}</li>
                 <li>Losses: ${session['userStats'].losses}</li>
               </ul>
