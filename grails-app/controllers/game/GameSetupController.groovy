@@ -3,7 +3,7 @@ package game
 import groovybones.game.GameBoard
 import groovybones.game.OpponentActions
 import groovybones.opponent.OpponentRetriever
-import groovybones.Opponent
+import groovybones.savedGame.SavedGameService
 import groovybones.user.UserService
 
 /**
@@ -23,8 +23,8 @@ class GameSetupController {
     def gameSetup() {
         log.info('GameSetup gameSetup()')
 
-        session['opponentsList'] = new OpponentRetriever().retrieveList(key)
-        session['savedGames'] = new UserService().getUserSavedGames(session['userId'] as Long)
+        session['opponentList'] = new OpponentRetriever().retrieveList(key)
+        session['savedGames'] = new SavedGameService().getSavedGames(session['userId'] as Long)
 
         render(view: 'gameSetup')
     }

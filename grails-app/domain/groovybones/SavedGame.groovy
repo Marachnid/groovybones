@@ -11,16 +11,16 @@ package groovybones
 class SavedGame {
     Long userId
     Long opponentId
-    ArrayList userBoard
-    ArrayList opponentBoard
+    String userBoard
+    String opponentBoard
     int turn
 
 
     //enforce DB constraints
     static constraints = {
-        userId nullable: false, blank: false, updatable: false
-        opponentId nullable: false, blank: false, updatable: false
-        turn blank: false, updatable: false
+        userId nullable: false, updatable: false
+        opponentId nullable: false, updatable: false
+        turn updatable: false
     }
 
     //define datatype mappings

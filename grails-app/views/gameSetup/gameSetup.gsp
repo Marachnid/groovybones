@@ -17,7 +17,7 @@
             <!-- Character selection -->
             <div class="character-grid">
 
-                <g:each in="${session['opponentsList']}" var="opponent">
+                <g:each in="${session['opponentList']}" var="opponent">
                     <div class="character-card"
                          data-id="${opponent.id}"
                          data-username="${opponent.username}"
@@ -45,7 +45,7 @@
                 <g:each in="${session['savedGames']}" var="sg">
 
                     <%
-                        def opponent = session['opponentsList'].find {it.id == sg.opponentId}
+                        def opponent = session['opponentList'].find {it.id == sg.opponentId}
                     %>
 
                     <option value="${sg.id}">${opponent.username} : turn ${sg.turn}</option>
@@ -53,8 +53,16 @@
                 </g:each>
 
             </select>
-            <button class="btn btn-small" id="deleteSave">Delete</button>
-            <button class="btn btn-small" id="loadSave">Load</button>
+
+            <g:form controller="savedGame" action="deleteSave" method="POST">
+                <input type="hidden" name="id" id="deleteIdField" />
+                <button type="submit" class="btn btn-small">Delete</button>
+            </g:form>
+
+            <g:form controller="savedGame" action="loadSave" method="POST">
+                <input type="hidden" name="id" id="loadIdField" />
+                <button type="submit" class="btn btn-small">Load</button>
+            </g:form>
 
         </div>
     </div>
@@ -90,19 +98,40 @@
             });
         });
 
+    </script>
 
-        document.getElementById("deleteSave").addEventListener("click", function () {
-            const id = document.getElementById("savedGamesSelect").value;
-            if (!id) return alert("Please select a saved game first.");
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
 
-            window.location.href = "/savedGame/delete/" + id;
-        });
+            const savedGamesBox = document.querySelector('.saved-games-box');
+            const forms = savedGamesBox.querySelectorAll('form');
 
-        document.getElementById("loadSave").addEventListener("click", function () {
-            const id = document.getElementById("savedGamesSelect").value;
-            if (!id) return alert("Please select a saved game first.");
+            const deleteForm = forms[0];
+            const loadForm   = forms[1];
 
-            window.location.href = "/savedGame/load/" + id;
+            const select = document.querySelector('#savedGamesSelect');
+            const deleteIdField = document.querySelector('#deleteIdField');
+            const loadIdField   = document.querySelector('#loadIdField');
+
+            deleteForm.addEventListener('submit', (e) => {
+                const id = select.value;
+                if (!id) {
+                    e.preventDefault();
+                    alert("Select a saved game first.");
+                    return;
+                }
+                deleteIdField.value = id;
+            });
+
+            loadForm.addEventListener('submit', (e) => {
+                const id = select.value;
+                if (!id) {
+                    e.preventDefault();
+                    alert("Select a saved game first.");
+                    return;
+                }
+                loadIdField.value = id;
+            });
         });
     </script>
 

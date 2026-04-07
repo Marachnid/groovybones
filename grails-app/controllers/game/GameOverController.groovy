@@ -61,6 +61,7 @@ class GameOverController {
         session['turn'] = null
         session['dice'] = null
         session['userTurn'] = null
+        session['timeout'] = null
 
 
         log.info("User stats: ${userStats.toString()}")

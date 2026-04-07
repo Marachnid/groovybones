@@ -35,7 +35,7 @@
         <div class="panel-col right">
           <ul>
             <li class="panel-toggle" data-panel="stats">Stats</li>
-            <li><g:link controller="home" action="index">Save & Exit</g:link></li>
+            <li><g:link controller="SavedGame" action="saveExit">Save & Exit</g:link></li>
           </ul>
         </div>
       </div>

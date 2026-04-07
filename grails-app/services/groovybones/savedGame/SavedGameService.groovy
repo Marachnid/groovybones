@@ -3,6 +3,8 @@ package groovybones.savedGame
 import grails.gorm.transactions.Transactional
 import groovybones.SavedGame
 import groovybones.User
+import groovy.json.JsonOutput
+
 
 /**
  * Responsible for handling SavedGame persistence operations
@@ -12,8 +14,10 @@ import groovybones.User
 @Transactional
 class SavedGameService {
 
+
     /**
      * add new savedGame DB entity to User
+     * parses userBoard and opponentBoard into Strings for DB varchar
      * @param newGame map of new SavedGame values
      */
     Long addSavedGame(Map newGame) {
@@ -28,6 +32,9 @@ class SavedGameService {
 
         try {
             SavedGame savedGame = new SavedGame(newGame)
+            savedGame.userBoard = JsonOutput.toJson(newGame.userBoard)
+            savedGame.opponentBoard = JsonOutput.toJson(newGame.opponentBoard)
+
             savedGame.save(flush: true, failOnError: true)
             log.info("Saved game added, ID: $savedGame.id")
             savedGame.id
@@ -54,14 +61,14 @@ class SavedGameService {
         }
 
         SavedGame.findAllByUserId(id).collect { sg ->
-            [
-                id: sg.id,
-                userBoard: sg.userBoard,
-                opponentBoard: sg.opponentBoard,
-                turn: sg.turn,
-                userId: sg.userId,
-                opponentId: sg.opponentId
-            ]
+                [
+                    id: sg.id,
+                    userBoard: sg.userBoard,
+                    opponentBoard: sg.opponentBoard,
+                    turn: sg.turn,
+                    userId: sg.userId,
+                    opponentId: sg.opponentId
+                ]
         }.sort {it.id}.reverse() as ArrayList<Map>
     }
 
