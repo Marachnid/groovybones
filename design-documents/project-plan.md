@@ -47,8 +47,34 @@
 - [x] Add 'intelligent' difficulty scaling (i.e. if (random <= 3 ? hostileAction() : randomAction())
 
 ### Features:
-- [ ] As a registered user, I want to be able to read cumulative game records/stats from past games
-- [ ] As a registered user, I want to be able to save(add) unfinished games or delete them
+- [x] As a user, I want to play against an 'intelligent' computer-controlled opponent
+- [x] Tune difficulty profiles (Hard should win more often than Medium and much more often than Easy)
+
+
+## Week 10
+- [x] Created new CSS theme/designs
+- [x] refactor and assessment of UI interactions
+
+### Features:
+
+
+
+## Week 11
+- [x] Finalized overall design theme
+- [x] Add unique features to game page - added pseudo navigation, tutorial, and stats into the gameboard
+
+### Features:
+- [x] As a user, I want to play against an 'intelligent' computer-controlled opponent
+
+
+
+## Week 12
+- [x] Completed large refactor of persistence relationships/interactions
+- [x] Cleaned up docs, tests, services, domains
+
+### Features:
+- [x] As a registered user, I want to be able to read cumulative game records/stats from past games
+- [x] As a registered user, I want to be able to save(add) unfinished games or delete them
 - [x] As a user, I want to play against an 'intelligent' computer-controlled opponent
 
 
