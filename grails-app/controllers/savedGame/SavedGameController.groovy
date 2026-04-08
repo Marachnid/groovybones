@@ -10,7 +10,7 @@ import groovybones.user.UserService
 
 
 /**
- * handles routing SavedGame operations used in various places
+ * consolidates SavedGame operations used in various places
  * load/save/delete
  */
 class SavedGameController {
@@ -22,8 +22,7 @@ class SavedGameController {
      * @return redirect to home
      */
     def saveExit() {
-        log.info("userBoard: ${session['userBoard'].board.toString()}")
-        log.info("opponentBoard: ${session['opponentBoard'].board.toString()}")
+        log.info('SavedGameController saveExit()')
 
         Map savedGame = [
                 userId: session['userId'],
@@ -55,17 +54,30 @@ class SavedGameController {
      * @return redirect to gameSetup
      */
     def deleteSave() {
+        log.info('SavedGameController deleteSave()')
         new SavedGameService().deleteSavedGame(params.id as Long)
         redirect(controller: 'gameSetup', action: 'gameSetup')
     }
 
 
     /**
+     * deletes all saved games belonging to user
+     * @return redirect to profile
+     */
+    def deleteAllSaves() {
+        log.info('SavedGameController deleteAllSaves()')
+        new SavedGameService().deleteAllSavedGames(session['userId'] as Long)
+        redirect(controller: 'profile', action: 'profile')
+    }
+
+
+    /**
      * Re-initializes a SavedGame into an active in-session game
-     * must de-parse userBoard and opponentBoard into ArrayLists
-     * @return
+     * must de-parse userBoard and opponentBoard from Strings to ArrayLists
+     * @return redirect to game
      */
     def loadSave() {
+        log.info('SavedGameController loadSave()')
         ArrayList<Map> savedGames = session['savedGames'] as ArrayList<Map>
         SavedGame savedGame = savedGames.find {it.id = params.id} as SavedGame
 
@@ -99,8 +111,8 @@ class SavedGameController {
                 session['userBoard'] as GameBoard
         )
 
-        session['userTurn'] = true                                     //opponent will most likely move before save
-        session['timeout'] = 3000                                     //timeout to delay instant opponent turn
+        session['userTurn'] = true                                 //turns will most likely end/be saved on player turn
+        session['timeout'] = 3000                                 //timeout to delay instant opponent turn
 
         //remove old saved game
         new SavedGameService().deleteSavedGame(params.id as Long)
