@@ -141,6 +141,7 @@
     text-shadow: 0 0 8px var(--neon-primary-glow);
     text-align: center;
     margin-top: 0;
+    cursor: default;
 
     /* FLICKER EFFECT - animation at bottom of page */
     animation: secondaryFlicker 7s infinite;

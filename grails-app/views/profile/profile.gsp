@@ -1,32 +1,35 @@
 <%@ page contentType="text/html;charset=UTF-8" %>
-<!doctype html>
-<html>
-<head>
-  <meta name="layout" content="main"/>
-  <asset:stylesheet src="profile.css"/>
-  <title>Profile</title>
-</head>
-<body>
+<meta name="layout" content="main"/>
+<asset:stylesheet src="profile.css"/>
+<title>Game Setup</title>
 
-  <h2>PROFILE</h2>
+<main class="util-main">
+  <div class="menu-box">
+    <h1 class="page-title">${session['username'].toUpperCase()}</h1>
 
-  <div class="content-container">
-    <div class="profile-lists">
-      <ul class="menu-list profile-list">
-        <li>${session['user'].username}</li>
-        <li>Manage Account (eventual link)</li>
-        <li>Manage Mods (eventual link)</li>
-        <li>Delete Account (eventual link)</li>
-      </ul>
 
-      <ul class="menu-list profile-list">
-        <li>Stats</li>
-        <li>Total Score: ${session['user'].totalScore}</li>
-        <li>Wins: ${session['user'].wins}</li>
-        <li>Losses: ${session['user'].losses}</li>
-        <li>Win Ratio: TBD</li>
-      </ul>
+    <div class="profile-row">
+
+      <div id="profileLinks" class="profile-list">
+        <ul class="stat-items">
+          <li class="btn btn-large"><g:link controller="GameSetup" action="gameSetup">Game Setup</g:link></li>
+          <li class="btn btn-large warning"><g:link controller="SavedGame" action="deleteAllSaves">Delete All Saved Games</g:link></li>
+          <li class="btn btn-large warning"><g:link controller="Profile" action="resetStats">Reset Stats</g:link></li>
+          <li class="btn btn-large warning"><g:link controller="Profile" action="resetProfile">Reset Profile</g:link></li>
+        </ul>
+      </div>
+
+
+      <div id="profileStats" class="profile-list">
+        <ul class="stat-items">
+          <li>Total Games: ${session['userStats']?.totalGames}</li>
+          <li>Total Score: ${session['userStats']?.totalScore}</li>
+          <li>Wins: ${session['userStats']?.wins}</li>
+          <li>Losses: ${session['userStats']?.losses}</li>
+          <li>Grooviness: ${session['userStats']?.winPercentage}%</li>
+        </ul>
+      </div>
+
     </div>
   </div>
-
-</body>
+</main>

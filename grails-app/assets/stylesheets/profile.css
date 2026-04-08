@@ -1,20 +1,113 @@
-.menu-list li {font-size: 1rem;}
-
-.profile-lists {
-    display: flex;
-    justify-content: center;
-    align-items: flex-start;
-    gap: 3rem;
+.menu-box {
+    flex-direction: column;
+    align-items: center;
 }
+
+.profile-row {
+    display: flex;
+    flex-direction: row;
+    gap: 2rem;
+}
+
 
 .profile-list {
-    width: 20rem; /* keeps lists from expanding too wide */
-    padding: 0;
-    margin: 0;
-    text-align: left;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 25px 40px;
+    background: var(--text-main);
+    border: 2px solid var(--border-soft);
+    border-radius: var(--radius);
 }
 
-.menu-list li:first-child {
-    font-size: 1.5rem;
-    text-decoration: underline;
+#profileStats:hover {
+    transition: var(--transition-fast);
+    transform: none;
+}
+
+#profileStats .stat-items {
+    height: 100%;
+    justify-content: space-between;
+}
+
+#profileStats li {
+    font-family: var(--nav-font), serif;
+}
+
+#profileStats,
+#profileLinks .stat-items li.btn {
+    box-shadow:
+            0 0 12px rgba(255, 255, 255, 0.35),
+            0 0 18px rgba(255, 255, 255, 0.25);
+}
+
+#profileLinks .stat-items li.btn:hover {
+    box-shadow:
+            0 0 20px var(--neon-primary-glow),
+            0 0 30px var(--neon-primary-glow);
+}
+
+
+.stat-items {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+    cursor: default;
+}
+
+.stat-items li {
+    font-family: var(--body-font), serif;
+    font-size: 2rem;
+    font-weight: 600;
+    color: var(--bg-deep);
+    letter-spacing: 0.04em;
+    transition: var(--transition-fast);
+}
+
+#profileLinks .stat-items li.btn:hover a {
+    color: var(--neon-primary-glow);
+    text-shadow: 0 0 8px var(--neon-primary-glow);
+}
+
+#profileLinks .stat-items li.btn.warning:hover a {
+    color: var(--bg-deep);
+}
+
+.warning:hover {
+    background-color: var(--neon-primary-glow);
+    color: var(--bg-deep);
+    border: none;
+}
+
+
+
+.stat-items a:link,
+.stat-items a:visited {
+    color: var(--bg-deep);
+    text-decoration: none;
+    font-weight: 600;
+    transition:
+            color var(--transition-fast),
+            text-shadow var(--transition-fast);
+}
+
+#profileLinks {
+    background: transparent;
+    box-shadow: none;
+    padding: 0;
+    border: none;
+}
+
+#profileLinks .stat-items {
+    gap: 12px;
+    width: 100%;
+}
+
+#profileLinks .stat-items li.btn {
+    transform: none;
+    scale: 1;
+    border: none;
 }
