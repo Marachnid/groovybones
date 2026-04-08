@@ -9,7 +9,6 @@
             <ul class="menu-buttons menu-list">
                 <li><g:link class="btn btn-large" controller="GameSetup" action="gameSetup">Play</g:link></li>
                 <li><g:link class="btn btn-large" controller="Profile" action="profile">Profile</g:link></li>
-                <li><g:link class="btn btn-large" controller="GameOver" action="gameOverAction">GameOver Test</g:link></li>
             </ul>
         </g:if>
 

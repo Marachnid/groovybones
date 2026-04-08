@@ -40,7 +40,7 @@ class GameActionController {
             if (userBoard.detectFullBoard()) redirect(controller: 'gameOver', action: 'gameOverAction')
             else redirect(controller: 'game', action: 'turnManager')
 
-        //redirect to game with hint if column already full
+        //redirect to game if column already full
         } else {
             log.info('column already full')
             redirect(controller: 'game', action: 'game')
