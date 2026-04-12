@@ -56,27 +56,42 @@ grails:
     default:
       codec: html
 
+
+aws:
+  region: us-east-2
+  cognito:
+    userPoolId: ${USER_POOL_ID}
+    clientId: ${CLIENT_ID}
+    clientSecret: ${CLIENT_SECRET}
+    domain: https://us-east-2fysv9qug6.auth.us-east-2.amazoncognito.com
+    loginUI: https://us-east-2fysv9qug6.auth.us-east-2.amazoncognito.com/login?client_id=1kvgptqf96h52ibammt9t04sj&redirect_uri=http://localhost:8080/login/callback&response_type=code&scope=email+openid+phone
+    logoutUI: https://us-east-2fysv9qug6.auth.us-east-2.amazoncognito.com/logout?client_id=1kvgptqf96h52ibammt9t04sj&logout_uri=http://localhost:8080/
+  credentials:
+    accessKey: ${ACCESS_KEY}
+    secretKey: ${SECRET_KEY}
+
+
+apiKey:
+  secretkey: ${API_KEY}
+
+
 #DB credentials/drivers are configured here - dataSource db credential variables exported to secrets file
 dataSource:
   driverClassName: com.mysql.cj.jdbc.Driver
   pooled: true
   jmxExport: true
   dialect: org.hibernate.dialect.MySQL8Dialect
+  url: ${DB_URL}
+  username: ${DB_USERNAME}
+  password: ${DB_PASSWORD}
 
 environments:
-
   development:
     dataSource:
-      driverClassName: com.mysql.cj.jdbc.Driver
-      dialect: org.hibernate.dialect.MySQL8Dialect
-      url: jdbc:mysql://localhost:3306/groovy
       dbCreate: none
 
   test:
     dataSource:
-      driverClassName: com.mysql.cj.jdbc.Driver
-      dialect: org.hibernate.dialect.MySQL8Dialect
-      url: jdbc:mysql://localhost:3306/groovy_test
       dbCreate: none
 
 

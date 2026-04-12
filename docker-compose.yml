@@ -1,0 +1,21 @@
+services:
+  grails-app:
+    build: .
+    container_name: groovybones
+    ports:
+      - "8080:8080"
+    environment:
+      GRAILS_ENV: production
+      DB_URL: ${DB_URL}
+      DB_USERNAME: ${DB_USERNAME}
+      DB_PASSWORD: ${DB_PASSWORD}
+
+      API_KEY: ${API_KEY}
+
+      ACCESS_KEY: ${ACCESS_KEY}
+      SECRET_KEY: ${SECRET_KEY}
+
+      USER_POOL_ID: ${USER_POOL_ID}
+      CLIENT_ID: ${CLIENT_ID}
+      CLIENT_SECRET: ${CLIENT_SECRET}
+    restart: unless-stopped
