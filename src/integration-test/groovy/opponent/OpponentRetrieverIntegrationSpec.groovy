@@ -41,7 +41,7 @@ class OpponentRetrieverIntegrationSpec extends Specification {
         log.info('Running Integration Tests')
 
         new SQLRunner(dataSource).refreshDB()
-        key = grailsApplication.config.getProperty('apiKey.secretkey', String)
+        key = grailsApplication.config.getProperty('testApiKey.secretkey', String)
         basePath = "http://localhost:$port/opponent"
 
         log.info("base testing path: $basePath")
