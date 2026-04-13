@@ -81,9 +81,6 @@ dataSource:
   pooled: true
   jmxExport: true
   dialect: org.hibernate.dialect.MySQL8Dialect
-  url: ${DB_URL}
-  username: ${DB_USERNAME}
-  password: ${DB_PASSWORD}
 
 environments:
   development:
@@ -92,12 +89,16 @@ environments:
 
   test:
     dataSource:
+      url: 'jdbc:mysql://localhost:3306/groovy_test'
       dbCreate: none
 
 
   production:
     dataSource:
       dbCreate: none
+      url: ${DB_URL_PRD}
+      username: ${DB_USERNAME_PRD}
+      password: ${DB_PASSWORD_PRD}
       properties:
         jmxEnabled: true
         initialSize: 5
