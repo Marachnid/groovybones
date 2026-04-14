@@ -20,6 +20,7 @@ class CognitoOAuthService {
         final String domain = config.getProperty('aws.cognito.domain', String) + '/oauth2/token'
         final String clientId = config.getProperty('aws.cognito.clientId', String)
         final String clientSecret = config.getProperty('aws.cognito.clientSecret', String)
+        final String redirectURI = config.getProperty('aws.cognito.redirectURI', String)
 
         //encode credentials separately from POST body
         String credentials = "${clientId}:${clientSecret}".bytes.encodeBase64().toString()
@@ -29,7 +30,7 @@ class CognitoOAuthService {
                 grant_type: 'authorization_code',
                 client_id: clientId,
                 code: code,
-                redirect_uri: 'http://localhost:8080/login/callback'
+                redirect_uri: redirectURI
         ]
             .collect { k, v -> "${k}=${URLEncoder.encode(v, 'UTF-8')}" }
             .join('&')
