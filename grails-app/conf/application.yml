@@ -60,19 +60,13 @@ grails:
 aws:
   region: us-east-2
   cognito:
-    userPoolId: ${USER_POOL_ID}
-    clientId: ${CLIENT_ID}
-    clientSecret: ${CLIENT_SECRET}
-    domain: https://us-east-2fysv9qug6.auth.us-east-2.amazoncognito.com
-    loginUI: https://us-east-2fysv9qug6.auth.us-east-2.amazoncognito.com/login?client_id=1kvgptqf96h52ibammt9t04sj&redirect_uri=http://localhost:8080/login/callback&response_type=code&scope=email+openid+phone
-    logoutUI: https://us-east-2fysv9qug6.auth.us-east-2.amazoncognito.com/logout?client_id=1kvgptqf96h52ibammt9t04sj&logout_uri=http://localhost:8080/
-  credentials:
-    accessKey: ${ACCESS_KEY}
-    secretKey: ${SECRET_KEY}
+    redirectURI: 'http://localhost:8080/login/callback'
+    host: 'http://localhost:8080'
+    domain: 'https://us-east-2fqbzjbueq.auth.us-east-2.amazoncognito.com'
 
 
-apiKey:
-  secretkey: ${API_KEY}
+opponentAPI:
+  host: http://localhost:8080/opponent
 
 
 #DB credentials/drivers are configured here - dataSource db credential variables exported to secrets file
@@ -85,6 +79,7 @@ dataSource:
 environments:
   development:
     dataSource:
+      url: 'jdbc:mysql://localhost:3306/groovy'
       dbCreate: none
 
   test:
