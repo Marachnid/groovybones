@@ -15,6 +15,7 @@ import groovybones.user.UserService
  */
 class SavedGameController {
     final String key = grailsApplication.config.getProperty('apiKey.secretkey', String)
+    final String domain = grailsApplication.config.getProperty('opponentAPI.host', String)
 
     /**
      * saves the current game instance and redirects back to home
@@ -100,7 +101,7 @@ class SavedGameController {
         session['opponentUsername'] = opDetails.username
 
 
-        session['opponentStats'] = new OpponentRetriever().retrieveOpponentStats(key, savedGame.opponentId)
+        session['opponentStats'] = new OpponentRetriever().retrieveOpponentStats(domain, key, savedGame.opponentId)
         session['userStats'] = new UserService().getUserStats(session['userId'] as Long)
 
 

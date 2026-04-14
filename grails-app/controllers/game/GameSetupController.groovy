@@ -13,6 +13,7 @@ import groovybones.user.UserService
  */
 class GameSetupController {
     final String key = grailsApplication.config.getProperty('apiKey.secretkey', String)
+    final String domain = grailsApplication.config.getProperty('opponentAPI.host', String)
 
 
     /**
@@ -23,7 +24,7 @@ class GameSetupController {
     def gameSetup() {
         log.info('GameSetup gameSetup()')
 
-        session['opponentList'] = new OpponentRetriever().retrieveList(key)
+        session['opponentList'] = new OpponentRetriever().retrieveList(domain, key)
         session['savedGames'] = new SavedGameService().getSavedGames(session['userId'] as Long)
 
         render(view: 'gameSetup')
@@ -42,7 +43,7 @@ class GameSetupController {
         session['opponentId'] = params.id
         session['opponentUsername'] = params.username
         session['opponentBoard'] = new GameBoard()
-        session['opponentStats'] = new OpponentRetriever().retrieveOpponentStats(key, params.id as Long)
+        session['opponentStats'] = new OpponentRetriever().retrieveOpponentStats(domain, key, params.id as Long)
 
         session['userStats'] = new UserService().getUserStats(session['userId'] as Long)
         session['userBoard'] = new GameBoard()

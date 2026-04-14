@@ -9,6 +9,8 @@ import groovybones.user.UserService
  */
 class GameOverController {
     final String key = grailsApplication.config.getProperty('apiKey.secretkey', String)
+    final String domain = grailsApplication.config.getProperty('opponentAPI.host', String)
+
 
     /**
      * default method to render gameOver page
@@ -69,7 +71,7 @@ class GameOverController {
 
         //update user and opponent
         new UserService().updateUser(session['userId'] as Long, userStats)
-        new OpponentRetriever().postUpdate(key, session['opponentId'] as Long, opStats)
+        new OpponentRetriever().postUpdate(domain, key, session['opponentId'] as Long, opStats)
 
         redirect(controller: 'GameOver', action: 'gameOver')
     }
