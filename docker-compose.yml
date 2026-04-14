@@ -7,17 +7,9 @@ services:
       - "8080:8080"
     environment:
       GRAILS_ENV: production
+      APP_DOMAIN: "https://groovybones.net/"
       JAVA_OPTS: "-Xms256m -Xmx512m -XX:MaxMetaspaceSize=192m"
-      DB_URL_PRD: ${DB_URL_PRD}
-      DB_USERNAME_PRD: ${DB_USERNAME_PRD}
-      DB_PASSWORD_PRD: ${DB_PASSWORD_PRD}
-
-      API_KEY: ${API_KEY}
-
-      ACCESS_KEY: ${ACCESS_KEY}
-      SECRET_KEY: ${SECRET_KEY}
-
-      USER_POOL_ID: ${USER_POOL_ID}
-      CLIENT_ID: ${CLIENT_ID}
-      CLIENT_SECRET: ${CLIENT_SECRET}
+      DB_URL: ${DB_URL}
+      DB_USERNAME: ${DB_USERNAME}
+      DB_PASSWORD: ${DB_PASSWORD}
     restart: unless-stopped

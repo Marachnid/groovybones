@@ -1,0 +1,12 @@
+# Ignore everything but necessary files/directories
+**
+
+# Allow only necessary resources
+!build.gradle
+!settings.gradle
+!gradle.properties
+!gradle/**
+!gradlew
+!gradlew.bat
+
+!grails-app/**

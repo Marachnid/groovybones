@@ -11,8 +11,6 @@ import org.slf4j.LoggerFactory
  */
 class OpponentRetriever {
     private static final Logger log = LoggerFactory.getLogger(OpponentRetriever)
-    String path = 'http://localhost:8080/opponent'
-
     int responseCode
 
 
@@ -22,10 +20,10 @@ class OpponentRetriever {
      * @param id opponent to find stats for
      * @return map of wins/losses/totalScore
      */
-    Map retrieveOpponentStats(String authKey, Long id) {
+    Map retrieveOpponentStats(String domain, String authKey, Long id) {
         log.info('OpponentRetriever retrieveOpponentStats()')
 
-        String newPath = "$path/$id"
+        String newPath = "$domain/$id"
         RequestCaller requestCaller = new RequestCaller(apiAuthKey: authKey, path: newPath)
 
         Map response = requestCaller.callGET()
@@ -44,10 +42,10 @@ class OpponentRetriever {
      * @param authKey api key
      * @return list of all opponents as light values
      */
-    ArrayList<Map> retrieveList(String authKey) {
+    ArrayList<Map> retrieveList(String domain, String authKey) {
         log.info('OpponentRetriever retrieveList()')
 
-        RequestCaller requestCaller = new RequestCaller(apiAuthKey: authKey, path: path)
+        RequestCaller requestCaller = new RequestCaller(apiAuthKey: authKey, path: domain)
 
         log.info('Making Request')
 
@@ -70,12 +68,12 @@ class OpponentRetriever {
      * @param id opponent to update
      * @param newValues to update
      */
-    void postUpdate(String authKey, Long id, Map newValues) {
+    void postUpdate(String domain, String authKey, Long id, Map newValues) {
         log.info("OpponentRetriever postUpdate() for ID: $id")
 
         newValues.id = id
 
-        RequestCaller requestCaller = new RequestCaller(apiAuthKey: authKey, path: path, body: newValues)
+        RequestCaller requestCaller = new RequestCaller(apiAuthKey: authKey, path: domain, body: newValues)
         Map response = requestCaller.callPOST()
         responseCode = response.responseCode
         log.info("Response code: $responseCode")
