@@ -57,16 +57,20 @@ grails:
       codec: html
 
 
+appdomain:
+  currentdomain: "${APP_DOMAIN:http://localhost:8080}"
+
+
 aws:
   region: us-east-2
   cognito:
-    redirectURI: 'http://localhost:8080/login/callback'
-    host: 'http://localhost:8080'
+    host: ${appdomain.currentdomain}
+    redirectURI: ${appdomain.currentdomain}/login/callback
     domain: 'https://us-east-2fqbzjbueq.auth.us-east-2.amazoncognito.com'
 
 
 opponentAPI:
-  host: http://localhost:8080/opponent
+  host: ${appdomain.currentdomain}/opponent
 
 
 #DB credentials/drivers are configured here - dataSource db credential variables exported to secrets file
@@ -91,9 +95,9 @@ environments:
   production:
     dataSource:
       dbCreate: none
-      url: ${DB_URL_PRD}
-      username: ${DB_USERNAME_PRD}
-      password: ${DB_PASSWORD_PRD}
+      url: ${DB_URL}
+      username: ${DB_USERNAME}
+      password: ${DB_PASSWORD}
       properties:
         jmxEnabled: true
         initialSize: 5
