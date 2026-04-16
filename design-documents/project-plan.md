@@ -78,15 +78,17 @@
 - [x] As a user, I want to play against an 'intelligent' computer-controlled opponent
 
 
-
-## BACKLOG
-- [ ] Setup existing remote droplet/domain to host GroovyBones
-- [ ] Configure remote droplet MySQL instance to host DB data (instead of AWS RDS)
-- [ ] Tune difficulty profiles (Hard should win more often than Medium and much more often than Easy)
-- [ ] Move difficulty modifiers to DB and introduce a service layer for recalling them
-- [ ] Introduce Spock unit testing for game logic and services
-- [ ] Figure out the least disruptive place to put a webservice in
+## Week 13
+- [x] Setup PRD hosting on DigitalOcean droplet with purchased domain name - groovybones.net
+- [x] Set up and connected RDS to droplet
+- [x] Create full MVP of app running in PRD
 
 
+## Week 14
+- [ ] Add/build/style about.gsp
+- [ ] Add/build/style main tutorial.gsp
+- [ ] Complete finishing touches for documentation
+- [ ] Take a look at UI updates for V2
 
-## Week 9-15
+## Week 15 & 16
+- [] I'm sure there will be something

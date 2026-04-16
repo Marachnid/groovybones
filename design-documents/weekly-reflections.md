@@ -193,7 +193,7 @@ Notes:
 
 ## Week 12
 4/6/ - 40h
-* half of this is carried over from the previous week
+* most of this is carried over from the previous week but was finished early in the week
 
 ### Completed a large refactor of Persistence full end-to-end working:
 > I noticed that I was putting an excessive amount of work into separating User and Opponent domain references 
@@ -240,3 +240,19 @@ Notes:
 - I struggle a lot with locking in a design until I can see how it's being used
 - A lot of stuff was slimmed down to keep only what is needed/useful
 - Testing was reduced for unnecessary interactions. There's very little areas for unexpected input
+
+
+## Week 13
+4/10 - 25h
+(week date is slightly off to be more accurate with task completion dates)
+Tasks Completed:
+- Dockerized the project for PRD deployments, configured separate non-docker local environments for dev/test
+- Set up RDS and configured into project
+- Set up DigitalOcean droplet for remote webserver/hosting
+- Purchased groovybones.net and configured Cloudflare
+- Set up networking and proxying to finish hosting
+
+Notes:
+- Lot of work with Docker/Docker Compose to figure out container pathing and optimizing builds to reduce size
+- Figured out workflows for SSH tunneling into webservers for configs and pulling docker images
+- Carried over a lot of the docker/docker compose work into the team project
