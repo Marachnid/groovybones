@@ -41,7 +41,7 @@ class OpponentRetrieverIntegrationSpec extends Specification {
         log.info('Running Integration Tests')
 
         new SQLRunner(dataSource).refreshDB()
-        key = grailsApplication.config.getProperty('testApiKey.secretkey', String)
+        key = grailsApplication.config.getProperty('apiKey.secretkey', String)
         basePath = "http://localhost:$port/opponent"
 
         log.info("base testing path: $basePath")
@@ -51,8 +51,8 @@ class OpponentRetrieverIntegrationSpec extends Specification {
     /** tests retrieving an ArrayList<Map> of opponent headers */
     void "return mapped list of opponent headers"() {
         when: 'OpponentServiceController base GET path is called'
-        OpponentRetriever opponentRetriever = new OpponentRetriever(path: basePath)
-        opponentHeaders = opponentRetriever.retrieveList(key)
+        OpponentRetriever opponentRetriever = new OpponentRetriever()
+        opponentHeaders = opponentRetriever.retrieveList(basePath, key)
 
         then: 'response code is 200, list of returned opponents is neither null nor empty'
         opponentRetriever.responseCode == 200
@@ -64,9 +64,9 @@ class OpponentRetrieverIntegrationSpec extends Specification {
     /** tests retrieving opponent stats */
     void "return mapped opponent"() {
         when: 'OpponentServiceController getById path is called'
-        OpponentRetriever opponentRetriever = new OpponentRetriever(path: basePath)
+        OpponentRetriever opponentRetriever = new OpponentRetriever()
         opponent = Opponent.get(1)
-        final Map stats = opponentRetriever.retrieveOpponentStats(key, opponent.id)
+        final Map stats = opponentRetriever.retrieveOpponentStats(basePath, key, opponent.id)
 
         then: 'response code is 200, stats match db stats'
         opponentRetriever.responseCode == 200
@@ -78,21 +78,21 @@ class OpponentRetrieverIntegrationSpec extends Specification {
     /** tests returning null opponent if ID not found */
     void "return null opponent if ID not found"() {
         expect: 'null for unfound ID'
-        !new OpponentRetriever(path: basePath).retrieveOpponentStats(key, -1)
+        !new OpponentRetriever().retrieveOpponentStats(basePath, key, -1)
     }
 
 
     /** tests returning null opponent if incorrect auth key */
     void "return null opponent if incorrect API key"() {
         expect: 'incorrect auth is used'
-        !new OpponentRetriever(path: basePath).retrieveList('badKey')
+        !new OpponentRetriever().retrieveList(basePath, 'badKey')
     }
 
     /** tests successfully returning an updated opponent */
     void "return opponent with updated values"() {
         when: 'opponent receives a new value'
-        OpponentRetriever opponentRetriever = new OpponentRetriever(path: basePath)
-        opponentRetriever.postUpdate(key, 1, [totalScore: 201])
+        OpponentRetriever opponentRetriever = new OpponentRetriever()
+        opponentRetriever.postUpdate(basePath, key, 1, [totalScore: 201])
 
         then: 'response code is 201, totalScore is updated'
         opponentRetriever.responseCode == 201

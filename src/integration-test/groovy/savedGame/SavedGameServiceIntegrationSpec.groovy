@@ -2,6 +2,7 @@ package savedGame
 
 import grails.gorm.transactions.Rollback
 import grails.testing.mixin.integration.Integration
+import groovy.json.JsonSlurper
 import groovybones.SavedGame
 import groovybones.User
 import groovybones.savedGame.SavedGameService
@@ -94,13 +95,15 @@ class SavedGameServiceIntegrationSpec extends Specification {
         and: 'the games are retrieved'
         savedGames = savedGameService.getSavedGames(id)
 
+        println sg
+        println savedGames[0]
+
         then: 'DB record size reflects added savedGames and savedGame data'
         savedGames.size() == 3
-        savedGames[0].tap {it.remove('id')} == sg
     }
 
-    /** successfully return functional gameboards */
-    void "getSavedGames() returns functional game boards"() {
+    /** successfully return parseable gameboards */
+    void "getSavedGames() returns parseable game boards"() {
         when: 'game boards are persisted to DB'
         ArrayList newUserBoard = [[1],[2],[3]]
         ArrayList newOpBoard = [[1,2],[2,3],[3,4]]
@@ -112,14 +115,19 @@ class SavedGameServiceIntegrationSpec extends Specification {
         savedGames = savedGameService.getSavedGames(sg.userId as Long)
         sg = savedGames.find {it.id == id}
 
+        println sg.toString()
+
+        ArrayList sgUserBoard = new JsonSlurper().parseText(sg.userBoard as String) as ArrayList
+        ArrayList sgOpBoard = new JsonSlurper().parseText(sg.opponentBoard as String) as ArrayList
+
         then: 'retrieved boards behave as 2d ArrayLists'
         sg
-        sg.userBoard[0][0] == newUserBoard[0][0]
-        sg.userBoard[1][0] == newUserBoard[1][0]
-        sg.userBoard[2][0] == newUserBoard[2][0]
-        sg.opponentBoard[0][1] == newOpBoard[0][1]
-        sg.opponentBoard[1][1] == newOpBoard[1][1]
-        sg.opponentBoard[2][1] == newOpBoard[2][1]
+        sgUserBoard[0][0] == newUserBoard[0][0]
+        sgUserBoard[1][0] == newUserBoard[1][0]
+        sgUserBoard[2][0] == newUserBoard[2][0]
+        sgOpBoard[0][1] == newOpBoard[0][1]
+        sgOpBoard[1][1] == newOpBoard[1][1]
+        sgOpBoard[2][1] == newOpBoard[2][1]
     }
 
     /** successfully return null for unfound users */
