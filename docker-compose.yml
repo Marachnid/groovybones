@@ -7,7 +7,7 @@ services:
       - "8080:8080"
     environment:
       GRAILS_ENV: production
-      APP_DOMAIN: "https://groovybones.net/"
+      APP_DOMAIN: "https://groovybones.net"
       JAVA_OPTS: "-Xms256m -Xmx512m -XX:MaxMetaspaceSize=192m"
       DB_URL: ${DB_URL}
       DB_USERNAME: ${DB_USERNAME}

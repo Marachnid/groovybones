@@ -4,10 +4,10 @@
 
 ### Site Content
 #### About *
-- [ ] As a user, I want to see an 'About' page to learn more about the site
+- [x] As a user, I want to see an 'About' page to learn more about the site
 
 #### Tutorial *
-- [ ] As a user, I want a page to learn about the game's rules and gameplay
+- [x] As a user, I want a page to learn about the game's rules and gameplay
 
 
 ### Account Management and Signup
@@ -15,10 +15,10 @@
 - [x] As a new user, I want to be able to create a new profile to play GroovyBones
 
 #### *Game Stats *
-- [ ] As a registered user, I want to be able to read cumulative game records/stats from past games
+- [x] As a registered user, I want to be able to read cumulative game records/stats from past games
 
 #### *Game Management *
-- [ ] As a registered user, I want to be able to save(add) unfinished games or delete them
+- [x] As a registered user, I want to be able to save(add) unfinished games or delete them
 
 #### Sign In *
 - [x] As a registered user, I want to be able to sign in to my profile and authenticate it
@@ -45,7 +45,6 @@
 
 #### Multiplayer
 - [ ] As a user, I want to be able to play against other, real, people
-
 
 
 ### Game Modifiers

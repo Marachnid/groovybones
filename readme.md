@@ -35,28 +35,26 @@ The desired outcome of GroovyBones is to allow a player to:
 - **ORM Framework**
   - GORM 8.1.2
 - **Database**
-  - MySQL 8.4.6
+  - MySQL 8.4.6, AWS RDS
 - **Dependency/Build Management**
   - Gradle 7.6.4
 - **Testing**
   - Spock
 - **Logging**
-  - SLF4J built-in/managed by Grails
+  - SLF4J
 - **CSS**
   - bootstrap
 - **Validation**: 
   - Cognito hosted UI
-  - TBD
 - **Security/Authentication**
   - AWS Cognito
 - **Hosting**
-  - TBD, DigitalOcean Droplet or AWS
+  - DigitalOcean Droplet
+- **Deployment**
+  - Docker, Docker Compose
 - **WEB SERVICE CONSUMED**
-  - I'm creating an internal web service to route all user DB interactions through
+  - I'm creating an internal web service to route all opponent DB persistence actions through
     - _Not to be confused with Grails services/GORM_
-    - Might include a split with game logic using Grails services while User logic using web services
-    - Grails services can initiate game logic without latency while User services are HTTP
-
 
 ## Tech I'd like to Explore:
 - Grails/Gradle/GORM is completely new as of this semester

@@ -1,10 +1,4 @@
 # Project Plan
-
-## Week X
-- [ ] 
-- [ ] 
-
-
 ## Week 4
 - [x] Develop basic screen designs
 - [x] Finish DB design notes
@@ -85,10 +79,9 @@
 
 
 ## Week 14
-- [ ] Add/build/style about.gsp
-- [ ] Add/build/style main tutorial.gsp
-- [ ] Complete finishing touches for documentation
-- [ ] Take a look at UI updates for V2
+## Week 15
 
-## Week 15 & 16
-- [] I'm sure there will be something
+## Week 16
+- [x] Add/build/style about.gsp
+- [x] Add/build/style main tutorial.gsp
+- [x] Complete finishing touches for documentation

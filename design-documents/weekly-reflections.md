@@ -256,3 +256,17 @@ Notes:
 - Lot of work with Docker/Docker Compose to figure out container pathing and optimizing builds to reduce size
 - Figured out workflows for SSH tunneling into webservers for configs and pulling docker images
 - Carried over a lot of the docker/docker compose work into the team project
+
+
+## Week 14 & 15
+0h
+Time off to handle internship projects
+
+
+## Week 16
+5/10 - 3h
+
+Tasks Completed:
+- Wrapped up the final About and Tutorial pages
+- Added an AWS property for the cognito register link
+- Cleaned up documentation and final presentation
