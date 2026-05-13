@@ -15,9 +15,8 @@
         <g:else>
             <ul class="menu-buttons menu-list">
                 <li><g:link class="btn btn-large" controller="Login" action="login">Sign In</g:link></li>
-                <li><g:link class="btn btn-large" controller="Register" action="register">Register</g:link></li>
+                <li><g:link class="btn btn-large" controller="Login" action="register">Register</g:link></li>
             </ul>
         </g:else>
-
     </div>
 </main>

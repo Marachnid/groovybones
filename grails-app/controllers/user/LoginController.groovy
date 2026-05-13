@@ -20,6 +20,10 @@ class LoginController {
         redirect(url: "${grailsApplication.config.getProperty('aws.cognito.loginUI')}")
     }
 
+    def register() {
+        log.info('LoginController register()')
+        redirect(url: "${grailsApplication.config.getProperty('aws.cognito.registerUI')}")
+    }
 
     /**
      * signs a user out of both cognito and the session, redirects users to home
