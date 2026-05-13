@@ -1,0 +1,18 @@
+
+.menu-box {
+    border: 2px solid var(--neon-primary-glow);
+    flex-direction: column;
+    width: 50%;
+}
+
+.util-main {font-family: var(--nav-font), sans-serif;}
+.page-header {color: var(--neon-primary)}
+
+p {
+    font-size: 1.25rem;
+    line-height: 2.5rem;
+    margin-bottom: 5rem;
+}
+
+p a {color: var(--neon-primary)}
+p a:visited {color: var(--neon-primary-glow)}
