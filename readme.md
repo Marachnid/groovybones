@@ -1,4 +1,6 @@
-# GroovyBones
+# GroovyBones 
+(project demo: https://youtu.be/sA6Od0oR4Yc)
+
 
 ## Problem Statement
 My goal with GroovyBones is to build a browser game recreation of the dice minigame 'Knucklebones' found in the game 'Cult of the Lamb'
@@ -37,13 +39,13 @@ The desired outcome of GroovyBones is to allow a player to:
 - **Database**
   - MySQL 8.4.6, AWS RDS
 - **Dependency/Build Management**
-  - Gradle 7.6.4
+  - Gradle 7.6.6
 - **Testing**
   - Spock
 - **Logging**
   - SLF4J
 - **CSS**
-  - bootstrap
+  - CSS
 - **Validation**: 
   - Cognito hosted UI
 - **Security/Authentication**
@@ -53,8 +55,7 @@ The desired outcome of GroovyBones is to allow a player to:
 - **Deployment**
   - Docker, Docker Compose
 - **WEB SERVICE CONSUMED**
-  - I'm creating an internal web service to route all opponent DB persistence actions through
-    - _Not to be confused with Grails services/GORM_
+  - Internal Webservice for managing Opponent persistence
 
 ## Tech I'd like to Explore:
 - Grails/Gradle/GORM is completely new as of this semester
